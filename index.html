@@ -1220,10 +1220,109 @@
             }
         }
 
-        function openSheet(teamName, tab = 'overview') {
-            showPricingPage(teamName, tab);
+        let currentSheetTeam = null;
+        let currentSheetTab = 'history';
+
+        function openSheet(teamName, initialTab = 'history') {
+            const team = initialData.find(t => t.name === teamName);
+            if (!team) return;
+            
+            currentSheetTeam = team;
+            currentSheetTab = initialTab;
+
+            document.getElementById('sheetOverlay').classList.add('show');
+            document.getElementById('sheetContent').classList.add('show');
+            document.getElementById('sheetTitle').innerText = teamName;
+            
+            renderSheetTabs();
+            renderSheetContent();
+            lucide.createIcons();
+            
+            document.body.style.overflow = 'hidden';
         }
 
+        function closeSheet() {
+            document.getElementById('sheetOverlay').classList.remove('show');
+            document.getElementById('sheetContent').classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchSheetTab(tab) {
+            currentSheetTab = tab;
+            renderSheetTabs();
+            renderSheetContent();
+            lucide.createIcons();
+        }
+
+        function renderSheetTabs() {
+            const container = document.getElementById('sheetTabs');
+            const tabs = [
+                { id: 'history', label: 'History', icon: 'credit-card' },
+                { id: 'activity', label: 'Activity', icon: 'history' }
+            ];
+
+            container.innerHTML = `
+                <div class="r-tabs w-full">
+                    ${tabs.map(tab => `
+                        <button onclick="switchSheetTab('${tab.id}')" class="r-tab flex-1 flex items-center justify-center gap-2 ${currentSheetTab === tab.id ? 'active' : ''}">
+                            <i data-lucide="${tab.icon}" class="size-3.5"></i>
+                            ${tab.label}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderSheetContent() {
+            const body = document.getElementById('sheetBody');
+            const team = currentSheetTeam;
+
+            if (currentSheetTab === 'history') {
+                body.innerHTML = `
+                    <div class="tab-content space-y-4">
+                        ${Array(5).fill(0).map((_, i) => `
+                            <div class="p-4 border border-neutral-100 rounded-xl hover:bg-neutral-50/50 transition-colors">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="text-[10px] font-bold text-emerald-600 uppercase">Paid</span>
+                                    <span class="text-sm font-bold">$${1492 - i * 10}.00</span>
+                                </div>
+                                <p class="text-xs font-semibold text-neutral-900">Software Subscription</p>
+                                <p class="text-[11px] text-neutral-400 mt-1">April ${12 - i}, 2026 • Visa •••• 4242</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (currentSheetTab === 'activity') {
+                body.innerHTML = `
+                    <div class="tab-content space-y-6">
+                        ${[
+                            { title: 'Plan Upgraded', time: 'Today, 2:45 PM' },
+                            { title: 'Billing Updated', time: 'Yesterday, 10:12 AM' },
+                            { title: 'Credits Refilled', time: 'April 15, 2026' }
+                        ].map((item, i) => `
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div class="size-2 rounded-full bg-indigo-500"></div>
+                                    ${i < 2 ? `<div class="w-px flex-1 bg-neutral-100 my-2"></div>` : ''}
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-neutral-900">${item.title}</p>
+                                    <p class="text-[10px] text-neutral-400 mt-1">${item.time}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        // Global Keyboard Listeners
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeSheet();
+                document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+            }
+        });
     </script>
 
     <!-- Side Panel / Sheet (Moved to document root for stacking context purity) -->
