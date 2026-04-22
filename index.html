@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radius | Soul View - Subscription Manager</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #5A5FF2;
+            --primary-foreground: #FAFAFA;
+            --neutral-50: #FAFAFA;
+            --neutral-100: #F5F5F5;
+            --neutral-200: #E5E5E5;
+            --neutral-300: #D4D4D4;
+            --neutral-400: #A3A3A3;
+            --neutral-500: #737373;
+            --neutral-600: #525252;
+            --neutral-700: #404040;
+            --neutral-800: #262626;
+            --neutral-900: #171717;
+            --neutral-950: #0A0A0A;
+
+            --background: #FFFFFF;
+            --foreground: #0A0A0A;
+            --muted: #F5F5F5;
+            --muted-foreground: #737373;
+            --border: #E5E5E5;
+            --radius-md: 6px;
+            --radius-xl: 12px;
+            --shadow-xs: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+            --shadow-sm: 0px 1px 3px 0px rgba(0, 0, 0, 0.10);
+
+            --success: #15A296;
+            --warning: #EAB308;
+            --destructive: #DC2626;
+            --info: #3F8DFF;
+
+            --ease-expo: cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        body {
+            font-family: 'Geist', sans-serif;
+            background-color: var(--neutral-50);
+            color: var(--foreground);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .font-ui {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'Geist Mono', monospace;
+        }
+
+        ::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--neutral-100);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neutral-300);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neutral-400);
+        }
+
+        .sticky-col {
+            position: sticky;
+            left: 0;
+            background: white;
+            z-index: 20;
+            border-right: 1px solid var(--border);
+            transition: background-color 0.3s var(--ease-expo), box-shadow 0.3s var(--ease-expo);
+        }
+
+        /* Highlight sticky column only when scrolled */
+        .sticky-col.scrolled {
+            background-color: #F8F9FF !important;
+            /* Subtle brand tint */
+            box-shadow: 4px 0 12px -4px rgba(0, 0, 0, 0.08);
+        }
+
+        .header-solid {
+            background: var(--neutral-50);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .row-hover:hover {
+            background-color: var(--neutral-50);
+        }
+
+        .btn-press:active {
+            transform: scale(0.97);
+        }
+
+        .transition-all-custom {
+            transition: all 0.4s var(--ease-expo);
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #f0f0f0;
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.3s var(--ease-expo);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            border-color: #e5e5e5;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.04);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #737373;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #171717;
+            letter-spacing: -0.02em;
+        }
+
+        .stat-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            height: 20px;
+            line-height: 1;
+        }
+
+        .stat-badge-success {
+            background: #f0fdf4;
+            color: #15803d;
+        }
+
+        .stat-badge-warning {
+            background: #fffbeb;
+            color: #b45309;
+        }
+
+        .stat-badge-danger {
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .stat-icon-bg {
+            position: absolute;
+            right: -10px;
+            bottom: -10px;
+            opacity: 0.03;
+            transform: rotate(-15deg);
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            transition: all 0.2s var(--ease-expo);
+            border: 1px solid transparent;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .action-btn-primary {
+            background: #f5f3ff;
+            color: #4f46e5;
+            border-color: #e0e7ff;
+        }
+
+        .action-btn-primary:hover {
+            background: #eef2ff;
+            border-color: #c7d2fe;
+            transform: translateY(-1px);
+        }
+
+        .action-btn-secondary {
+            background: #f8fafc;
+            color: #64748b;
+            border-color: #f1f5f9;
+        }
+
+        .action-btn-secondary:hover {
+            background: #f1f5f9;
+            border-color: #e2e8f0;
+            transform: translateY(-1px);
+        }
+
+        .action-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* Side Panel / Drawer */
+        .sheet-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        .sheet-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sheet-content {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100vh;
+            height: 100dvh;
+            background: white;
+            z-index: 10000;
+            box-shadow: -20px 0 50px rgba(0, 0, 0, 0.1);
+            transform: translateX(100%);
+            transition: transform 0.6s cubic-bezier(0.32, 0.72, 0, 1);
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .sheet-content.show {
+            transform: translateX(0);
+        }
+
+        .sheet-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sheet-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .log-item {
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--neutral-50);
+        }
+
+        .log-item:last-child {
+            border-bottom: none;
+        }
+        .action-bar {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            z-index: 30;
+            margin-bottom: 1rem;
+        }
+
+        .search-slim {
+            height: 36px;
+            background: #f9f9f9;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding-left: 2.25rem;
+            font-size: 13px;
+            width: 240px;
+            transition: all 0.2s var(--ease-expo);
+            color: #171717;
+        }
+
+        .search-slim:focus {
+            background: white;
+            border-color: var(--primary);
+            width: 300px;
+            box-shadow: 0 0 0 3px rgba(90, 95, 242, 0.08);
+        }
+
+        /* Shadcn-style Dropdown */
+        .dropdown-trigger {
+            height: 36px;
+            padding: 0 0.75rem;
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s var(--ease-expo);
+            user-select: none;
+        }
+
+        .dropdown-trigger:hover {
+            background: #f9f9f9;
+            border-color: #d4d4d4;
+        }
+
+        .dropdown-trigger.active {
+            border-color: var(--primary);
+            background: #fcfcff;
+        }
+
+        .dropdown-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #737373;
+        }
+
+        .dropdown-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: #171717;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            width: 180px;
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 4px;
+            display: none;
+            flex-direction: column;
+            z-index: 100;
+            animation: dropdownFadeIn 0.2s var(--ease-expo);
+        }
+
+        .dropdown-menu.show {
+            display: flex;
+        }
+
+        .dropdown-item {
+            padding: 8px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+            color: #404040;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .dropdown-item:hover {
+            background: #f5f5f5;
+            color: #171717;
+        }
+
+        .dropdown-item.selected {
+            background: #f0f2ff;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        @keyframes dropdownFadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .search-container {
+            transition: all 0.3s var(--ease-expo);
+        }
+
+        .search-container:focus-within {
+            box-shadow: 0 0 0 4px rgba(90, 95, 242, 0.1);
+            border-color: var(--primary);
+        }
+
+        .truncate-team {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .compact-table td,
+        .compact-table th {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 12px;
+            padding-right: 12px;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+
+        /* Radius UI Component overrides to match standard */
+        .r-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: var(--font-ui);
+            font-weight: 500;
+            font-size: 14px;
+            height: 36px;
+            padding: 0 16px;
+            border-radius: 30px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 150ms;
+        }
+
+        .r-btn-primary {
+            background: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .r-btn-primary:hover {
+            background: #4A4FE0;
+        }
+
+        .r-btn-outline {
+            background: #fff;
+            color: var(--foreground);
+            border-color: var(--border);
+        }
+
+        .r-btn-outline:hover {
+            background: var(--neutral-50);
+        }
+
+        .r-btn-link {
+            background: transparent;
+            color: var(--primary);
+            padding: 0;
+            height: auto;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .r-input {
+            display: block;
+            width: 100%;
+            height: 36px;
+            padding: 0 12px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: var(--foreground);
+            background: #fff;
+            border: 1px solid var(--neutral-300);
+            border-radius: var(--radius-md);
+            transition: all 150ms;
+        }
+
+        .r-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(90, 95, 242, 0.15);
+        }
+
+        .r-input::placeholder {
+            color: var(--neutral-400);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-neutral-50">
+    <div class="p-6">
+
+    <!-- Header Section -->
+    <header class="mb-4">
+        <div class="flex items-center gap-2 mb-2">
+            <span
+                class="bg-indigo-100 text-indigo-600 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider font-ui">SOUL</span>
+            <span class="text-neutral-400">/</span>
+            <span class="text-neutral-500 text-xs font-medium font-ui">Subscription Manager</span>
+        </div>
+        <h1 class="text-3xl font-bold tracking-tight text-neutral-950">SOUL Subscription Manager</h1>
+        <p class="text-neutral-500 text-sm mt-1">Subscription table to view all teams and agents</p>
+    </header>
+
+    <!-- Refined Action Bar -->
+    <div class="action-bar">
+        <div class="relative group">
+            <i data-lucide="search" class="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-indigo-600 transition-colors"></i>
+            <input type="text" id="searchInput" placeholder="Search teams..."
+                class="search-slim outline-none">
+        </div>
+
+        <div class="flex items-center gap-2">
+            <!-- Status Dropdown -->
+            <div class="relative">
+                <div id="statusTrigger" class="dropdown-trigger">
+                    <span class="dropdown-label">Status:</span>
+                    <span id="statusLabel" class="dropdown-value">All</span>
+                    <i data-lucide="chevron-down" class="size-3.5 text-neutral-400"></i>
+                </div>
+                <div id="statusMenu" class="dropdown-menu">
+                    <div class="dropdown-item selected" data-value="all">All Statuses</div>
+                    <div class="dropdown-item" data-value="active">Active</div>
+                    <div class="dropdown-item" data-value="warning">Warning</div>
+                    <div class="dropdown-item" data-value="failed">Failed</div>
+                </div>
+            </div>
+
+            <!-- Plan Dropdown -->
+            <div class="relative">
+                <div id="planTrigger" class="dropdown-trigger">
+                    <span class="dropdown-label">Plan:</span>
+                    <span id="planLabel" class="dropdown-value">All</span>
+                    <i data-lucide="chevron-down" class="size-3.5 text-neutral-400"></i>
+                </div>
+                <div id="planMenu" class="dropdown-menu">
+                    <div class="dropdown-item selected" data-value="all">All Plans</div>
+                    <div class="dropdown-item" data-value="$149">$149</div>
+                    <div class="dropdown-item" data-value="$199">$199</div>
+                    <div class="dropdown-item" data-value="$299">$299</div>
+                </div>
+            </div>
+
+            <!-- Payer Dropdown -->
+            <div class="relative">
+                <div id="payerTrigger" class="dropdown-trigger">
+                    <span class="dropdown-label">Payer:</span>
+                    <span id="payerLabel" class="dropdown-value">All</span>
+                    <i data-lucide="chevron-down" class="size-3.5 text-neutral-400"></i>
+                </div>
+                <div id="payerMenu" class="dropdown-menu">
+                    <div class="dropdown-item selected" data-value="all">All Payers</div>
+                    <div class="dropdown-item" data-value="Lead">Lead</div>
+                    <div class="dropdown-item" data-value="Agents">Agents</div>
+                </div>
+            </div>
+
+            <button id="resetFilters" class="text-[#5A5FF2] hover:bg-indigo-50 transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-md">
+                <i data-lucide="rotate-ccw" class="size-3.5"></i>
+                <span class="text-[12px] font-bold">Reset</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="px-6 grid grid-cols-4 gap-4 mb-4">
+        <div class="stat-card">
+            <div class="stat-label">
+                <i data-lucide="users-2" class="size-3.5"></i>
+                Total Teams
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="stat-value">1,284</span>
+                <span class="stat-badge stat-badge-success">
+                    <i data-lucide="trending-up" class="size-3"></i>
+                    12%
+                </span>
+            </div>
+            <i data-lucide="users-2" class="size-16 stat-icon-bg"></i>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">
+                <i data-lucide="user-check" class="size-3.5"></i>
+                Active Seats
+            </div>
+            <div class="stat-value">8,492</div>
+            <i data-lucide="user-check" class="size-16 stat-icon-bg"></i>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label text-amber-600">
+                <i data-lucide="zap" class="size-3.5"></i>
+                Low Credits
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="stat-value text-amber-700">42</span>
+                <span class="stat-badge stat-badge-warning">Attention</span>
+            </div>
+            <i data-lucide="zap" class="size-16 stat-icon-bg"></i>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label text-rose-600">
+                <i data-lucide="alert-circle" class="size-3.5"></i>
+                Failed Billing
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="stat-value text-rose-700">12</span>
+                <span class="stat-badge stat-badge-danger">Urgent</span>
+            </div>
+            <i data-lucide="alert-circle" class="size-16 stat-icon-bg"></i>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white border border-neutral-200 rounded-xl shadow-md overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse compact-table">
+                <thead class="header-solid sticky top-0 z-30">
+                    <tr class="bg-neutral-50">
+                        <th class="sticky-col bg-neutral-50 text-[12px] font-semibold text-neutral-500 font-ui">Team
+                            Name</th>
+                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Primary Team Lead</th>
+                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Who is Paying</th>
+                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Lead Software Plan</th>
+                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Associate Pricing</th>
+                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Preferred Collaborator Pricing</th>
+                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">MLS Fee</th>
+                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Website Fee</th>
+                        <th class="text-[12px] font-semibold text-neutral-500 font-ui text-center">Leads</th>
+                        <th class="text-[12px] font-semibold text-neutral-500 font-ui text-center">Associates</th>
+                        <th class="text-[12px] font-semibold text-neutral-500 font-ui text-center">External
+                            Collaborators</th>
+                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">E/O Pricing Plan</th>
+                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Credits Remaining</th>
+                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Billing Cycle Date</th>
+                        <th class="text-center text-[12px] font-semibold text-neutral-500 font-ui">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody" class="divide-y divide-neutral-100"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const initialData = [
+            { id: 0, name: "Circle RE", lead: "Marcus Vane", paying: "Lead", sw: "$299", assoc: "$59", collab: "$39", mls: "$25", web: "$149", L: 2, A: 24, XC: 8, eo: "$15", credits: 45000, billing: "May 20", status: "active" },
+            { id: 1, name: "The Alpha Group Real Estate", lead: "Jonathan Sterling", paying: "Lead", sw: "$199", assoc: "$49", collab: "$29", mls: "$15", web: "$99", L: 1, A: 12, XC: 4, eo: "$10", credits: 12500, billing: "May 12", status: "active" },
+            { id: 2, name: "Sunset Valley Associates", lead: "Sarah Jenkins", paying: "Agents", sw: "$149", assoc: "$39", collab: "$19", mls: "$15", web: "$99", L: 1, A: 8, XC: 2, eo: "$10", credits: 850, billing: "May 28", status: "warning" },
+            { id: 3, name: "Horizon Luxury Properties & Estates", lead: "Michael Chen", paying: "Lead", sw: "$299", assoc: "$69", collab: "$39", mls: "$25", web: "$149", L: 3, A: 34, XC: 12, eo: "$15", credits: 45200, billing: "May 15", status: "active" },
+            { id: 4, name: "Evergreen Realty Network", lead: "Elena Rodriguez", paying: "Lead", sw: "$199", assoc: "$49", collab: "$29", mls: "$15", web: "$99", L: 1, A: 5, XC: 2, eo: "$10", credits: 120, billing: "May 05", status: "failed" },
+            { id: 5, name: "Pacific Heights Brokerage", lead: "David Kim", paying: "Agents", sw: "$299", assoc: "$59", collab: "$39", mls: "$25", web: "$179", L: 2, A: 15, XC: 6, eo: "$12", credits: 8200, billing: "May 10", status: "active" },
+            { id: 6, name: "Metro City Living", lead: "Jessica Taylor", paying: "Lead", sw: "$199", assoc: "$49", collab: "$29", mls: "$15", web: "$99", L: 1, A: 10, XC: 3, eo: "$10", credits: 5500, billing: "May 22", status: "active" },
+            { id: 7, name: "Blue Harbor Real Estate", lead: "Robert Wilson", paying: "Lead", sw: "$149", assoc: "$39", collab: "$19", mls: "$15", web: "$99", L: 1, A: 14, XC: 5, eo: "$10", credits: 340, billing: "May 18", status: "warning" },
+            { id: 8, name: "Summit Ridge Realty", lead: "Karen Thompson", paying: "Agents", sw: "$199", assoc: "$49", collab: "$29", mls: "$15", web: "$99", L: 1, A: 6, XC: 2, eo: "$10", credits: 4100, billing: "May 30", status: "active" },
+            { id: 9, name: "Oasis Property Management", lead: "Kevin Adams", paying: "Lead", sw: "$299", assoc: "$59", collab: "$39", mls: "$25", web: "$149", L: 1, A: 18, XC: 8, eo: "$15", credits: 18000, billing: "Jun 02", status: "active" },
+            { id: 10, name: "Silver Lake Properties", lead: "Lisa Wong", paying: "Lead", sw: "$199", assoc: "$49", collab: "$29", mls: "$15", web: "$99", L: 1, A: 7, XC: 1, eo: "$10", credits: 9200, billing: "Jun 05", status: "active" },
+            { id: 11, name: "Grand Central Realty", lead: "Anthony Rossi", paying: "Lead", sw: "$299", assoc: "$59", collab: "$39", mls: "$25", web: "$149", L: 2, A: 20, XC: 10, eo: "$15", credits: 25000, billing: "Jun 10", status: "active" },
+            { id: 12, name: "Lakeside Estates", lead: "Emily Davis", paying: "Agents", sw: "$149", assoc: "$39", collab: "$19", mls: "$15", web: "$99", L: 1, A: 4, XC: 0, eo: "$10", credits: 1500, billing: "Jun 12", status: "active" },
+            { id: 13, name: "Park Avenue Homes", lead: "Christopher Lee", paying: "Lead", sw: "$199", assoc: "$49", collab: "$29", mls: "$15", web: "$99", L: 1, A: 11, XC: 4, eo: "$10", credits: 7800, billing: "Jun 15", status: "active" },
+            { id: 14, name: "Coastal Living Realty", lead: "Amanda White", paying: "Lead", sw: "$299", assoc: "$59", collab: "$39", mls: "$25", web: "$149", L: 1, A: 16, XC: 6, eo: "$15", credits: 14000, billing: "Jun 18", status: "active" },
+            { id: 15, name: "Urban Square Brokerage", lead: "Daniel Brown", paying: "Lead", sw: "$199", assoc: "$49", collab: "$29", mls: "$15", web: "$99", L: 1, A: 9, XC: 2, eo: "$10", credits: 500, billing: "Jun 20", status: "warning" },
+            { id: 16, name: "Skyline Realty Group", lead: "Patricia Miller", paying: "Agents", sw: "$149", assoc: "$39", collab: "$19", mls: "$15", web: "$99", L: 1, A: 5, XC: 1, eo: "$10", credits: 2200, billing: "Jun 22", status: "active" },
+            { id: 17, name: "Heritage Homes", lead: "William Garcia", paying: "Lead", sw: "$299", assoc: "$59", collab: "$39", mls: "$25", web: "$149", L: 2, A: 22, XC: 9, eo: "$15", credits: 31000, billing: "Jun 25", status: "active" }
+        ];
+
+        let state = {
+            search: '',
+            status: 'all',
+            plan: 'all',
+            payer: 'all',
+            seats: 'all'
+        };
+
+        function render() {
+            const body = document.getElementById('tableBody');
+            const filtered = initialData.filter(team => {
+                const searchMatch = team.name.toLowerCase().includes(state.search.toLowerCase()) || 
+                                   team.lead.toLowerCase().includes(state.search.toLowerCase());
+                const statusMatch = state.status === 'all' || team.status === state.status;
+                const planMatch = state.plan === 'all' || team.sw === state.plan;
+                const payerMatch = state.payer === 'all' || team.paying === state.payer;
+                return searchMatch && statusMatch && planMatch && payerMatch;
+            });
+
+            body.innerHTML = filtered.map(team => `
+                <tr class="row-hover group">
+                    <td class="sticky-col font-semibold text-neutral-900 bg-white group-hover:bg-neutral-50 transition-colors">
+                        <div class="truncate-team" title="${team.name}">${team.name}</div>
+                    </td>
+                    <td class="text-neutral-700 font-medium">${team.lead}</td>
+                    <td>
+                        <span class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${team.paying === 'Lead' ? 'bg-indigo-50 text-indigo-600' : 'bg-neutral-100 text-neutral-500'}">
+                            ${team.paying}
+                        </span>
+                    </td>
+                    <td class="font-mono text-[13px] text-neutral-600">${team.sw}</td>
+                    <td class="font-mono text-[13px] text-neutral-600">${team.assoc}</td>
+                    <td class="font-mono text-[13px] text-neutral-600">${team.collab}</td>
+                    <td class="font-mono text-[13px] text-neutral-600">${team.mls}</td>
+                    <td class="font-mono text-[13px] text-neutral-600">${team.web}</td>
+                    <td class="text-center font-mono text-[13px] text-neutral-500">${team.L}</td>
+                    <td class="text-center font-mono text-[13px] text-neutral-500">${team.A}</td>
+                    <td class="text-center font-mono text-[13px] text-neutral-500">${team.XC}</td>
+                    <td class="font-mono text-[13px] text-neutral-600">${team.eo}</td>
+                    <td class="font-mono text-[13px] ${team.credits < 1000 ? (team.credits < 200 ? 'text-red-600' : 'text-amber-600') : 'text-neutral-900'}">
+                        ${team.credits.toLocaleString()}
+                    </td>
+                    <td class="text-[12px] font-medium ${team.status === 'failed' ? 'text-red-600' : (team.status === 'warning' ? 'text-amber-600' : 'text-neutral-500')}">
+                        ${team.billing}
+                    </td>
+                    <td class="text-center">
+                        <div class="flex items-center justify-center gap-1.5">
+                            <button class="action-btn action-btn-primary" onclick="openSheet('${team.name}', 'payment')">
+                                <i data-lucide="credit-card" class="size-3.5"></i>
+                                History
+                            </button>
+                            <button class="action-btn action-btn-secondary" onclick="openSheet('${team.name}', 'activity')">
+                                <i data-lucide="history" class="size-3.5"></i>
+                                Activity
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
+
+            // Setup Scroll Listener
+            const scrollContainer = document.querySelector('.overflow-x-auto');
+            scrollContainer.addEventListener('scroll', () => {
+                const isScrolled = scrollContainer.scrollLeft > 0;
+                document.querySelectorAll('.sticky-col').forEach(el => {
+                    el.classList.toggle('scrolled', isScrolled);
+                });
+            }, { passive: true });
+        }
+
+        // Event Listeners
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            state.search = e.target.value;
+            render();
+        });
+
+        // Dropdown Logic
+        function setupDropdown(triggerId, menuId, labelId, stateKey) {
+            const trigger = document.getElementById(triggerId);
+            const menu = document.getElementById(menuId);
+            const label = document.getElementById(labelId);
+
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.dropdown-menu').forEach(m => {
+                    if (m !== menu) m.classList.remove('show');
+                });
+                menu.classList.toggle('show');
+            });
+
+            menu.querySelectorAll('.dropdown-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const val = item.getAttribute('data-value');
+                    state[stateKey] = val;
+                    label.innerText = item.innerText.replace('All Statuses', 'All').replace('All Plans', 'All').replace('All Payers', 'All');
+                    
+                    menu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
+                    item.classList.add('selected');
+                    
+                    trigger.classList.toggle('active', val !== 'all');
+                    menu.classList.remove('show');
+                    render();
+                });
+            });
+        }
+
+        setupDropdown('statusTrigger', 'statusMenu', 'statusLabel', 'status');
+        setupDropdown('planTrigger', 'planMenu', 'planLabel', 'plan');
+        setupDropdown('payerTrigger', 'payerMenu', 'payerLabel', 'payer');
+
+        window.addEventListener('click', () => {
+            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
+
+        document.getElementById('resetFilters').addEventListener('click', () => {
+            state = { search: '', status: 'all', plan: 'all', payer: 'all', seats: 'all' };
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusLabel').innerText = 'All';
+            document.getElementById('planLabel').innerText = 'All';
+            document.getElementById('payerLabel').innerText = 'All';
+            
+            document.querySelectorAll('.dropdown-trigger').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.dropdown-item').forEach(i => {
+                i.classList.remove('selected');
+                if (i.getAttribute('data-value') === 'all') i.classList.add('selected');
+            });
+            render();
+        });
+
+        render();
+    </script>
+
+
+    <script>
+        function openSheet(teamName, type) {
+            const overlay = document.getElementById('sheetOverlay');
+            const content = document.getElementById('sheetContent');
+            const title = document.getElementById('sheetTitle');
+            const subtitle = document.getElementById('sheetSubtitle');
+            const body = document.getElementById('sheetBody');
+
+            subtitle.innerText = teamName;
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+            
+            if (type === 'payment') {
+                title.innerText = 'Payment History';
+                body.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="p-4 border border-neutral-100 rounded-xl bg-neutral-50/50">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-[10px] font-bold text-emerald-600 uppercase">Paid</span>
+                                <span class="text-sm font-bold">$1,492.00</span>
+                            </div>
+                            <p class="text-xs font-semibold text-neutral-900">Software Subscription - Pro Plan</p>
+                            <p class="text-[11px] text-neutral-400 mt-1">April 12, 2026 • Visa •••• 4242</p>
+                        </div>
+                        <div class="p-4 border border-neutral-100 rounded-xl">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-[10px] font-bold text-emerald-600 uppercase">Paid</span>
+                                <span class="text-sm font-bold">$240.00</span>
+                            </div>
+                            <p class="text-xs font-semibold text-neutral-900">Add-on: 50,000 Extra Credits</p>
+                            <p class="text-[11px] text-neutral-400 mt-1">March 28, 2026 • Visa •••• 4242</p>
+                        </div>
+                        <div class="p-4 border border-neutral-100 rounded-xl">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-[10px] font-bold text-emerald-600 uppercase">Paid</span>
+                                <span class="text-sm font-bold">$1,492.00</span>
+                            </div>
+                            <p class="text-xs font-semibold text-neutral-900">Software Subscription - Pro Plan</p>
+                            <p class="text-[11px] text-neutral-400 mt-1">March 12, 2026 • Visa •••• 4242</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                title.innerText = 'Activity Log';
+                body.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="size-2 rounded-full bg-indigo-500 ring-4 ring-indigo-50"></div>
+                                <div class="w-px flex-1 bg-neutral-100 my-2"></div>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-neutral-900">Plan Upgraded</p>
+                                <p class="text-[11px] text-neutral-500 mt-0.5">Marcus Thorne upgraded to Pro Plan + 12 Associates</p>
+                                <p class="text-[10px] text-neutral-400 mt-1">Today, 2:45 PM</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="size-2 rounded-full bg-neutral-300"></div>
+                                <div class="w-px flex-1 bg-neutral-100 my-2"></div>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-neutral-900">Billing Updated</p>
+                                <p class="text-[11px] text-neutral-500 mt-0.5">New Payment Method added (Visa •••• 4242)</p>
+                                <p class="text-[10px] text-neutral-400 mt-1">Yesterday, 10:12 AM</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="size-2 rounded-full bg-neutral-300"></div>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-neutral-900">Credits Refilled</p>
+                                <p class="text-[11px] text-neutral-500 mt-0.5">Auto-refill triggered: 50,000 Credits</p>
+                                <p class="text-[10px] text-neutral-400 mt-1">April 15, 2026</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            overlay.classList.add('show');
+            content.classList.add('show');
+            lucide.createIcons();
+        }
+
+        function closeSheet() {
+            document.getElementById('sheetOverlay').classList.remove('show');
+            document.getElementById('sheetContent').classList.remove('show');
+            document.documentElement.style.overflow = 'auto';
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+    </div>
+
+    <!-- Side Panel / Sheet (Moved to document root for stacking context purity) -->
+    <div id="sheetOverlay" class="sheet-overlay" onclick="closeSheet()"></div>
+    <div id="sheetContent" class="sheet-content">
+        <div class="sheet-header border-b border-neutral-100 p-6 flex justify-between items-center">
+            <div>
+                <h3 id="sheetTitle" class="text-xl font-bold text-neutral-900 tracking-tight">Payment History</h3>
+                <p id="sheetSubtitle" class="text-sm text-neutral-500 mt-1">Team Alpha Group</p>
+            </div>
+            <button onclick="closeSheet()" class="p-2.5 hover:bg-neutral-100 rounded-xl transition-all active:scale-95">
+                <i data-lucide="x" class="size-5 text-neutral-600"></i>
+            </button>
+        </div>
+        <div id="sheetBody" class="sheet-body flex-1 overflow-y-auto"></div>
+    </div>
+</body>
+</html>
