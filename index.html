@@ -775,7 +775,7 @@
             });
 
             body.innerHTML = filtered.map(team => `
-                <tr class="row-hover group">
+                <tr class="row-hover group cursor-pointer" onclick="openSheet('${team.name}', 'overview')">
                     <td class="sticky-col font-semibold text-neutral-900 bg-white group-hover:bg-neutral-50 transition-colors">
                         <div class="truncate-team" title="${team.name}">${team.name}</div>
                     </td>
@@ -802,11 +802,11 @@
                     </td>
                     <td class="text-center">
                         <div class="flex items-center justify-center gap-1.5">
-                            <button class="action-btn action-btn-primary" onclick="openSheet('${team.name}', 'history')">
+                            <button class="action-btn action-btn-primary" onclick="event.stopPropagation(); openSheet('${team.name}', 'history')">
                                 <i data-lucide="credit-card" class="size-3.5"></i>
                                 History
                             </button>
-                            <button class="action-btn action-btn-secondary" onclick="openSheet('${team.name}', 'activity')">
+                            <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); openSheet('${team.name}', 'activity')">
                                 <i data-lucide="history" class="size-3.5"></i>
                                 Activity
                             </button>
