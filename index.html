@@ -553,11 +553,51 @@
         .r-input::placeholder {
             color: var(--neutral-400);
         }
+        /* Pricing Page Styles */
+        .pricing-page {
+            display: none;
+            animation: slideInUp 0.5s var(--ease-expo);
+        }
+
+        .pricing-page.show {
+            display: block;
+        }
+
+        .main-dashboard.hide {
+            display: none;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pricing-nav-item {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-500);
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s var(--ease-expo);
+        }
+
+        .pricing-nav-item.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .pricing-content-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
     </style>
 </head>
 
 <body class="min-h-screen bg-neutral-50">
-    <div class="p-6">
+    <!-- Main Dashboard View -->
+    <div id="mainDashboard" class="main-dashboard p-6">
 
     <!-- Header Section -->
     <header class="mb-4">
@@ -709,6 +749,47 @@
                 </thead>
                 <tbody id="tableBody" class="divide-y divide-neutral-100"></tbody>
             </table>
+        </div>
+    </div>
+
+    <!-- Pricing Page View -->
+    <div id="pricingPage" class="pricing-page min-h-screen bg-white">
+        <div class="max-w-7xl mx-auto px-6 py-10">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-10">
+                <div class="flex items-center gap-6">
+                    <button onclick="backToDashboard()" class="size-12 flex items-center justify-center hover:bg-neutral-100 rounded-2xl transition-all active:scale-90 border border-neutral-100 shadow-sm">
+                        <i data-lucide="arrow-left" class="size-6 text-neutral-600"></i>
+                    </button>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <div class="size-1.5 rounded-full bg-indigo-500"></div>
+                            <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.2em]">Team Management</span>
+                        </div>
+                        <h2 id="pricingTeamName" class="text-4xl font-bold text-neutral-900 tracking-tight">Team Name</h2>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="r-btn r-btn-outline h-12 rounded-2xl px-6">
+                        <i data-lucide="download" class="size-4"></i>
+                        Export Billing
+                    </button>
+                    <button class="r-btn r-btn-primary h-12 rounded-2xl px-6">
+                        <i data-lucide="plus" class="size-4"></i>
+                        Add New Seat
+                    </button>
+                </div>
+            </div>
+
+            <!-- Horizontal Tabs -->
+            <div class="flex items-center gap-10 border-b border-neutral-100 mb-10 overflow-x-auto no-scrollbar" id="pricingTabs">
+                <!-- Tabs injected here -->
+            </div>
+
+            <!-- Content Area -->
+            <div id="pricingBody" class="pb-20">
+                <!-- Content injected here -->
+            </div>
         </div>
     </div>
 
@@ -890,236 +971,259 @@
 
 
     <script>
-        let currentSheetTeam = null;
-        let currentTab = 'overview';
+        let currentTeam = null;
+        let currentDetailTab = 'overview';
 
-        function openSheet(teamName, initialTab = 'overview') {
+        function showPricingPage(teamName, initialTab = 'overview') {
             const team = initialData.find(t => t.name === teamName);
             if (!team) return;
             
-            currentSheetTeam = team;
-            currentTab = initialTab;
+            currentTeam = team;
+            currentDetailTab = initialTab;
 
-            const overlay = document.getElementById('sheetOverlay');
-            const content = document.getElementById('sheetContent');
-            const title = document.getElementById('sheetTitle');
-            const subtitle = document.getElementById('sheetSubtitle');
+            document.getElementById('mainDashboard').classList.add('hide');
+            document.getElementById('pricingPage').classList.add('show');
+            document.getElementById('pricingTeamName').innerText = teamName;
 
-            title.innerText = teamName;
-            subtitle.innerText = 'Team Details';
-            document.documentElement.style.overflow = 'hidden';
-            document.body.style.overflow = 'hidden';
+            renderPricingTabs();
+            renderPricingContent();
+            lucide.createIcons();
             
-            renderSheetTabs();
-            renderTabContent();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-            overlay.classList.add('show');
-            content.classList.add('show');
+        function backToDashboard() {
+            document.getElementById('mainDashboard').classList.remove('hide');
+            document.getElementById('pricingPage').classList.remove('show');
+            render(); // Refresh dashboard
+        }
+
+        function switchDetailTab(tab) {
+            currentDetailTab = tab;
+            renderPricingTabs();
+            renderPricingContent();
             lucide.createIcons();
         }
 
-        function switchTab(tab) {
-            currentTab = tab;
-            renderSheetTabs();
-            renderTabContent();
-            lucide.createIcons();
-        }
-
-        function renderSheetTabs() {
-            const container = document.getElementById('sheetTabs');
+        function renderPricingTabs() {
+            const container = document.getElementById('pricingTabs');
             const tabs = [
-                { id: 'overview', label: 'Overview', icon: 'layout-dashboard' },
-                { id: 'history', label: 'History', icon: 'credit-card' },
-                { id: 'tokens', label: 'AI Tokens', icon: 'zap' },
-                { id: 'activity', label: 'Activity', icon: 'history' }
+                { id: 'overview', label: 'Overview & Plan' },
+                { id: 'history', label: 'Billing History' },
+                { id: 'tokens', label: 'AI Tokens & Subs' },
+                { id: 'activity', label: 'Activity Log' }
             ];
 
-            container.innerHTML = `
-                <div class="r-tabs w-full">
-                    ${tabs.map(tab => `
-                        <button onclick="switchTab('${tab.id}')" class="r-tab flex-1 flex items-center justify-center gap-2 ${currentTab === tab.id ? 'active' : ''}">
-                            <i data-lucide="${tab.icon}" class="size-3.5"></i>
-                            ${tab.label}
-                        </button>
-                    `).join('')}
+            container.innerHTML = tabs.map(tab => `
+                <div onclick="switchDetailTab('${tab.id}')" class="pricing-nav-item ${currentDetailTab === tab.id ? 'active' : ''}">
+                    ${tab.label}
                 </div>
-            `;
+            `).join('');
         }
 
-        function renderTabContent() {
-            const body = document.getElementById('sheetBody');
-            const team = currentSheetTeam;
+        function renderPricingContent() {
+            const body = document.getElementById('pricingBody');
+            const team = currentTeam;
 
-            if (currentTab === 'overview') {
+            if (currentDetailTab === 'overview') {
                 body.innerHTML = `
-                    <div class="tab-content">
-                        <div class="overview-grid">
-                            <div class="overview-item">
-                                <p class="text-[10px] font-bold text-neutral-400 uppercase mb-1">Lead Plan</p>
-                                <p class="text-lg font-bold text-neutral-900">${team.sw}</p>
-                            </div>
-                            <div class="overview-item">
-                                <p class="text-[10px] font-bold text-neutral-400 uppercase mb-1">Associates</p>
-                                <p class="text-lg font-bold text-neutral-900">${team.A}</p>
-                            </div>
-                            <div class="overview-item">
-                                <p class="text-[10px] font-bold text-neutral-400 uppercase mb-1">Credits</p>
-                                <p class="text-lg font-bold text-neutral-900">${team.credits.toLocaleString()}</p>
-                            </div>
-                            <div class="overview-item">
-                                <p class="text-[10px] font-bold text-neutral-400 uppercase mb-1">Billing Date</p>
-                                <p class="text-lg font-bold text-neutral-900">${team.billing}</p>
-                            </div>
-                        </div>
-
-                        <div class="switch-container mt-6">
-                            <div>
-                                <p class="text-sm font-bold text-neutral-900">Agent Pays</p>
-                                <p class="text-[11px] text-neutral-500">Toggle if agents pay their own fees</p>
-                            </div>
-                            <div class="r-switch ${team.paying === 'Agents' ? 'on' : ''}" onclick="togglePayer(this)"></div>
-                        </div>
-
-                        <div class="mt-8 p-4 bg-indigo-50 border border-indigo-100 rounded-xl">
-                            <div class="flex items-center gap-2 text-indigo-700 mb-2">
-                                <i data-lucide="info" class="size-4"></i>
-                                <p class="text-xs font-bold uppercase">Plan Details</p>
-                            </div>
-                            <p class="text-[11px] text-indigo-600 leading-relaxed">
-                                This team is currently on the <span class="font-bold">Enterprise Tier</span>. Associate pricing is locked at ${team.assoc}/month per seat.
-                            </p>
-                        </div>
-                    </div>
-                `;
-            } else if (currentTab === 'history') {
-                body.innerHTML = `
-                    <div class="tab-content space-y-4">
-                        <div class="p-4 border border-neutral-100 rounded-xl bg-neutral-50/50">
-                            <div class="flex justify-between items-start mb-2">
-                                <span class="text-[10px] font-bold text-emerald-600 uppercase">Paid</span>
-                                <span class="text-sm font-bold">$1,492.00</span>
-                            </div>
-                            <p class="text-xs font-semibold text-neutral-900">Software Subscription - Pro Plan</p>
-                            <p class="text-[11px] text-neutral-400 mt-1">April 12, 2026 • Visa •••• 4242</p>
-                        </div>
-                        <div class="p-4 border border-neutral-100 rounded-xl">
-                            <div class="flex justify-between items-start mb-2">
-                                <span class="text-[10px] font-bold text-emerald-600 uppercase">Paid</span>
-                                <span class="text-sm font-bold">$240.00</span>
-                            </div>
-                            <p class="text-xs font-semibold text-neutral-900">Add-on: 50,000 Extra Credits</p>
-                            <p class="text-[11px] text-neutral-400 mt-1">March 28, 2026 • Visa •••• 4242</p>
-                        </div>
-                        <div class="p-4 border border-neutral-100 rounded-xl">
-                            <div class="flex justify-between items-start mb-2">
-                                <span class="text-[10px] font-bold text-emerald-600 uppercase">Paid</span>
-                                <span class="text-sm font-bold">$1,492.00</span>
-                            </div>
-                            <p class="text-xs font-semibold text-neutral-900">Software Subscription - Pro Plan</p>
-                            <p class="text-[11px] text-neutral-400 mt-1">March 12, 2026 • Visa •••• 4242</p>
-                        </div>
-                    </div>
-                `;
-            } else if (currentTab === 'tokens') {
-                body.innerHTML = `
-                    <div class="tab-content">
-                        <div class="p-6 bg-neutral-900 rounded-2xl text-white mb-6 overflow-hidden relative">
-                            <div class="relative z-10">
-                                <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Available Credits</p>
-                                <h4 class="text-3xl font-bold tracking-tight">${team.credits.toLocaleString()}</h4>
-                                <div class="mt-4 flex items-center gap-2">
-                                    <div class="h-1.5 flex-1 bg-white/10 rounded-full overflow-hidden">
-                                        <div class="h-full bg-indigo-500" style="width: 65%"></div>
+                    <div class="space-y-8">
+                        <div class="pricing-content-grid">
+                            <div class="r-card">
+                                <p class="text-xs font-bold text-neutral-400 uppercase mb-4">Subscription Plan</p>
+                                <h4 class="text-4xl font-bold text-neutral-900 mb-2">${team.sw}</h4>
+                                <p class="text-sm text-neutral-500">Billed monthly on the ${team.billing}</p>
+                                <hr class="my-6 border-neutral-100">
+                                <div class="space-y-3">
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-neutral-500">Associates</span>
+                                        <span class="font-bold">${team.A} seats</span>
                                     </div>
-                                    <span class="text-[10px] font-bold text-neutral-400">65%</span>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-neutral-500">External Collabs</span>
+                                        <span class="font-bold">${team.XC} seats</span>
+                                    </div>
                                 </div>
                             </div>
-                            <i data-lucide="zap" class="size-24 absolute -right-4 -bottom-4 text-white/5 rotate-12"></i>
+                            
+                            <div class="r-card border-indigo-100 bg-indigo-50/30">
+                                <p class="text-xs font-bold text-indigo-400 uppercase mb-4">Associate Pricing</p>
+                                <h4 class="text-4xl font-bold text-indigo-600 mb-2">${team.assoc}</h4>
+                                <p class="text-sm text-indigo-500">Per seat / monthly</p>
+                                <hr class="my-6 border-indigo-100">
+                                <div class="switch-container border-indigo-100">
+                                    <div>
+                                        <p class="text-sm font-bold text-neutral-900">Agent Pays</p>
+                                        <p class="text-[11px] text-neutral-500">Toggle billing responsibility</p>
+                                    </div>
+                                    <div class="r-switch ${team.paying === 'Agents' ? 'on' : ''}" onclick="toggleTeamPayer(this)"></div>
+                                </div>
+                            </div>
+
+                            <div class="r-card">
+                                <p class="text-xs font-bold text-neutral-400 uppercase mb-4">Credits Balance</p>
+                                <h4 class="text-4xl font-bold text-neutral-900 mb-2">${team.credits.toLocaleString()}</h4>
+                                <p class="text-sm text-neutral-500">Points remaining this cycle</p>
+                                <hr class="my-6 border-neutral-100">
+                                <button class="r-btn r-btn-outline w-full rounded-xl h-10">Top Up Credits</button>
+                            </div>
                         </div>
-                        
-                        <div class="space-y-4">
-                            <h5 class="text-xs font-bold text-neutral-900 uppercase tracking-wider">Usage by Member</h5>
-                            <div class="space-y-3">
-                                ${Array(3).fill(0).map((_, i) => `
-                                    <div class="flex items-center justify-between p-3 border border-neutral-100 rounded-xl">
-                                        <div class="flex items-center gap-3">
-                                            <div class="size-8 rounded-full bg-neutral-100 flex items-center justify-center text-[10px] font-bold">
-                                                ${['MV', 'JS', 'SJ'][i]}
-                                            </div>
-                                            <div>
-                                                <p class="text-[11px] font-bold text-neutral-900">${['Marcus Vane', 'Jonathan Sterling', 'Sarah Jenkins'][i]}</p>
-                                                <p class="text-[10px] text-neutral-500">Associate</p>
-                                            </div>
+
+                        <div class="r-card">
+                            <h5 class="text-lg font-bold text-neutral-900 mb-6">Plan Features</h5>
+                            <div class="grid grid-cols-4 gap-6">
+                                ${['MLS Integration', 'Website Builder', 'CRM Access', 'Marketing Suite', 'Lead Routing', 'E/O Insurance', '24/7 Support', 'API Access'].map(feature => `
+                                    <div class="flex items-center gap-3">
+                                        <div class="size-5 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                            <i data-lucide="check" class="size-3"></i>
                                         </div>
-                                        <p class="text-[11px] font-mono font-bold">${(12000 - i * 2000).toLocaleString()} pts</p>
+                                        <span class="text-sm text-neutral-700">${feature}</span>
                                     </div>
                                 `).join('')}
                             </div>
                         </div>
                     </div>
                 `;
-            } else if (currentTab === 'activity') {
+            } else if (currentDetailTab === 'history') {
                 body.innerHTML = `
-                    <div class="tab-content space-y-6">
-                        <div class="flex gap-4">
-                            <div class="flex flex-col items-center">
-                                <div class="size-2 rounded-full bg-indigo-500 ring-4 ring-indigo-50"></div>
-                                <div class="w-px flex-1 bg-neutral-100 my-2"></div>
+                    <div class="bg-white border border-neutral-100 rounded-2xl overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-neutral-50 border-b border-neutral-100">
+                                <tr>
+                                    <th class="px-6 py-4 text-xs font-bold text-neutral-500 uppercase">Date</th>
+                                    <th class="px-6 py-4 text-xs font-bold text-neutral-500 uppercase">Description</th>
+                                    <th class="px-6 py-4 text-xs font-bold text-neutral-500 uppercase">Amount</th>
+                                    <th class="px-6 py-4 text-xs font-bold text-neutral-500 uppercase">Status</th>
+                                    <th class="px-6 py-4 text-xs font-bold text-neutral-500 uppercase">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-neutral-50">
+                                ${Array(5).fill(0).map((_, i) => `
+                                    <tr class="hover:bg-neutral-50/50">
+                                        <td class="px-6 py-4 text-sm text-neutral-600">April ${12 - i}, 2026</td>
+                                        <td class="px-6 py-4 text-sm font-semibold text-neutral-900">Software Subscription - Pro Plan</td>
+                                        <td class="px-6 py-4 text-sm font-bold">$1,492.00</td>
+                                        <td class="px-6 py-4">
+                                            <span class="r-badge r-badge-success text-[10px]">SUCCESS</span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <button class="text-indigo-600 hover:underline text-sm font-bold">Download</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } else if (currentDetailTab === 'tokens') {
+                body.innerHTML = `
+                    <div class="grid grid-cols-3 gap-8">
+                        <div class="col-span-2 space-y-6">
+                            <div class="r-card bg-neutral-950 text-white border-0 p-8">
+                                <div class="flex justify-between items-start mb-8">
+                                    <div>
+                                        <p class="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-2">Available AI Points</p>
+                                        <h3 class="text-5xl font-bold">${team.credits.toLocaleString()}</h3>
+                                    </div>
+                                    <div class="size-12 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                                        <i data-lucide="zap" class="size-6 text-white"></i>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                                        <div class="h-full bg-indigo-500" style="width: 72%"></div>
+                                    </div>
+                                    <div class="flex justify-between text-[11px] font-bold text-neutral-400">
+                                        <span>72% REMAINING</span>
+                                        <span>REFILL ON MAY 20</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-xs font-bold text-neutral-900">Plan Upgraded</p>
-                                <p class="text-[11px] text-neutral-500 mt-0.5">Marcus Thorne upgraded to Pro Plan + 12 Associates</p>
-                                <p class="text-[10px] text-neutral-400 mt-1">Today, 2:45 PM</p>
+
+                            <div class="r-card">
+                                <h5 class="text-sm font-bold text-neutral-900 mb-6 uppercase">Point Usage History</h5>
+                                <div class="space-y-4">
+                                    ${Array(4).fill(0).map((_, i) => `
+                                        <div class="flex items-center justify-between py-3 border-b border-neutral-50 last:border-0">
+                                            <div class="flex items-center gap-3">
+                                                <div class="size-8 rounded-lg bg-neutral-50 flex items-center justify-center">
+                                                    <i data-lucide="bot" class="size-4 text-neutral-400"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-bold text-neutral-900">AI Listing Generation</p>
+                                                    <p class="text-xs text-neutral-500">Today, 11:20 AM</p>
+                                                </div>
+                                            </div>
+                                            <span class="text-sm font-bold text-rose-600">-250 pts</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
                             </div>
                         </div>
-                        <div class="flex gap-4">
-                            <div class="flex flex-col items-center">
-                                <div class="size-2 rounded-full bg-neutral-300"></div>
-                                <div class="w-px flex-1 bg-neutral-100 my-2"></div>
-                            </div>
-                            <div>
-                                <p class="text-xs font-bold text-neutral-900">Billing Updated</p>
-                                <p class="text-[11px] text-neutral-500 mt-0.5">New Payment Method added (Visa •••• 4242)</p>
-                                <p class="text-[10px] text-neutral-400 mt-1">Yesterday, 10:12 AM</p>
+
+                        <div class="space-y-6">
+                            <div class="r-card">
+                                <h5 class="text-sm font-bold text-neutral-900 mb-4 uppercase">Top Consumers</h5>
+                                <div class="space-y-4">
+                                    ${Array(3).fill(0).map((_, i) => `
+                                        <div class="flex items-center gap-3">
+                                            <div class="r-avatar r-avatar-sm">${['MV', 'JS', 'SJ'][i]}</div>
+                                            <div class="flex-1">
+                                                <div class="flex justify-between text-xs mb-1">
+                                                    <span class="font-bold">${['Marcus Vane', 'Jonathan Sterling', 'Sarah Jenkins'][i]}</span>
+                                                    <span>${12000 - i * 3000}</span>
+                                                </div>
+                                                <div class="r-progress"><div class="r-progress-bar" style="width: ${80 - i * 15}%"></div></div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
                             </div>
                         </div>
-                        <div class="flex gap-4">
-                            <div class="flex flex-col items-center">
-                                <div class="size-2 rounded-full bg-neutral-300"></div>
-                            </div>
-                            <div>
-                                <p class="text-xs font-bold text-neutral-900">Credits Refilled</p>
-                                <p class="text-[11px] text-neutral-500 mt-0.5">Auto-refill triggered: 50,000 Credits</p>
-                                <p class="text-[10px] text-neutral-400 mt-1">April 15, 2026</p>
-                            </div>
+                    </div>
+                `;
+            } else if (currentDetailTab === 'activity') {
+                body.innerHTML = `
+                    <div class="max-w-2xl">
+                        <div class="space-y-10">
+                            ${[
+                                { title: 'Plan Upgraded', desc: 'Marcus Thorne upgraded to Pro Plan + 12 Associates', time: 'Today, 2:45 PM', icon: 'trending-up', color: 'indigo' },
+                                { title: 'Billing Updated', desc: 'New Payment Method added (Visa •••• 4242)', time: 'Yesterday, 10:12 AM', icon: 'credit-card', color: 'neutral' },
+                                { title: 'Credits Refilled', desc: 'Auto-refill triggered: 50,000 Credits', time: 'April 15, 2026', icon: 'zap', color: 'amber' },
+                                { title: 'Member Invited', desc: 'Sarah Jenkins was invited as an Associate', time: 'April 10, 2026', icon: 'user-plus', color: 'neutral' }
+                            ].map((item, i) => `
+                                <div class="flex gap-6">
+                                    <div class="flex flex-col items-center">
+                                        <div class="size-10 rounded-xl bg-${item.color === 'neutral' ? 'neutral-100' : item.color + '-50'} flex items-center justify-center">
+                                            <i data-lucide="${item.icon}" class="size-5 text-${item.color === 'neutral' ? 'neutral-600' : item.color + '-600'}"></i>
+                                        </div>
+                                        ${i < 3 ? `<div class="w-px flex-1 bg-neutral-100 my-2"></div>` : ''}
+                                    </div>
+                                    <div class="pt-1">
+                                        <p class="text-base font-bold text-neutral-900">${item.title}</p>
+                                        <p class="text-sm text-neutral-500 mt-1">${item.desc}</p>
+                                        <p class="text-[11px] text-neutral-400 mt-2 font-bold uppercase tracking-wider">${item.time}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
                 `;
             }
         }
 
-        function togglePayer(el) {
+        function toggleTeamPayer(el) {
             el.classList.toggle('on');
-            if (currentSheetTeam) {
-                currentSheetTeam.paying = el.classList.contains('on') ? 'Agents' : 'Lead';
-                render(); // Update main table
+            if (currentTeam) {
+                currentTeam.paying = el.classList.contains('on') ? 'Agents' : 'Lead';
             }
         }
 
-        function closeSheet() {
-            document.getElementById('sheetOverlay').classList.remove('show');
-            document.getElementById('sheetContent').classList.remove('show');
-            document.documentElement.style.overflow = 'auto';
-            document.body.style.overflow = 'auto';
+        function openSheet(teamName, tab = 'overview') {
+            showPricingPage(teamName, tab);
         }
 
-        // Global Keyboard Listeners
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeSheet();
-                document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
-            }
-        });
+        // Original script remains, but openSheet now redirects to the page view
     </script>
     </div>
 
