@@ -857,7 +857,7 @@
             });
 
             body.innerHTML = filtered.map(team => `
-                <tr class="row-hover group cursor-pointer" onclick="openSheet('${team.name}', 'overview')">
+                <tr class="row-hover group cursor-pointer" onclick="showPricingPage('${team.name}', 'overview')">
                     <td class="sticky-col font-semibold text-neutral-900 bg-white group-hover:bg-neutral-50 transition-colors">
                         <div class="truncate-team" title="${team.name}">${team.name}</div>
                     </td>
