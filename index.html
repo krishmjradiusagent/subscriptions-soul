@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Radius | Soul View - Subscription Manager</title>
+    <!-- Radius UI Design System -->
+    <link rel="stylesheet" href="Radius UI Design System/colors_and_type.css">
+    <link rel="stylesheet" href="Radius UI Design System/components.css">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +18,34 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5A5FF2',
+                        neutral: {
+                            50: '#FAFAFA',
+                            100: '#F5F5F5',
+                            200: '#E5E5E5',
+                            300: '#D4D4D4',
+                            400: '#A3A3A3',
+                            500: '#737373',
+                            600: '#525252',
+                            700: '#404040',
+                            800: '#262626',
+                            900: '#171717',
+                            950: '#0A0A0A',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Geist Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         :root {
             --primary: #5A5FF2;
@@ -45,12 +76,17 @@
             --warning: #EAB308;
             --destructive: #DC2626;
             --info: #3F8DFF;
+        }
 
-            --ease-expo: cubic-bezier(0.32, 0.72, 0, 1);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            font-family: 'Geist', sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--neutral-50);
             color: var(--foreground);
             -webkit-font-smoothing: antialiased;
@@ -80,6 +116,15 @@
 
         ::-webkit-scrollbar-thumb:hover {
             background: var(--neutral-400);
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
         .sticky-col {
@@ -187,6 +232,64 @@
             transform: rotate(-15deg);
         }
 
+        .hidden {
+            display: none !important;
+        }
+
+        .show {
+            display: block !important;
+        }
+
+        /* Aggressive Scroll Fix & Visual Feedback */
+        html,
+        body {
+            height: auto !important;
+            min-height: 100% !important;
+            overflow: auto !important;
+            /* Changed from visible to auto to force scrollbar context */
+            -webkit-overflow-scrolling: touch;
+            scrollbar-gutter: stable;
+        }
+
+        /* Ensure scrollbars are ALWAYS visible for visual feedback */
+        ::-webkit-scrollbar {
+            width: 8px !important;
+            height: 8px !important;
+            display: block !important;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent !important;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neutral-300) !important;
+            border-radius: 10px !important;
+            border: 2px solid var(--neutral-50) !important;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neutral-400) !important;
+        }
+
+        body.is-scrolling {
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+        }
+
+        #pricingPage {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: auto !important;
+            min-height: 100vh;
+        }
+
+        #pricingPage.show {
+            display: block !important;
+            overflow-y: visible !important;
+        }
+
         .action-btn {
             display: inline-flex;
             align-items: center;
@@ -227,6 +330,209 @@
 
         .action-btn:active {
             transform: scale(0.96);
+        }
+
+        .hub-card {
+            background: white;
+            border: 1px solid var(--neutral-200);
+            border-radius: 12px;
+            box-shadow: var(--shadow-xs);
+            transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        .hub-card:hover {
+            border-color: var(--neutral-300);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .plan-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.875rem 1rem;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .plan-row:hover {
+            background-color: var(--neutral-50);
+        }
+
+        .inline-edit-input {
+            width: 70px;
+            height: 28px;
+            padding: 0 8px;
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            outline: none;
+            background: white;
+            transition: all 0.2s var(--ease-out);
+        }
+
+        .inline-edit-input:focus {
+            box-shadow: 0 0 0 2px rgba(90, 95, 242, 0.1);
+        }
+
+        .nav-card {
+            background: white;
+            border: 1px solid var(--neutral-200);
+            border-radius: 12px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        .nav-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px -5px rgba(90, 95, 242, 0.1);
+        }
+
+        .summary-card {
+            background: #F8F9FF;
+            border: 1px solid #E0E4FF;
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .roster-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--neutral-600);
+            transition: all 0.2s ease;
+        }
+
+        .roster-link:hover {
+            background-color: var(--neutral-100);
+            color: var(--primary);
+        }
+
+        /* Modal / Dialog */
+        .dialog-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        .dialog-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dialog-content {
+            background: white;
+            width: 100%;
+            max-width: 440px;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transform: scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        .dialog-overlay.show .dialog-content {
+            transform: scale(1);
+        }
+
+        /* Switch — defined in Radius DS components.css */
+
+        /* Bento Expansion Styles */
+        .expanded-section {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.4s ease, margin 0.4s ease;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .expanded-section.open {
+            max-height: 2000px;
+            opacity: 1;
+            margin-top: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .bento-active {
+            border-color: var(--primary) !important;
+            background-color: #F8F9FF !important;
+            box-shadow: 0 0 0 1px var(--primary), 0 10px 25px -5px rgba(90, 95, 242, 0.15) !important;
+        }
+
+        .bento-active .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Switch Spacing Refinement */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 6px 16px;
+            background: white;
+            border-radius: 99px;
+            border: 1px solid var(--neutral-100);
+            box-shadow: var(--shadow-xs);
+        }
+
+        .toggle-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--neutral-400);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-active-text {
+            color: var(--neutral-900);
+        }
+
+        /* Sticky Sidebar Fixes */
+        .sticky-sidebar {
+            position: sticky;
+            top: 2rem;
+            align-self: start;
+        }
+
+        .no-phantom-padding {
+            padding-bottom: 1.5rem !important;
+        }
+
+        /* Auto-save toast */
+        .save-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--neutral-900);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 99px;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 10001;
+            transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        .save-toast.show {
+            transform: translateX(-50%) translateY(0);
         }
 
         /* Side Panel / Drawer */
@@ -285,7 +591,8 @@
         .sheet-body {
             flex: 1;
             overflow-y: auto;
-            padding: 0; /* Removing default padding for tab content control */
+            padding: 0;
+            /* Removing default padding for tab content control */
         }
 
         .sheet-tabs-container {
@@ -303,8 +610,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .overview-grid {
@@ -344,6 +658,7 @@
         .log-item:last-child {
             border-bottom: none;
         }
+
         .action-bar {
             padding: 0.75rem 1.5rem;
             background: white;
@@ -453,8 +768,15 @@
         }
 
         @keyframes dropdownFadeIn {
-            from { opacity: 0; transform: translateY(-4px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .search-container {
@@ -502,11 +824,13 @@
 
         .r-btn-primary {
             background: var(--primary);
-            color: var(--primary-foreground);
+            color: white;
+            transition: all 0.2s var(--ease-smooth);
         }
 
         .r-btn-primary:hover {
-            background: #4A4FE0;
+            background: var(--primary-hover);
+            transform: translateY(-1px);
         }
 
         .r-btn-outline {
@@ -553,44 +877,257 @@
         .r-input::placeholder {
             color: var(--neutral-400);
         }
-        /* Pricing Page Styles */
+
+        /* Pricing Page / Billing Details Overhaul (GitBook Style) */
         .pricing-page {
             display: none;
-            animation: slideInUp 0.5s var(--ease-expo);
+            background: #FAFAFA;
         }
 
         .pricing-page.show {
-            display: block;
+            display: flex;
         }
 
-        .main-dashboard.hide {
-            display: none;
-        }
-
-        @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .pricing-nav-item {
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--neutral-500);
-            border-bottom: 2px solid transparent;
-            cursor: pointer;
-            transition: all 0.2s var(--ease-expo);
-        }
-
-        .pricing-nav-item.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-        }
-
-        .pricing-content-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        .pricing-sidebar {
+            width: 240px;
+            height: 100vh;
+            border-right: 1px solid var(--neutral-200);
+            padding: 24px 16px;
+            background: #FAFAFA;
+            position: sticky;
+            top: 0;
+            display: flex;
+            flex-direction: column;
             gap: 24px;
+        }
+
+        .nav-section {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--neutral-400);
+            text-transform: uppercase;
+            padding: 0 12px;
+            margin-bottom: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--neutral-600);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: var(--neutral-100);
+            color: var(--neutral-900);
+        }
+
+        .nav-item.active {
+            background: #E5E7EB;
+            color: var(--neutral-900);
+            font-weight: 600;
+        }
+
+        /* shadcn/ui aesthetic additions */
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .plan-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .plan-row:hover {
+            background: var(--neutral-50);
+        }
+
+        .nav-card {
+            background: white;
+            border: 1px solid var(--neutral-200);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s var(--ease-smooth);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+            border-color: var(--primary);
+        }
+
+        .token-progress {
+            height: 6px;
+            background: var(--neutral-100);
+            border-radius: 3px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+
+        .token-progress-bar {
+            height: 100%;
+            background: var(--primary);
+            transition: width 1s var(--ease-expo), background 0.3s;
+        }
+
+        .token-progress-bar.warning {
+            background: var(--destructive);
+        }
+
+        .recalc-animate {
+            animation: pulse-price 0.4s var(--ease-smooth);
+        }
+
+        @keyframes pulse-price {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+                color: var(--primary);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .status-badge-active {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: #ECFDF5;
+            color: #059669;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .billing-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .pricing-summary-panel {
+            width: 320px;
+            height: fit-content;
+            padding: 40px 24px;
+            position: sticky;
+            top: 0;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid var(--neutral-200);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .plan-pill {
+            background: #FDF2F8;
+            color: #DB2777;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+        }
+
+
+        .trial-banner {
+            background: #FDF2F8;
+            border: 1px solid #FBCFE8;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        /* Radius UI Buttons & Colors */
+        .r-btn-upgrade {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+            height: 40px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s var(--ease-smooth);
+        }
+
+        .r-btn-upgrade:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 4px 12px rgba(90, 95, 242, 0.2);
+        }
+
+        .r-tabs-minimal {
+            display: flex;
+            gap: 24px;
+            border-bottom: 1px solid var(--neutral-100);
+            margin-bottom: 32px;
+        }
+
+        .r-tab-minimal {
+            padding-bottom: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--neutral-500);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .r-tab-minimal.active {
+            color: var(--neutral-900);
+            font-weight: 600;
+        }
+
+        .r-tab-minimal.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
         }
     </style>
 </head>
@@ -599,202 +1136,989 @@
     <!-- Main Dashboard View -->
     <div id="mainDashboard" class="main-dashboard p-6">
 
-    <!-- Header Section -->
-    <header class="mb-4">
-        <div class="flex items-center gap-2 mb-2">
-            <span
-                class="bg-indigo-100 text-indigo-600 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider font-ui">SOUL</span>
-            <span class="text-neutral-400">/</span>
-            <span class="text-neutral-500 text-xs font-medium font-ui">Subscription Manager</span>
-        </div>
-        <h1 class="text-3xl font-bold tracking-tight text-neutral-950">SOUL Subscription Manager</h1>
-        <p class="text-neutral-500 text-sm mt-1">Subscription table to view all teams and agents</p>
-    </header>
+        <!-- Header Section -->
+        <header class="mb-4">
+            <div class="flex items-center gap-2 mb-2">
+                <span
+                    class="bg-indigo-100 text-indigo-600 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider font-ui">SOUL</span>
+                <span class="text-neutral-400">/</span>
+                <span class="text-neutral-500 text-xs font-medium font-ui">Subscription Manager</span>
+            </div>
+            <h1 class="text-2xl font-semibold tracking-tight text-neutral-950">SOUL Subscription Manager</h1>
+            <p class="text-neutral-500 text-sm mt-1">Subscription table to view all teams and agents</p>
+        </header>
 
-    <!-- Refined Action Bar -->
-    <div class="action-bar">
-        <div class="relative group">
-            <i data-lucide="search" class="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-indigo-600 transition-colors"></i>
-            <input type="text" id="searchInput" placeholder="Search teams..."
-                class="search-slim outline-none">
-        </div>
-
-        <div class="flex items-center gap-2">
-            <!-- Status Dropdown -->
-            <div class="relative">
-                <div id="statusTrigger" class="dropdown-trigger">
-                    <span class="dropdown-label">Status:</span>
-                    <span id="statusLabel" class="dropdown-value">All</span>
-                    <i data-lucide="chevron-down" class="size-3.5 text-neutral-400"></i>
-                </div>
-                <div id="statusMenu" class="dropdown-menu">
-                    <div class="dropdown-item selected" data-value="all">All Statuses</div>
-                    <div class="dropdown-item" data-value="active">Active</div>
-                    <div class="dropdown-item" data-value="warning">Warning</div>
-                    <div class="dropdown-item" data-value="failed">Failed</div>
-                </div>
+        <!-- Refined Action Bar -->
+        <div class="action-bar">
+            <div class="relative group">
+                <i data-lucide="search"
+                    class="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-indigo-600 transition-colors"></i>
+                <input type="text" id="searchInput" placeholder="Search teams..." class="search-slim outline-none">
             </div>
 
-            <!-- Plan Dropdown -->
-            <div class="relative">
-                <div id="planTrigger" class="dropdown-trigger">
-                    <span class="dropdown-label">Plan:</span>
-                    <span id="planLabel" class="dropdown-value">All</span>
-                    <i data-lucide="chevron-down" class="size-3.5 text-neutral-400"></i>
-                </div>
-                <div id="planMenu" class="dropdown-menu">
-                    <div class="dropdown-item selected" data-value="all">All Plans</div>
-                    <div class="dropdown-item" data-value="$149">$149</div>
-                    <div class="dropdown-item" data-value="$199">$199</div>
-                    <div class="dropdown-item" data-value="$299">$299</div>
-                </div>
-            </div>
-
-            <!-- Payer Dropdown -->
-            <div class="relative">
-                <div id="payerTrigger" class="dropdown-trigger">
-                    <span class="dropdown-label">Payer:</span>
-                    <span id="payerLabel" class="dropdown-value">All</span>
-                    <i data-lucide="chevron-down" class="size-3.5 text-neutral-400"></i>
-                </div>
-                <div id="payerMenu" class="dropdown-menu">
-                    <div class="dropdown-item selected" data-value="all">All Payers</div>
-                    <div class="dropdown-item" data-value="Lead">Lead</div>
-                    <div class="dropdown-item" data-value="Agents">Agents</div>
-                </div>
-            </div>
-
-            <button id="resetFilters" class="text-[#5A5FF2] hover:bg-indigo-50 transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-md">
-                <i data-lucide="rotate-ccw" class="size-3.5"></i>
-                <span class="text-[12px] font-bold">Reset</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Stats -->
-    <div class="px-6 grid grid-cols-4 gap-4 mb-4">
-        <div class="stat-card">
-            <div class="stat-label">
-                <i data-lucide="users-2" class="size-3.5"></i>
-                Total Teams
-            </div>
             <div class="flex items-center gap-2">
-                <span class="stat-value">1,284</span>
-                <span class="stat-badge stat-badge-success">
-                    <i data-lucide="trending-up" class="size-3"></i>
-                    12%
-                </span>
-            </div>
-            <i data-lucide="users-2" class="size-16 stat-icon-bg"></i>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-label">
-                <i data-lucide="user-check" class="size-3.5"></i>
-                Active Seats
-            </div>
-            <div class="stat-value">8,492</div>
-            <i data-lucide="user-check" class="size-16 stat-icon-bg"></i>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-label text-amber-600">
-                <i data-lucide="zap" class="size-3.5"></i>
-                Low Credits
-            </div>
-            <div class="flex items-center gap-2">
-                <span class="stat-value text-amber-700">42</span>
-                <span class="stat-badge stat-badge-warning">Attention</span>
-            </div>
-            <i data-lucide="zap" class="size-16 stat-icon-bg"></i>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-label text-rose-600">
-                <i data-lucide="alert-circle" class="size-3.5"></i>
-                Failed Billing
-            </div>
-            <div class="flex items-center gap-2">
-                <span class="stat-value text-rose-700">12</span>
-                <span class="stat-badge stat-badge-danger">Urgent</span>
-            </div>
-            <i data-lucide="alert-circle" class="size-16 stat-icon-bg"></i>
-        </div>
-    </div>
-
-    <!-- Table -->
-    <div class="bg-white border border-neutral-200 rounded-xl shadow-md overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse compact-table">
-                <thead class="header-solid sticky top-0 z-30">
-                    <tr class="bg-neutral-50">
-                        <th class="sticky-col bg-neutral-50 text-[12px] font-semibold text-neutral-500 font-ui">Team
-                            Name</th>
-                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Primary Team Lead</th>
-                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Who is Paying</th>
-                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Lead Software Plan</th>
-                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Associate Pricing</th>
-                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Preferred Collaborator Pricing</th>
-                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">MLS Fee</th>
-                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Website Fee</th>
-                        <th class="text-[12px] font-semibold text-neutral-500 font-ui text-center">Leads</th>
-                        <th class="text-[12px] font-semibold text-neutral-500 font-ui text-center">Associates</th>
-                        <th class="text-[12px] font-semibold text-neutral-500 font-ui text-center">External
-                            Collaborators</th>
-                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">E/O Pricing Plan</th>
-                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Credits Remaining</th>
-                        <th class="text-[12px] font-semibold text-neutral-500 font-ui">Billing Cycle Date</th>
-                        <th class="text-center text-[12px] font-semibold text-neutral-500 font-ui">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody" class="divide-y divide-neutral-100"></tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<!-- Pricing Page View -->
-<div id="pricingPage" class="pricing-page min-h-screen bg-white">
-        <div class="max-w-7xl mx-auto px-6 py-10">
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-10">
-                <div class="flex items-center gap-6">
-                    <button onclick="backToDashboard()" class="size-12 flex items-center justify-center hover:bg-neutral-100 rounded-2xl transition-all active:scale-90 border border-neutral-100 shadow-sm">
-                        <i data-lucide="arrow-left" class="size-6 text-neutral-600"></i>
-                    </button>
-                    <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <div class="size-1.5 rounded-full bg-indigo-500"></div>
-                            <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.2em]">Team Management</span>
-                        </div>
-                        <h2 id="pricingTeamName" class="text-4xl font-bold text-neutral-900 tracking-tight">Team Name</h2>
+                <!-- Status Dropdown -->
+                <div class="relative">
+                    <div id="statusTrigger" class="dropdown-trigger">
+                        <span class="dropdown-label">Status:</span>
+                        <span id="statusLabel" class="dropdown-value">All</span>
+                        <i data-lucide="chevron-down" class="size-3.5 text-neutral-400"></i>
+                    </div>
+                    <div id="statusMenu" class="dropdown-menu">
+                        <div class="dropdown-item selected" data-value="all">All Statuses</div>
+                        <div class="dropdown-item" data-value="active">Active</div>
+                        <div class="dropdown-item" data-value="warning">Warning</div>
+                        <div class="dropdown-item" data-value="failed">Failed</div>
                     </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <button class="r-btn r-btn-outline h-12 rounded-2xl px-6">
-                        <i data-lucide="download" class="size-4"></i>
-                        Export Billing
+
+                <!-- Plan Dropdown -->
+                <div class="relative">
+                    <div id="planTrigger" class="dropdown-trigger">
+                        <span class="dropdown-label">Plan:</span>
+                        <span id="planLabel" class="dropdown-value">All</span>
+                        <i data-lucide="chevron-down" class="size-3.5 text-neutral-400"></i>
+                    </div>
+                    <div id="planMenu" class="dropdown-menu">
+                        <div class="dropdown-item selected" data-value="all">All Plans</div>
+                        <div class="dropdown-item" data-value="$149">$149</div>
+                        <div class="dropdown-item" data-value="$199">$199</div>
+                        <div class="dropdown-item" data-value="$299">$299</div>
+                    </div>
+                </div>
+
+                <!-- Payer Dropdown -->
+                <div class="relative">
+                    <div id="payerTrigger" class="dropdown-trigger">
+                        <span class="dropdown-label">Payer:</span>
+                        <span id="payerLabel" class="dropdown-value">All</span>
+                        <i data-lucide="chevron-down" class="size-3.5 text-neutral-400"></i>
+                    </div>
+                    <div id="payerMenu" class="dropdown-menu">
+                        <div class="dropdown-item selected" data-value="all">All Payers</div>
+                        <div class="dropdown-item" data-value="Lead">Lead</div>
+                        <div class="dropdown-item" data-value="Agents">Agents</div>
+                    </div>
+                </div>
+
+                <button id="resetFilters"
+                    class="text-[#5A5FF2] hover:bg-indigo-50 transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-md">
+                    <i data-lucide="rotate-ccw" class="size-3.5"></i>
+                    <span class="text-[12px] font-bold">Reset</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="px-6 grid grid-cols-4 gap-4 mb-4">
+            <div class="stat-card">
+                <div class="stat-label">
+                    <i data-lucide="users-2" class="size-3.5"></i>
+                    Total Teams
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="stat-value">1,284</span>
+                    <span class="stat-badge stat-badge-success">
+                        <i data-lucide="trending-up" class="size-3"></i>
+                        12%
+                    </span>
+                </div>
+                <i data-lucide="users-2" class="size-16 stat-icon-bg"></i>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">
+                    <i data-lucide="user-check" class="size-3.5"></i>
+                    Active Seats
+                </div>
+                <div class="stat-value">8,492</div>
+                <i data-lucide="user-check" class="size-16 stat-icon-bg"></i>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label text-amber-600">
+                    <i data-lucide="zap" class="size-3.5"></i>
+                    Low Credits
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="stat-value text-amber-700">42</span>
+                    <span class="stat-badge stat-badge-warning">Attention</span>
+                </div>
+                <i data-lucide="zap" class="size-16 stat-icon-bg"></i>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label text-rose-600">
+                    <i data-lucide="alert-circle" class="size-3.5"></i>
+                    Failed Billing
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="stat-value text-rose-700">12</span>
+                    <span class="stat-badge stat-badge-danger">Urgent</span>
+                </div>
+                <i data-lucide="alert-circle" class="size-16 stat-icon-bg"></i>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="bg-white border border-neutral-200 rounded-xl shadow-md overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse compact-table">
+                    <thead class="header-solid sticky top-0 z-30">
+                        <tr class="bg-neutral-50">
+                            <th class="sticky-col bg-neutral-50 text-[12px] font-semibold text-neutral-500 font-ui">Team
+                                Name</th>
+                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Primary Team Lead</th>
+                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Who is Paying</th>
+                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Lead Software Plan</th>
+                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Associate Pricing</th>
+                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Preferred Collaborator
+                                Pricing</th>
+                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">MLS Fee</th>
+                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Website Fee</th>
+                            <th class="text-[12px] font-semibold text-neutral-500 font-ui text-center">Leads</th>
+                            <th class="text-[12px] font-semibold text-neutral-500 font-ui text-center">Associates</th>
+                            <th class="text-[12px] font-semibold text-neutral-500 font-ui text-center">External
+                                Collaborators</th>
+                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">E/O Pricing Plan</th>
+                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Credits Remaining</th>
+                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Billing Cycle Date</th>
+                            <th class="text-center text-[12px] font-semibold text-neutral-500 font-ui">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody" class="divide-y divide-neutral-100"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Tokens & Usage View (Full Page Drill-down) -->
+    <div id="tokensPage" class="hidden min-h-screen bg-[#FDFDFD]">
+        <div class="max-w-[1400px] mx-auto w-full px-8 py-10">
+            <!-- Header (Identical to Pricing Page) -->
+            <header class="mb-6">
+                <nav
+                    class="flex items-center gap-2 text-[11px] font-bold text-neutral-400 mb-6 uppercase tracking-wider">
+                    <button onclick="navigateBackToOverview()" class="hover:text-primary transition-colors">Subscription
+                        Manager</button>
+                    <i data-lucide="chevron-right" class="size-3"></i>
+                    <span class="text-neutral-500" id="tokenTeamBreadcrumb">Circle RE</span>
+                    <i data-lucide="chevron-right" class="size-3"></i>
+                    <span class="text-neutral-900">AI Tokens & Usage</span>
+                </nav>
+                <div class="flex justify-between items-end">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h1 class="text-3xl font-semibold text-neutral-900 tracking-tight">AI Tokens & Usage</h1>
+                            <div class="status-badge-active">
+                                <span class="size-1.5 rounded-full bg-emerald-500"></span>
+                                <span class="text-[10px] font-black uppercase">Tokens Active</span>
+                            </div>
+                        </div>
+                        <p class="text-neutral-500 text-sm">Monitor credit consumption and manage automated refill logic
+                        </p>
+                    </div>
+                    <button onclick="navigateBackToOverview()"
+                        class="px-5 py-2 bg-neutral-900 text-white text-[11px] font-black rounded-lg hover:bg-neutral-800 transition-all uppercase tracking-widest flex items-center gap-2">
+                        <i data-lucide="arrow-left" class="size-4"></i>
+                        Return to Hub
                     </button>
-                    <button class="r-btn r-btn-primary h-12 rounded-2xl px-6">
-                        <i data-lucide="plus" class="size-4"></i>
-                        Add New Seat
+                </div>
+            </header>
+
+            <!-- Top Dashboard (Bento Hub - Matching existing styles) -->
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <!-- Card 1: Available Credits -->
+                <div class="hub-card p-8 bg-white border border-neutral-100 shadow-sm relative overflow-hidden">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="size-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
+                            <i data-lucide="zap" class="size-6"></i>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] font-black text-neutral-400 uppercase tracking-widest mb-1">Status</p>
+                            <span class="text-[10px] font-bold text-emerald-600 uppercase">Healthy</span>
+                        </div>
+                    </div>
+                    <h4 class="text-sm font-semibold text-neutral-900 mb-2">Credits Remaining</h4>
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span class="text-4xl font-bold text-neutral-900 tracking-tight tabular-nums">10,240</span>
+                        <span class="text-[10px] font-bold text-neutral-400 uppercase">Tokens</span>
+                    </div>
+                    <div class="w-full h-1.5 bg-neutral-100 rounded-full overflow-hidden mb-2">
+                        <div class="h-full bg-amber-500 rounded-full" style="width: 65%;"></div>
+                    </div>
+                    <p class="text-[10px] font-bold text-neutral-400 uppercase">Cycle ends May 20</p>
+                </div>
+
+                <!-- Card 2: Auto-Recharge Settings -->
+                <div class="hub-card p-8 bg-white border border-neutral-100 shadow-sm">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="size-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                            <i data-lucide="settings" class="size-6"></i>
+                        </div>
+                        <div class="r-switch on" onclick="toggleSwitch(this)"></div>
+                    </div>
+                    <h4 class="text-sm font-semibold text-neutral-900 mb-2">Auto-Recharge Logic</h4>
+                    <p class="text-xs text-neutral-500 leading-relaxed mb-6">Refill 5,000 tokens ($50.00) when balance
+                        drops below 1,000.</p>
+                    <button class="text-[11px] font-black text-primary uppercase tracking-widest hover:underline">Modify
+                        Settings</button>
+                </div>
+
+                <!-- Card 3: Manual Recharge -->
+                <div class="hub-card p-8 bg-white border border-neutral-100 shadow-sm flex flex-col justify-between">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="size-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                            <i data-lucide="plus-circle" class="size-6"></i>
+                        </div>
+                        <button class="text-[10px] font-bold text-neutral-400 uppercase hover:text-primary">Pricing
+                            Info</button>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-neutral-900 mb-2">Manual Recharge</h4>
+                        <p class="text-xs text-neutral-500 mb-6">Add tokens immediately for high-volume tasks.</p>
+                    </div>
+                    <button
+                        class="w-full py-2.5 bg-primary text-white text-[11px] font-black rounded-lg hover:bg-primary/90 transition-all uppercase tracking-widest shadow-sm">
+                        Buy Credits
                     </button>
                 </div>
             </div>
 
-            <!-- Horizontal Tabs -->
-            <div class="flex items-center gap-10 border-b border-neutral-100 mb-10 overflow-x-auto no-scrollbar" id="pricingTabs">
-                <!-- Tabs injected here -->
-            </div>
+            <!-- Main Content Area (Full-Width Tables - Matching Roster table style) -->
+            <div class="hub-card bg-white border border-neutral-100 shadow-sm overflow-hidden">
+                <div class="flex border-b border-neutral-100 bg-neutral-50/30">
+                    <button id="usageLogTab" onclick="switchTokenTab('usage')"
+                        class="px-8 py-5 text-[11px] font-black uppercase tracking-widest border-b-2 border-primary text-neutral-900 transition-all">
+                        Usage Activity
+                    </button>
+                    <button id="financialTab" onclick="switchTokenTab('financial')"
+                        class="px-8 py-5 text-[11px] font-black uppercase tracking-widest border-b-2 border-transparent text-neutral-400 hover:text-neutral-600 transition-all">
+                        Invoices & Refills
+                    </button>
+                </div>
 
-            <!-- Content Area -->
-            <div id="pricingBody" class="pb-20">
-                <!-- Content injected here -->
+                <!-- Tables -->
+                <div id="usageLogView" class="w-full">
+                    <table class="w-full text-left">
+                        <thead class="bg-neutral-50/50 border-b border-neutral-100">
+                            <tr>
+                                <th class="py-4 px-8 text-[9px] font-black text-neutral-400 uppercase tracking-widest">
+                                    Date / Time</th>
+                                <th class="py-4 px-8 text-[9px] font-black text-neutral-400 uppercase tracking-widest">
+                                    Member</th>
+                                <th class="py-4 px-8 text-[9px] font-black text-neutral-400 uppercase tracking-widest">
+                                    Service</th>
+                                <th
+                                    class="py-4 px-8 text-[9px] font-black text-neutral-400 uppercase tracking-widest text-right">
+                                    Consumption</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tokenUsageBody" class="divide-y divide-neutral-50"></tbody>
+                    </table>
+                </div>
+
+                <div id="financialView" class="hidden w-full">
+                    <table class="w-full text-left">
+                        <thead class="bg-neutral-50/50 border-b border-neutral-100">
+                            <tr>
+                                <th class="py-4 px-8 text-[9px] font-black text-neutral-400 uppercase tracking-widest">
+                                    Date</th>
+                                <th class="py-4 px-8 text-[9px] font-black text-neutral-400 uppercase tracking-widest">
+                                    Transaction Type</th>
+                                <th
+                                    class="py-4 px-8 text-[9px] font-black text-neutral-400 uppercase tracking-widest text-center">
+                                    Amount</th>
+                                <th
+                                    class="py-4 px-8 text-[9px] font-black text-neutral-400 uppercase tracking-widest text-center">
+                                    Tokens</th>
+                                <th
+                                    class="py-4 px-8 text-[9px] font-black text-neutral-400 uppercase tracking-widest text-right">
+                                    Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tokenFinancialBody" class="divide-y divide-neutral-50"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
+    </div>
+
+    <!-- Pricing Page View (Team Subscription Overview Hub) -->
+    <div id="pricingPage" class="hidden h-screen overflow-hidden bg-[#FDFDFD]">
+        <div class="max-w-[1400px] mx-auto w-full px-8 py-10 flex-1 min-h-0 overflow-y-auto">
+            <!-- Header -->
+            <header class="mb-6">
+                <nav
+                    class="flex items-center gap-2 text-[11px] font-bold text-neutral-400 mb-6 uppercase tracking-wider">
+                    <button onclick="backToDashboard()" class="hover:text-primary transition-colors">Subscription
+                        Manager</button>
+                    <i data-lucide="chevron-right" class="size-3"></i>
+                    <span class="text-neutral-900" id="pricingTeamName">Circle RE</span>
+                </nav>
+                <div class="flex justify-between items-end">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h1 class="text-3xl font-semibold text-neutral-900 tracking-tight" id="hubTitle">Circle RE
+                            </h1>
+                            <div class="status-badge-active" id="hubStatusBadge">
+                                <span class="size-1.5 rounded-full bg-emerald-500"></span>
+                                Active
+                            </div>
+                        </div>
+                        <span class="text-xs font-bold text-neutral-400 tracking-widest uppercase">Team Subscription ID:
+                            <span id="hubTeamId">Team-CR-9201</span></span>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="action-btn action-btn-secondary h-10 px-4 rounded-xl text-xs font-bold">
+                            <i data-lucide="share-2" class="size-4"></i> Export Data
+                        </button>
+                        <button
+                            class="action-btn action-btn-primary h-10 px-5 rounded-xl text-xs font-bold bg-[#5A5FF2] text-white border-0">
+                            <i data-lucide="settings" class="size-4"></i> Manage Plan
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="flex gap-10 items-start mb-4">
+                <!-- Main Left Column (Fluid) -->
+                <div class="flex-1 min-w-0 flex flex-col gap-4">
+                    <!-- Error Banner (Conditional) -->
+                    <div id="hubErrorBanner"
+                        class="hidden mb-10 p-6 bg-rose-50 border border-rose-200 rounded-2xl flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="size-12 rounded-xl bg-white flex items-center justify-center text-rose-500 shadow-sm">
+                                <i data-lucide="alert-circle" class="size-6"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-rose-900 uppercase tracking-tight">Billing Failed
+                                    • <span id="errorAmount">$1,785.00</span></h4>
+                                <p class="text-xs text-rose-600 font-medium">Automatic payment failed on Mar 12, 2026.
+                                    Please update payment method.</p>
+                            </div>
+                        </div>
+                        <button
+                            class="px-5 py-2 bg-rose-600 text-white text-[11px] font-black rounded-lg hover:bg-rose-700 transition-all uppercase tracking-widest">
+                            Resolve Now
+                        </button>
+                    </div>
+
+                    <!-- Section 1: Plan Charges & Toggles -->
+                    <section class="hub-card p-6" style="margin-top: 0;">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h3 class="text-base font-semibold text-neutral-900">Plan charges</h3>
+                                <p class="text-xs text-neutral-500">Global tiered pricing and seat allocation logic</p>
+                            </div>
+                            <button onclick="togglePlanEdit()" id="editPlanBtn"
+                                class="text-xs font-semibold text-primary hover:underline">Edit</button>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="plan-row px-4 py-4 rounded-2xl bg-neutral-50/50">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="size-10 rounded-xl bg-white border border-neutral-100 flex items-center justify-center text-neutral-600 shadow-sm">
+                                        <i data-lucide="crown" class="size-5"></i>
+                                    </div>
+                                    <span class="text-sm font-semibold text-neutral-900">Team Lead Plan</span>
+                                </div>
+                                <div id="leadPriceContainer">
+                                    <span class="text-sm font-bold text-neutral-900 tracking-tight">$299.00</span>
+                                </div>
+                            </div>
+
+                            <div class="plan-row px-4 py-4 rounded-2xl bg-neutral-50/50">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="size-10 rounded-xl bg-white border border-neutral-100 flex items-center justify-center text-neutral-600 shadow-sm">
+                                        <i data-lucide="users" class="size-5"></i>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-semibold text-neutral-900">Associate Seats</span>
+                                        <span
+                                            class="text-[10px] font-medium text-neutral-400 uppercase tracking-wide">Currently
+                                            <span id="hubAssociateCount">24</span> seats active</span>
+                                    </div>
+                                </div>
+                                <div id="associatePriceContainer">
+                                    <span class="text-sm font-bold text-neutral-900 tracking-tight">$59.00 /ea</span>
+                                </div>
+                            </div>
+
+                            <div class="plan-row px-4 py-4 rounded-2xl bg-neutral-50/50">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="size-10 rounded-xl bg-white border border-neutral-100 flex items-center justify-center text-neutral-600 shadow-sm">
+                                        <i data-lucide="globe" class="size-5"></i>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-bold text-neutral-900">External Collaborators</span>
+                                        <span class="text-[10px] font-bold text-neutral-400 uppercase">Currently <span
+                                                id="hubPrefCount">4</span> active</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-6">
+                                    <div class="flex items-center gap-1 p-0.5 bg-neutral-100 rounded-full">
+                                        <button onclick="setCollabBilling('teamlead',this)" id="collabBtn_teamlead" class="px-3 py-1 rounded-full text-[10px] font-bold transition-all whitespace-nowrap bg-[#5A5FF2] text-white">Team lead</button>
+                                        <button onclick="setCollabBilling('agent',this)" id="collabBtn_agent" class="px-3 py-1 rounded-full text-[10px] font-bold transition-all whitespace-nowrap text-neutral-500 hover:text-neutral-700">Agent</button>
+                                        <button onclick="setCollabBilling('collab',this)" id="collabBtn_collab" class="px-3 py-1 rounded-full text-[10px] font-bold transition-all whitespace-nowrap text-neutral-500 hover:text-neutral-700">Collab</button>
+                                    </div>
+                                    <div id="prefPriceContainer" class="hidden"></div>
+                                    <div id="extPriceContainer">
+                                        <span class="text-sm font-black text-neutral-900 tracking-tight">$25.00 /ea</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mt-4 pt-8 border-t border-neutral-100 flex justify-between items-center bg-indigo-50/20 -mx-8 px-8 py-6 rounded-b-xl border-b border-indigo-100/50">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="size-12 rounded-2xl bg-white border border-indigo-100 flex items-center justify-center text-indigo-500 shadow-sm">
+                                    <i data-lucide="eye" class="size-6"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-semibold text-neutral-900">Access to my clients and my
+                                        transactions</h4>
+                                    <p class="text-xs text-neutral-400">Opens dedicated visibility tabs for front-end
+                                        agents</p>
+                                </div>
+                            </div>
+                            <div class="r-switch on shadow-sm" onclick="toggleSwitch(this)"></div>
+                        </div>
+                    </section>
+
+
+
+                </div><!-- /left col -->
+
+                <!-- Right Column (Sticky Summary) -->
+                <div class="w-[350px] flex-shrink-0 flex flex-col gap-6 sticky top-0 self-start">
+                    <!-- Subscription Summary (Sticky) -->
+                    <div class="hub-card p-8 bg-white border border-neutral-100 no-phantom-padding relative overflow-hidden shadow-sm"
+                        style="margin-top: 0;">
+                        <div
+                            class="absolute top-0 right-0 w-32 h-32 bg-indigo-50/50 rounded-full blur-3xl -mr-16 -mt-16">
+                        </div>
+                        <h3 class="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.15em] mb-8">
+                            Subscription Summary</h3>
+                        <div class="space-y-5 mb-10 relative z-10">
+                            <div class="flex justify-between text-sm">
+                                <span class="font-medium text-neutral-500">Team Lead Plan</span>
+                                <span class="font-semibold text-neutral-900">$299.00</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="font-medium text-neutral-500">Associate Seats (<span
+                                        id="hubSumSeats">24</span>)</span>
+                                <span class="font-semibold text-neutral-900">$1,416.00</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="font-medium text-neutral-500">Global Add-ons</span>
+                                <span class="font-semibold text-neutral-900">$45.00</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="font-medium text-neutral-500">Risk Management</span>
+                                <span class="font-semibold text-neutral-900">$25.00</span>
+                            </div>
+                        </div>
+                        <div class="pt-8 border-t border-neutral-50 mt-10 relative z-10">
+                            <div class="flex justify-between items-baseline">
+                                <div>
+                                    <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Monthly
+                                        Total</p>
+                                    <p class="text-[9px] font-medium text-neutral-300 uppercase tracking-tight">EXCL.
+                                        TAXES</p>
+                                </div>
+                                <span class="text-3xl font-bold text-neutral-900 tracking-tight"
+                                    id="hubGrandTotal">$1,785.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /two-col flex -->
+
+            <!-- Section 3: Full-Width Info Sections -->
+            <div class="flex flex-col gap-4 pb-10">
+
+                        <!-- Payment Methods — full width -->
+                        <div class="hub-card p-6">
+                            <div class="flex justify-between items-center mb-5">
+                                <div class="flex items-center gap-3">
+                                    <div class="size-9 rounded-xl bg-indigo-50 flex items-center justify-center text-primary">
+                                        <i data-lucide="credit-card" class="size-4"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-semibold text-neutral-900">Payment Methods</h3>
+                                        <p class="text-[10px] font-medium text-neutral-400 uppercase tracking-wide">Cards on file for this team</p>
+                                    </div>
+                                </div>
+                                <button onclick="openPaymentModal()" class="text-[11px] font-bold text-primary hover:underline flex items-center gap-1">
+                                    <i data-lucide="plus" class="size-3.5"></i> Add card
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3" id="paymentCardsList">
+                                <div class="p-4 rounded-xl border border-indigo-100 bg-indigo-50/30 flex items-center gap-3 cursor-pointer hover:border-primary/30 transition-all group">
+                                    <div class="size-10 rounded-xl bg-white border border-neutral-100 flex items-center justify-center text-primary shadow-sm shrink-0">
+                                        <i data-lucide="credit-card" class="size-5"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center gap-2 mb-0.5">
+                                            <p class="text-sm font-bold text-neutral-900">Visa ···· 4242</p>
+                                            <span class="text-[8px] font-black uppercase tracking-wider text-indigo-600 bg-indigo-100 px-1.5 py-0.5 rounded-full">Default</span>
+                                        </div>
+                                        <p class="text-[10px] text-neutral-500 uppercase tracking-tight">Expires 12/28</p>
+                                    </div>
+                                </div>
+                                <div class="p-4 rounded-xl border border-neutral-100 bg-neutral-50/50 flex items-center gap-3 cursor-pointer hover:border-primary/20 transition-all group">
+                                    <div class="size-10 rounded-xl bg-white border border-neutral-100 flex items-center justify-center text-neutral-400 shadow-sm shrink-0 group-hover:text-primary transition-all">
+                                        <i data-lucide="credit-card" class="size-5"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-bold text-neutral-900 mb-0.5">Mastercard ···· 8801</p>
+                                        <p class="text-[10px] text-neutral-500 uppercase tracking-tight">Expires 09/27</p>
+                                    </div>
+                                    <button class="text-[9px] font-bold text-neutral-400 hover:text-primary transition-colors shrink-0 whitespace-nowrap">Set default</button>
+                                </div>
+                                <button onclick="openPaymentModal()" class="p-4 rounded-xl border border-dashed border-neutral-200 flex items-center justify-center gap-2 text-[12px] font-bold text-neutral-400 hover:text-primary hover:border-primary/30 hover:bg-indigo-50/30 transition-all">
+                                    <i data-lucide="plus" class="size-4"></i> Add payment method
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Seat Roster — full width -->
+                        <section class="hub-card overflow-hidden">
+                            <button onclick="toggleRoster()" class="w-full flex justify-between items-center p-6 hover:bg-neutral-50 transition-all group">
+                                <div class="flex items-center gap-4">
+                                    <div class="size-10 rounded-xl bg-neutral-100 flex items-center justify-center text-neutral-500 group-hover:bg-neutral-900 group-hover:text-white transition-all">
+                                        <i data-lucide="users-2" class="size-5"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-3 text-left">
+                                            <h3 class="text-lg font-bold text-neutral-900 tracking-tight">Seat Roster & Billing Audit</h3>
+                                            <span class="px-2.5 py-0.5 bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase rounded-full" id="hubRosterCount">32 Members</span>
+                                        </div>
+                                        <p class="text-xs text-neutral-400 mt-0.5">Comprehensive audit of team seats, prorated charges, and payer responsibility</p>
+                                    </div>
+                                </div>
+                                <i id="rosterChevron" data-lucide="chevron-down" class="size-5 text-neutral-400 transition-transform"></i>
+                            </button>
+                            <div id="rosterContent" class="h-0 overflow-hidden transition-all duration-500">
+                                <div class="border-t border-neutral-100 bg-white">
+                                    <div id="rosterTableContainer" class="w-full overflow-x-auto">
+                                        <!-- Table injected by JS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Billing History -->
+                        <div id="billingExpanded" class="hub-card overflow-hidden">
+                            <div class="p-6 bg-neutral-50/50 border-b border-neutral-100">
+                                <div class="flex justify-between items-center mb-6">
+                                    <div class="flex items-center gap-3">
+                                        <div class="size-9 rounded-xl bg-indigo-50 flex items-center justify-center text-primary">
+                                            <i data-lucide="credit-card" class="size-4"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-sm font-semibold text-neutral-900">Billing History</h3>
+                                            <p class="text-[10px] font-medium text-neutral-400 uppercase tracking-wide">Financial Audit & Invoices</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="flex items-center gap-3 px-4 py-2.5 bg-white border border-neutral-100 rounded-xl shadow-sm">
+                                            <div class="text-right">
+                                                <p
+                                                    class="text-[9px] font-black text-neutral-400 uppercase tracking-widest">
+                                                    Billing cycle</p>
+                                                <p class="text-xs font-bold text-neutral-900" id="autoRenewLabel">Monthly auto-renew</p>
+                                            </div>
+                                            <div class="r-switch on" onclick="toggleAutoRenew(this)"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-4 gap-4">
+                                    <div class="p-5 rounded-2xl bg-white border border-neutral-100 shadow-sm">
+                                        <p class="text-[10px] font-bold text-neutral-400 uppercase mb-1">Next Reset</p>
+                                        <p class="text-lg font-black text-neutral-900" id="bhResetDate">May 20, 2026</p>
+                                    </div>
+                                    <div class="p-5 rounded-2xl bg-white border border-neutral-100 shadow-sm">
+                                        <p class="text-[10px] font-bold text-neutral-400 uppercase mb-1">Invoices this cycle</p>
+                                        <div class="flex items-baseline gap-2">
+                                            <p class="text-lg font-black text-neutral-900">3</p>
+                                            <span class="text-[9px] font-bold text-indigo-500 uppercase tracking-wide">Split-pay active</span>
+                                        </div>
+                                    </div>
+                                    <div class="p-5 rounded-2xl bg-white border border-neutral-100 shadow-sm">
+                                        <p class="text-[10px] font-bold text-neutral-400 uppercase mb-1">Who covers collab seats</p>
+                                        <div class="flex flex-col gap-1 mt-1">
+                                            <div class="flex items-center gap-1.5">
+                                                <span class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
+                                                <span class="text-[10px] font-semibold text-neutral-700">Sandra → James Wilson</span>
+                                            </div>
+                                            <div class="flex items-center gap-1.5">
+                                                <span class="w-2 h-2 rounded-full bg-violet-400 inline-block"></span>
+                                                <span class="text-[10px] font-semibold text-neutral-700">Priya Mehta self-pays</span>
+                                            </div>
+                                            <div class="flex items-center gap-1.5">
+                                                <span class="w-2 h-2 rounded-full bg-indigo-400 inline-block"></span>
+                                                <span class="text-[10px] font-semibold text-neutral-700">Team Lead → Tom Reeves</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-5 rounded-2xl bg-white border border-neutral-100 shadow-sm flex flex-col justify-between">
+                                        <div>
+                                            <p class="text-[10px] font-bold text-neutral-400 uppercase mb-1">Billing logic</p>
+                                            <p class="text-xs font-bold text-neutral-700">Agent & Collab Split-Pay</p>
+                                            <p class="text-[10px] text-neutral-400 mt-1">Per-seat responsibility assigned</p>
+                                        </div>
+                                        <button onclick="showSwitchBillingModal()" class="mt-3 text-[10px] font-bold text-indigo-500 hover:text-indigo-700 text-left leading-none hover:underline">Switch all → Team Lead pays</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-0">
+                                <table class="w-full text-left">
+                                    <thead class="bg-neutral-50 border-b border-neutral-100">
+                                        <tr>
+                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest whitespace-nowrap">Date</th>
+                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Invoice ID</th>
+                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Amount</th>
+                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Status</th>
+                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Responsibility</th>
+                                            <th class="py-2.5 px-5"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="invoiceTableBody">
+                                        <!-- Dynamic invoices -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Mel Credits -->
+                        <div id="tokensExpanded" class="r-card" style="border-radius: var(--radius-xl); padding: 24px;">
+                            <!-- Section header -->
+                            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+                                <div style="display:flex; align-items:center; gap:10px;">
+                                    <div style="width:36px;height:36px;border-radius:var(--radius);background:#EEF2FF;display:flex;align-items:center;justify-content:center;color:var(--primary);">
+                                        <i data-lucide="sparkles" style="width:16px;height:16px;stroke-width:1.5;"></i>
+                                    </div>
+                                    <div>
+                                        <p style="font-family:var(--font-display);font-weight:600;font-size:15px;color:var(--foreground);margin:0;">Mel Credits</p>
+                                        <p style="font-size:12px;color:var(--muted-foreground);margin:0;">Powers prospecting, CMA, document signing &amp; all complex actions</p>
+                                    </div>
+                                </div>
+                                <div style="display:flex;align-items:center;gap:8px;">
+                                    <span class="r-badge r-badge-success" style="font-size:11px;">Auto-recharge ON</span>
+                                </div>
+                            </div>
+                            <!-- Top: 3 stat cards using r-card -->
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+
+                                <!-- Total Mel Credits — unified pool -->
+                                <div style="border:1px solid var(--border);border-radius:var(--radius-xl);padding:16px;display:flex;flex-direction:column;gap:12px;background:var(--card);">
+                                    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                                        <div style="width:32px;height:32px;border-radius:var(--radius);background:#EEF2FF;display:flex;align-items:center;justify-content:center;color:var(--primary);flex-shrink:0;">
+                                            <i data-lucide="coins" style="width:15px;height:15px;stroke-width:1.5;"></i>
+                                        </div>
+                                        <span class="r-badge r-badge-warning" style="font-size:10px;padding:2px 8px;">Low</span>
+                                    </div>
+                                    <div>
+                                        <p style="font-size:11px;color:var(--muted-foreground);margin:0 0 4px;font-family:var(--font-ui);">Total Mel Credits</p>
+                                        <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:8px;">
+                                            <span style="font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--foreground);letter-spacing:-0.02em;">42,580</span>
+                                            <span style="font-size:12px;color:var(--muted-foreground);">/ 200,000</span>
+                                        </div>
+                                        <div class="r-progress" style="height:5px;margin-bottom:6px;">
+                                            <div class="r-progress-bar" style="width:21%;background:#EAB308;"></div>
+                                        </div>
+                                        <p style="font-size:10px;color:var(--muted-foreground);font-family:var(--font-ui);">157,420 used · cycle ends May 20</p>
+                                    </div>
+                                </div>
+
+                                <!-- Auto-Recharge -->
+                                <div style="border:1px solid var(--border);border-radius:var(--radius-xl);padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--card);">
+                                    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                                        <div style="width:32px;height:32px;border-radius:var(--radius);background:var(--secondary);display:flex;align-items:center;justify-content:center;color:var(--primary);flex-shrink:0;">
+                                            <i data-lucide="settings-2" style="width:15px;height:15px;stroke-width:1.5;"></i>
+                                        </div>
+                                        <div class="r-switch on" onclick="toggleSwitch(this)" style="flex-shrink:0;"></div>
+                                    </div>
+                                    <div style="flex:1;">
+                                        <p style="font-size:13px;font-weight:600;color:var(--foreground);margin:0 0 4px;font-family:var(--font-display);">Auto-Recharge</p>
+                                        <p style="font-size:12px;color:var(--muted-foreground);margin:0;line-height:1.5;">Adds 50,000 credits ($50) when balance drops below 10,000.</p>
+                                    </div>
+                                    <button class="r-btn-link" style="font-size:12px;font-weight:500;text-align:left;padding:0;">Modify settings</button>
+                                </div>
+
+                                <!-- Manual recharge / upsell -->
+                                <div style="border:1px solid var(--primary);border-radius:var(--radius-xl);padding:16px;display:flex;flex-direction:column;gap:10px;background:#F8F8FF;">
+                                    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                                        <div style="width:32px;height:32px;border-radius:var(--radius);background:#EEEEFF;display:flex;align-items:center;justify-content:center;color:var(--primary);flex-shrink:0;">
+                                            <i data-lucide="plus-circle" style="width:15px;height:15px;stroke-width:1.5;"></i>
+                                        </div>
+                                        <button class="r-btn-link" style="font-size:11px;" onclick="showMelPricingInfo()">Pricing info</button>
+                                    </div>
+                                    <div style="flex:1;">
+                                        <p style="font-size:13px;font-weight:600;color:var(--foreground);margin:0 0 4px;font-family:var(--font-display);">Need More Credits?</p>
+                                        <p style="font-size:12px;color:var(--muted-foreground);margin:0;line-height:1.5;">When credits run out, <strong style="color:var(--foreground);">all Mel actions pause</strong> — prospecting, CMA, doc signing & Q&A.</p>
+                                    </div>
+                                    <button onclick="openPaymentModal()" class="r-btn r-btn-primary r-btn-sm" style="width:100%;border-radius:var(--radius-md);">
+                                        <i data-lucide="zap" style="width:13px;height:13px;stroke-width:1.5;"></i>
+                                        Recharge now
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Usage breakdown bar -->
+                            <div style="background:var(--muted);border-radius:var(--radius);padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
+                                <p style="font-size:11px;font-weight:500;color:var(--muted-foreground);white-space:nowrap;font-family:var(--font-ui);min-width:80px;">This cycle</p>
+                                <div style="flex:1;display:flex;height:6px;border-radius:9999px;overflow:hidden;gap:1px;">
+                                    <div style="flex:82;background:var(--chart-3);border-radius:4px 0 0 4px;" title="Mel Prospecting 82%"></div>
+                                    <div style="flex:9;background:var(--chart-2);" title="CMA Reports 9%"></div>
+                                    <div style="flex:5;background:var(--chart-6);" title="Doc Signing 5%"></div>
+                                    <div style="flex:4;background:var(--neutral-300);border-radius:0 4px 4px 0;" title="Other 4%"></div>
+                                </div>
+                                <div style="display:flex;gap:12px;flex-shrink:0;">
+                                    <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted-foreground);font-family:var(--font-ui);"><span style="width:8px;height:8px;border-radius:2px;background:var(--chart-3);display:inline-block;"></span>Prospecting 82%</span>
+                                    <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted-foreground);font-family:var(--font-ui);"><span style="width:8px;height:8px;border-radius:2px;background:var(--chart-2);display:inline-block;"></span>CMA 9%</span>
+                                    <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted-foreground);font-family:var(--font-ui);"><span style="width:8px;height:8px;border-radius:2px;background:var(--chart-6);display:inline-block;"></span>Docs 5%</span>
+                                    <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted-foreground);font-family:var(--font-ui);"><span style="width:8px;height:8px;border-radius:2px;background:var(--neutral-300);display:inline-block;"></span>Other 4%</span>
+                                </div>
+                            </div>
+
+                            <!-- Tabs using .r-tabs -->
+                            <div>
+                                <div class="r-tabs" style="margin-bottom:16px;">
+                                    <div class="r-tab active" onclick="switchMelTab(this,'tokenUsage')" style="cursor:pointer;">Usage activity</div>
+                                    <div class="r-tab" onclick="switchMelTab(this,'tokenInvoices')" style="cursor:pointer;">Invoices & refills</div>
+                                </div>
+
+                                <!-- Usage Activity -->
+                                <div id="tokenUsage">
+                                    <table class="r-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date / time</th>
+                                                <th>Member</th>
+                                                <th>Feature</th>
+                                                <th style="text-align:right;">Credits</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="font-size:12px;color:var(--muted-foreground);white-space:nowrap;">Apr 18 · 2:45 PM</td>
+                                                <td>
+                                                    <div style="display:flex;align-items:center;gap:8px;">
+                                                        <div class="r-avatar r-avatar-sm" style="background:#EEF2FF;color:var(--primary);font-size:11px;font-weight:600;">S</div>
+                                                        <span style="font-size:13px;font-weight:500;">Sandra O.</span>
+                                                    </div>
+                                                </td>
+                                                <td><span class="r-badge" style="background:#FEF3C7;color:#92400E;border:none;font-size:10px;padding:2px 8px;border-radius:30px;">Mel Prospecting</span></td>
+                                                <td style="text-align:right;font-family:var(--font-mono);font-size:13px;font-weight:600;">30,000</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size:12px;color:var(--muted-foreground);white-space:nowrap;">Apr 18 · 1:12 PM</td>
+                                                <td>
+                                                    <div style="display:flex;align-items:center;gap:8px;">
+                                                        <div class="r-avatar r-avatar-sm" style="background:#D1FAE5;color:#065F46;font-size:11px;font-weight:600;">M</div>
+                                                        <span style="font-size:13px;font-weight:500;">Mark V.</span>
+                                                    </div>
+                                                </td>
+                                                <td><span class="r-badge" style="background:#F0FDF4;color:#166534;border:none;font-size:10px;padding:2px 8px;border-radius:30px;">CMA Report</span></td>
+                                                <td style="text-align:right;font-family:var(--font-mono);font-size:13px;font-weight:600;">120</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size:12px;color:var(--muted-foreground);white-space:nowrap;">Apr 17 · 9:00 AM</td>
+                                                <td>
+                                                    <div style="display:flex;align-items:center;gap:8px;">
+                                                        <div class="r-avatar r-avatar-sm" style="background:#EEF2FF;color:var(--primary);font-size:11px;font-weight:600;">S</div>
+                                                        <span style="font-size:13px;font-weight:500;">Sandra O.</span>
+                                                    </div>
+                                                </td>
+                                                <td><span class="r-badge r-badge-secondary" style="font-size:10px;padding:2px 8px;border-radius:30px;">Doc Signing</span></td>
+                                                <td style="text-align:right;font-family:var(--font-mono);font-size:13px;font-weight:600;">15</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size:12px;color:var(--muted-foreground);white-space:nowrap;">Apr 16 · 4:30 PM</td>
+                                                <td>
+                                                    <div style="display:flex;align-items:center;gap:8px;">
+                                                        <div class="r-avatar r-avatar-sm" style="background:#FCE7F3;color:#9D174D;font-size:11px;font-weight:600;">J</div>
+                                                        <span style="font-size:13px;font-weight:500;">James R.</span>
+                                                    </div>
+                                                </td>
+                                                <td><span class="r-badge" style="background:#FEF3C7;color:#92400E;border:none;font-size:10px;padding:2px 8px;border-radius:30px;">Mel Prospecting</span></td>
+                                                <td style="text-align:right;font-family:var(--font-mono);font-size:13px;font-weight:600;">28,400</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size:12px;color:var(--muted-foreground);white-space:nowrap;">Apr 16 · 11:20 AM</td>
+                                                <td>
+                                                    <div style="display:flex;align-items:center;gap:8px;">
+                                                        <div class="r-avatar r-avatar-sm" style="background:#D1FAE5;color:#065F46;font-size:11px;font-weight:600;">M</div>
+                                                        <span style="font-size:13px;font-weight:500;">Mark V.</span>
+                                                    </div>
+                                                </td>
+                                                <td><span class="r-badge r-badge-secondary" style="font-size:10px;padding:2px 8px;border-radius:30px;">Mel Q&amp;A</span></td>
+                                                <td style="text-align:right;font-family:var(--font-mono);font-size:13px;font-weight:600;">3</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Invoices & Refills -->
+                                <div id="tokenInvoices" style="display:none;">
+                                    <table class="r-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Type</th>
+                                                <th>Credits added</th>
+                                                <th style="text-align:right;">Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="font-size:12px;color:var(--muted-foreground);">Apr 1, 2026</td>
+                                                <td><span class="r-badge r-badge-success" style="font-size:10px;padding:2px 8px;border-radius:30px;">Auto-recharge</span></td>
+                                                <td style="font-family:var(--font-mono);font-size:13px;font-weight:600;">50,000</td>
+                                                <td style="text-align:right;font-size:13px;font-weight:500;">$50.00</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size:12px;color:var(--muted-foreground);">Mar 1, 2026</td>
+                                                <td><span class="r-badge r-badge-default" style="font-size:10px;padding:2px 8px;border-radius:30px;">Manual</span></td>
+                                                <td style="font-family:var(--font-mono);font-size:13px;font-weight:600;">100,000</td>
+                                                <td style="text-align:right;font-size:13px;font-weight:500;">$100.00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Activity Log -->
+                        <div id="activityExpanded" class="hub-card p-6">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="size-9 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                                    <i data-lucide="history" class="size-4"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-semibold text-neutral-900">Activity Log</h3>
+                                    <p class="text-[10px] font-medium text-neutral-400 uppercase tracking-wide">Team Activity Timeline</p>
+                                </div>
+                            </div>
+                            <div id="activityTimeline" class="w-full"><!-- rendered by JS --></div>
+                        </div>
+                    </div>
+            </div><!-- /section 3 -->
+        </div><!-- /inner wrapper -->
+    </div><!-- /pricingPage -->
+
+
+
+    <!-- Confirmation Modal Overlay -->
+    <div id="modalOverlay"
+        class="fixed inset-0 bg-neutral-900/40 backdrop-blur-sm z-[100] hidden items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 transform scale-95 opacity-0 transition-all duration-300"
+            id="confirmationModal">
+            <div class="size-14 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-6">
+                <i data-lucide="alert-triangle" class="size-8"></i>
+            </div>
+            <h3 class="text-xl font-black text-neutral-900 tracking-tight mb-2">Switch to Team Lead Pays?</h3>
+            <p class="text-sm text-neutral-500 leading-relaxed mb-8">
+                This will globally update the billing structure for <span class="font-bold text-neutral-900">Circle
+                    RE</span>. All future associate fees and add-ons will be charged directly to the Team Lead's primary
+                payment method.
+            </p>
+            <div class="flex gap-3">
+                <button onclick="closeModal()"
+                    class="flex-1 h-12 rounded-xl border border-neutral-200 text-sm font-bold text-neutral-600 hover:bg-neutral-50 transition-colors">Cancel</button>
+                <button onclick="confirmLeadPays()"
+                    class="flex-1 h-12 rounded-xl bg-rose-600 text-white text-sm font-bold hover:bg-rose-700 shadow-lg shadow-rose-100 transition-all">Confirm
+                    Switch</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Dialog (Payment Modal) -->
+    <div id="paymentModal" class="dialog-overlay" onclick="if(event.target === this) closePaymentModal()">
+        <div class="dialog-content">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h3 class="text-xl font-bold text-neutral-900">Payment method</h3>
+                    <p class="text-xs text-neutral-500">Update how you pay for this team subscription</p>
+                </div>
+                <button onclick="closePaymentModal()"
+                    class="size-8 rounded-full hover:bg-neutral-100 flex items-center justify-center transition-colors">
+                    <i data-lucide="x" class="size-4 text-neutral-400"></i>
+                </button>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Toggle Tabs -->
+                <div class="flex p-1 bg-neutral-100 rounded-xl">
+                    <button
+                        class="flex-1 py-2 text-xs font-bold text-neutral-900 bg-white rounded-lg shadow-sm transition-all">Credit
+                        Card</button>
+                    <button
+                        class="flex-1 py-2 text-xs font-bold text-neutral-500 hover:text-neutral-900 rounded-lg transition-all">ACH
+                        Transfer</button>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest px-1">Card
+                            Number</label>
+                        <div class="h-11 px-4 rounded-xl border border-neutral-200 bg-white flex items-center gap-3">
+                            <i data-lucide="credit-card" class="size-4 text-neutral-400"></i>
+                            <input type="text" class="flex-1 bg-transparent border-0 outline-none text-sm font-medium"
+                                placeholder="•••• •••• •••• 4242">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label
+                                class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest px-1">Expiry</label>
+                            <input type="text"
+                                class="w-full h-11 px-4 rounded-xl border border-neutral-200 bg-white text-sm font-medium"
+                                placeholder="MM / YY">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label
+                                class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest px-1">CVC</label>
+                            <input type="text"
+                                class="w-full h-11 px-4 rounded-xl border border-neutral-200 bg-white text-sm font-medium"
+                                placeholder="•••">
+                        </div>
+                    </div>
+                </div>
+
+                <button
+                    class="w-full h-12 bg-neutral-900 text-white rounded-xl text-sm font-bold mt-4 hover:bg-neutral-800 transition-all">
+                    Save Payment Method
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auto-save Toast -->
+    <div id="saveToast" class="save-toast">
+        <i data-lucide="check-circle-2" class="size-4 text-emerald-400"></i>
+        Changes auto-saved
     </div>
 
     <script>
+        const initialLogs = [
+            { id: 1, team: "Circle RE", action: "Sandra added", details: "Associate Seat", time: "2m ago" },
+            { id: 2, team: "Circle RE", action: "Payer changed", details: "Agent Pays enabled", time: "1h ago" },
+            { id: 3, team: "The Alpha Group Real Estate", action: "New Member", details: "Team Lead added", time: "4h ago" },
+            { id: 4, team: "Sunset Valley Associates", action: "Refilled", details: "5,000 AI Credits", time: "1d ago" },
+            { id: 5, team: "Circle RE", action: "Invoice Paid", details: "April 2026", time: "2d ago" },
+        ];
+
         const generateRows = () => {
             const baseData = [
                 { id: 0, name: "Circle RE", lead: "Marcus Vane", paying: "Lead", sw: "$299", assoc: "$59", collab: "$39", mls: "$25", web: "$149", L: 2, A: 24, XC: 8, eo: "$15", credits: 45000, billing: "May 20", status: "active" },
@@ -807,7 +2131,7 @@
 
             const extraNames = ["Beacon Hill", "Golden Gate", "Emerald City", "Silver Lake", "Grand Central", "Blue Harbor", "Summit Ridge", "Metro City", "Oasis Property", "Urban Square", "Skyline Realty", "Heritage Homes", "Coastal Living", "Park Avenue", "Lakeside Estates"];
             const extraLeads = ["Sarah O'Connor", "James Peterson", "Linda Carter", "Anthony Rossi", "Emily Davis", "Christopher Lee", "Amanda White", "Daniel Brown", "Patricia Miller", "William Garcia"];
-            
+
             const rows = [...baseData];
             for (let i = baseData.length; i < 50; i++) {
                 const name = extraNames[i % extraNames.length] + " " + (Math.random() > 0.5 ? "Group" : "Partners");
@@ -835,29 +2159,45 @@
             return rows;
         };
 
-        const initialData = generateRows();
+        // --- Mock API & Data Management ---
+        class DataManager {
+            constructor() {
+                this.teams = generateRows();
+                this.state = {
+                    search: '',
+                    status: 'all',
+                    plan: 'all',
+                    payer: 'all'
+                };
+            }
 
-        let state = {
-            search: '',
-            status: 'all',
-            plan: 'all',
-            payer: 'all',
-            seats: 'all'
-        };
+            getFilteredTeams() {
+                return this.teams.filter(team => {
+                    const searchMatch = team.name.toLowerCase().includes(this.state.search.toLowerCase()) ||
+                        team.lead.toLowerCase().includes(this.state.search.toLowerCase());
+                    const statusMatch = this.state.status === 'all' || team.status === this.state.status;
+                    const planMatch = this.state.plan === 'all' || team.sw === this.state.plan;
+                    const payerMatch = this.state.payer === 'all' || team.paying === this.state.payer;
+                    return searchMatch && statusMatch && planMatch && payerMatch;
+                });
+            }
+
+            updateTeam(id, updates) {
+                const index = this.teams.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    this.teams[index] = { ...this.teams[index], ...updates };
+                }
+            }
+        }
+
+        const api = new DataManager();
 
         function render() {
             const body = document.getElementById('tableBody');
-            const filtered = initialData.filter(team => {
-                const searchMatch = team.name.toLowerCase().includes(state.search.toLowerCase()) || 
-                                   team.lead.toLowerCase().includes(state.search.toLowerCase());
-                const statusMatch = state.status === 'all' || team.status === state.status;
-                const planMatch = state.plan === 'all' || team.sw === state.plan;
-                const payerMatch = state.payer === 'all' || team.paying === state.payer;
-                return searchMatch && statusMatch && planMatch && payerMatch;
-            });
+            const filtered = api.getFilteredTeams();
 
             body.innerHTML = filtered.map(team => `
-                <tr class="row-hover group cursor-pointer" onclick="showPricingPage('${team.name}', 'overview')">
+                <tr class="row-hover group cursor-pointer" onclick="showPricingPage(${team.id})">
                     <td class="sticky-col font-semibold text-neutral-900 bg-white group-hover:bg-neutral-50 transition-colors">
                         <div class="truncate-team" title="${team.name}">${team.name}</div>
                     </td>
@@ -884,11 +2224,11 @@
                     </td>
                     <td class="text-center">
                         <div class="flex items-center justify-center gap-1.5">
-                            <button class="action-btn action-btn-primary" onclick="event.stopPropagation(); openSheet('${team.name}', 'history')">
+                            <button class="action-btn action-btn-primary" onclick="event.stopPropagation(); openSheet(${team.id}, 'history')">
                                 <i data-lucide="credit-card" class="size-3.5"></i>
                                 History
                             </button>
-                            <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); openSheet('${team.name}', 'activity')">
+                            <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); openSheet(${team.id}, 'activity')">
                                 <i data-lucide="history" class="size-3.5"></i>
                                 Activity
                             </button>
@@ -910,7 +2250,7 @@
 
         // Event Listeners
         document.getElementById('searchInput').addEventListener('input', (e) => {
-            state.search = e.target.value;
+            api.state.search = e.target.value;
             render();
         });
 
@@ -931,12 +2271,12 @@
             menu.querySelectorAll('.dropdown-item').forEach(item => {
                 item.addEventListener('click', () => {
                     const val = item.getAttribute('data-value');
-                    state[stateKey] = val;
+                    api.state[stateKey] = val;
                     label.innerText = item.innerText.replace('All Statuses', 'All').replace('All Plans', 'All').replace('All Payers', 'All');
-                    
+
                     menu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
                     item.classList.add('selected');
-                    
+
                     trigger.classList.toggle('active', val !== 'all');
                     menu.classList.remove('show');
                     render();
@@ -953,12 +2293,12 @@
         });
 
         document.getElementById('resetFilters').addEventListener('click', () => {
-            state = { search: '', status: 'all', plan: 'all', payer: 'all', seats: 'all' };
+            api.state = { search: '', status: 'all', plan: 'all', payer: 'all' };
             document.getElementById('searchInput').value = '';
             document.getElementById('statusLabel').innerText = 'All';
             document.getElementById('planLabel').innerText = 'All';
             document.getElementById('payerLabel').innerText = 'All';
-            
+
             document.querySelectorAll('.dropdown-trigger').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.dropdown-item').forEach(i => {
                 i.classList.remove('selected');
@@ -968,276 +2308,773 @@
         });
 
         render();
-    </script>
+        // --- Pricing Page / Hub Logic ---
+        let currentTeamId = null;
+        let isEditingPlan = false;
 
-
-    <script>
-        let currentTeam = null;
-        let currentDetailTab = 'overview';
-
-        function showPricingPage(teamName, initialTab = 'overview') {
-            const team = initialData.find(t => t.name === teamName);
+        function showPricingPage(teamId) {
+            currentTeamId = teamId;
+            const team = api.teams.find(t => t.id === teamId);
             if (!team) return;
-            
-            currentTeam = team;
-            currentDetailTab = initialTab;
 
-            document.getElementById('mainDashboard').classList.add('hide');
+            // Aggressive Scroll Unlock
+            document.body.classList.add('is-scrolling');
+            document.body.style.overflow = 'auto';
+            document.documentElement.style.overflow = 'auto';
+
+            // Populate UI
+            if (document.getElementById('hubTitle')) document.getElementById('hubTitle').innerText = team.name;
+            if (document.getElementById('pricingTeamName')) document.getElementById('pricingTeamName').innerText = team.name;
+            if (document.getElementById('hubTeamId')) document.getElementById('hubTeamId').innerText = `Team-${team.name.substring(0, 2).toUpperCase()}-${9000 + team.id}`;
+            if (document.getElementById('hubAssociateCount')) document.getElementById('hubAssociateCount').innerText = team.A;
+            if (document.getElementById('hubPrefCount')) document.getElementById('hubPrefCount').innerText = team.XC || 4;
+            if (document.getElementById('hubRosterCount')) document.getElementById('hubRosterCount').innerText = `${team.A + team.L + (team.XC || 0)} Members`;
+            if (document.getElementById('hubSumSeats')) document.getElementById('hubSumSeats').innerText = team.A;
+            if (document.getElementById('hubNextCycle')) document.getElementById('hubNextCycle').innerText = team.billing + ", 2026";
+
+            // Populate Prices (Display mode)
+            const leadContainer = document.getElementById('leadPriceContainer');
+            if (leadContainer) leadContainer.innerHTML = `<span class="text-sm font-bold text-neutral-900">${team.sw}.00</span>`;
+
+            const assocContainer = document.getElementById('associatePriceContainer');
+            if (assocContainer) assocContainer.innerHTML = `<span class="text-sm font-bold text-neutral-900">${team.assoc}.00 /ea</span>`;
+
+            const prefContainer = document.getElementById('prefPriceContainer');
+            if (prefContainer) prefContainer.innerHTML = `<span class="text-sm font-bold text-neutral-900">$29.00 /ea</span>`;
+
+            const extContainer = document.getElementById('extPriceContainer');
+            if (extContainer) extContainer.innerHTML = `<span class="text-sm font-bold text-neutral-900">$0.00 /ea</span>`;
+
+            // Error state simulation
+            const errorBanner = document.getElementById('hubErrorBanner');
+            if (errorBanner) {
+                if (team.status === 'failed') {
+                    errorBanner.classList.remove('hidden');
+                    const errorAmt = document.getElementById('errorAmount');
+                    if (errorAmt) errorAmt.innerText = `$${calculateTotal(team).toLocaleString()}.00`;
+                } else {
+                    errorBanner.classList.add('hidden');
+                }
+            }
+
+            // Calculations
+            updateGrandTotal(team);
+
+            // Reset Hub Expansion State
+            document.querySelectorAll('.expanded-section').forEach(s => s.classList.remove('open'));
+            document.querySelectorAll('.nav-card').forEach(c => c.classList.remove('bento-active'));
+            const rosterContent = document.getElementById('rosterContent');
+            if (rosterContent) rosterContent.style.height = '0px';
+
+            // Populate Expanded Content
+            renderInvoiceTable(team);
+
+            // Roster Table
+            renderRosterTable(team);
+
+            // Activity Log
+            renderActivityLog();
+
+            // Toggle visibility
+            document.getElementById('mainDashboard').classList.add('hidden');
+            document.getElementById('pricingPage').classList.remove('hidden');
             document.getElementById('pricingPage').classList.add('show');
-            document.getElementById('pricingTeamName').innerText = teamName;
 
-            renderPricingTabs();
-            renderPricingContent();
-            lucide.createIcons();
-            
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function backToDashboard() {
-            document.getElementById('mainDashboard').classList.remove('hide');
-            document.getElementById('pricingPage').classList.remove('show');
-            render(); // Refresh dashboard
-        }
-
-        function switchDetailTab(tab) {
-            currentDetailTab = tab;
-            renderPricingTabs();
-            renderPricingContent();
             lucide.createIcons();
         }
 
-        function renderPricingTabs() {
-            const container = document.getElementById('pricingTabs');
-            const tabs = [
-                { id: 'overview', label: 'Overview & Plan' },
-                { id: 'history', label: 'Billing History' },
-                { id: 'tokens', label: 'AI Tokens & Subs' },
-                { id: 'activity', label: 'Activity Log' }
+        const teamMembers = [
+            { id: 1, name: "Sarah Chen", role: "Team Lead", email: "sarah.chen@soul.ai", status: "Active", entry: "Start of Cycle", type: "Pro", baseFee: 49 },
+            { id: 2, name: "Marcus Wright", role: "Co-Team Lead", email: "m.wright@soul.ai", status: "Active", entry: "Start of Cycle", type: "Pro", baseFee: 49 },
+            { id: 3, name: "Elena Rossi", role: "Associate", email: "elena@soul.ai", status: "Active", entry: "Start of Cycle", type: "Core", baseFee: 29 },
+            { id: 4, name: "James Wilson", role: "Collaborator", email: "j.wilson@partner.ai", status: "Active", entry: "Added 12 days ago", type: "Core", baseFee: 25, prorated: true, collabPayer: "agent", collabPayerName: "Sandra O." },
+            { id: 5, name: "Amara Okafor", role: "Associate", email: "amara@soul.ai", status: "Active", entry: "Start of Cycle", type: "Core", baseFee: 29 },
+            { id: 6, name: "David Park", role: "Associate", email: "d.park@soul.ai", status: "Pending", entry: "Added 3 days ago", type: "Core", baseFee: 29, prorated: true },
+            { id: 7, name: "Priya Mehta", role: "Collaborator", email: "priya@extpartner.co", status: "Active", entry: "Start of Cycle", type: "Core", baseFee: 25, collabPayer: "collab" },
+            { id: 8, name: "Tom Reeves", role: "Collaborator", email: "t.reeves@re.com", status: "Active", entry: "Added 5 days ago", type: "Core", baseFee: 25, prorated: true, collabPayer: "teamlead" }
+        ];
+
+        function renderRosterTable(team) {
+            const container = document.getElementById('rosterTableContainer');
+            if (!container) return;
+
+            const extSwitch = document.getElementById('extCollabSwitch');
+            const agentPaysExt = extSwitch ? extSwitch.classList.contains('on') : false;
+
+            let html = `
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-neutral-100">
+                            <th class="px-6 py-4 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Member</th>
+                            <th class="px-6 py-4 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Role / Plan</th>
+                            <th class="px-6 py-4 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Status</th>
+                            <th class="px-6 py-4 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Cycle Usage</th>
+                            <th class="px-6 py-4 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Payer</th>
+                            <th class="px-6 py-4 text-[10px] font-bold text-neutral-400 uppercase tracking-wider text-right whitespace-nowrap">Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-neutral-50">
+            `;
+
+            teamMembers.forEach(m => {
+                const isLead = m.role.includes("Lead");
+                const isExt = m.role === "Collaborator";
+
+                // Payer badge logic
+                let payerBadge = '';
+                if (isLead) {
+                    payerBadge = `<span class="inline-flex px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wide bg-indigo-50 text-indigo-600">Team Lead</span>`;
+                } else if (isExt) {
+                    if (m.collabPayer === 'agent') {
+                        payerBadge = `
+                            <div class="flex flex-col gap-1">
+                                <span class="inline-flex px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wide bg-amber-50 text-amber-600">${m.collabPayerName} pays</span>
+                                <button onclick="cycleCollabPayer(${m.id})" class="text-[9px] font-bold text-indigo-500 hover:text-indigo-700 text-left leading-none">Switch billing →</button>
+                            </div>`;
+                    } else if (m.collabPayer === 'collab') {
+                        payerBadge = `
+                            <div class="flex flex-col gap-1">
+                                <span class="inline-flex px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wide bg-violet-50 text-violet-600">Collab pays</span>
+                                <button onclick="cycleCollabPayer(${m.id})" class="text-[9px] font-bold text-indigo-500 hover:text-indigo-700 text-left leading-none">Switch billing →</button>
+                            </div>`;
+                    } else {
+                        payerBadge = `
+                            <div class="flex flex-col gap-1">
+                                <span class="inline-flex px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wide bg-indigo-50 text-indigo-600">Team Lead pays</span>
+                                <button onclick="cycleCollabPayer(${m.id})" class="text-[9px] font-bold text-indigo-500 hover:text-indigo-700 text-left leading-none">Switch billing →</button>
+                            </div>`;
+                    }
+                } else {
+                    payerBadge = `<span class="inline-flex px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wide bg-neutral-100 text-neutral-500">Agent</span>`;
+                }
+
+                let displayFee = m.baseFee;
+                if (m.prorated) {
+                    const daysLeft = m.entry.includes("12") ? 18 : m.entry.includes("5") ? 25 : 27;
+                    displayFee = (m.baseFee * (daysLeft / 30)).toFixed(2);
+                }
+
+                html += `
+                    <tr class="hover:bg-neutral-50/50 transition-colors group cursor-pointer" data-member-id="${m.id}">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 rounded-full ${isExt ? 'bg-violet-50 text-violet-500' : 'bg-neutral-100 text-neutral-500'} flex items-center justify-center text-[10px] font-bold group-hover:bg-primary group-hover:text-white transition-all shrink-0">
+                                    ${m.name.split(' ').map(n => n[0]).join('')}
+                                </div>
+                                <div class="flex flex-col">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-semibold text-neutral-900">${m.name}</span>
+                                        ${isExt ? '<span class="text-[8px] font-black uppercase tracking-wider text-violet-400 bg-violet-50 px-1.5 py-0.5 rounded">External</span>' : ''}
+                                    </div>
+                                    <span class="text-[10px] font-medium text-neutral-400">${m.email}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex flex-col">
+                                <span class="text-xs font-semibold text-neutral-700">${m.role}</span>
+                                <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-tight">${m.type} Plan · $${m.baseFee}/mo</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center gap-1.5">
+                                <div class="size-1.5 rounded-full ${m.status === 'Active' ? 'bg-emerald-500' : 'bg-amber-500'}"></div>
+                                <span class="text-xs font-medium text-neutral-600">${m.status}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex flex-col">
+                                <span class="text-xs font-medium text-neutral-700">${m.entry}</span>
+                                ${m.prorated ? '<span class="text-[9px] font-bold text-indigo-500 uppercase tracking-wider">Prorated Charge</span>' : '<span class="text-[9px] font-bold text-neutral-300 uppercase tracking-wider">Full Cycle</span>'}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            ${payerBadge}
+                        </td>
+                        <td class="px-6 py-4 text-right whitespace-nowrap">
+                            <span class="text-sm font-bold text-neutral-900">$${displayFee}</span>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function toggleSwitch(el) {
+            el.classList.toggle('on');
+            const group = el.closest('.toggle-group');
+            if (group) {
+                const offLabel = group.querySelector('.toggle-label-off');
+                const onLabel = group.querySelector('.toggle-label-on');
+                if (el.classList.contains('on')) {
+                    onLabel.classList.add('toggle-active-text');
+                    offLabel.classList.remove('toggle-active-text');
+                } else {
+                    offLabel.classList.add('toggle-active-text');
+                    onLabel.classList.remove('toggle-active-text');
+                }
+            }
+            updateGrandTotal(api.teams.find(t => t.id === currentTeamId));
+            renderRosterTable(api.teams.find(t => t.id === currentTeamId));
+            autoSave();
+        }
+
+        function simulatePayment(btn) {
+            const text = btn.querySelector('.btn-text');
+            const originalText = text.innerText;
+            btn.disabled = true;
+            btn.classList.add('opacity-80');
+            text.innerHTML = '<i data-lucide="loader-2" class="size-4 animate-spin"></i> Processing...';
+            lucide.createIcons();
+
+            setTimeout(() => {
+                text.innerHTML = '<i data-lucide="check" class="size-4"></i> Success';
+                btn.classList.remove('bg-primary');
+                btn.classList.add('bg-emerald-500');
+                lucide.createIcons();
+                setTimeout(() => {
+                    text.innerText = originalText;
+                    btn.classList.add('bg-primary');
+                    btn.classList.remove('bg-emerald-500');
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-80');
+                    lucide.createIcons();
+                }, 2000);
+            }, 1500);
+        }
+
+        function toggleRoster() {
+            const content = document.getElementById('rosterContent');
+            const chevron = document.getElementById('rosterChevron');
+            const isExpanded = content.style.height && content.style.height !== '0px';
+
+            if (isExpanded) {
+                content.style.height = '0px';
+                chevron.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.height = content.scrollHeight + 'px';
+                chevron.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Global collab billing mode (default: teamlead)
+        let globalCollabBilling = 'teamlead';
+
+        function setCollabBilling(mode, btn) {
+            globalCollabBilling = mode;
+            // Update button styles
+            ['teamlead', 'agent', 'collab'].forEach(m => {
+                const b = document.getElementById('collabBtn_' + m);
+                if (!b) return;
+                if (m === mode) {
+                    b.style.background = '#5A5FF2';
+                    b.style.color = '#fff';
+                } else {
+                    b.style.background = 'transparent';
+                    b.style.color = '#737373';
+                }
+            });
+            // Apply to all collab members
+            teamMembers.filter(m => m.role === 'Collaborator').forEach(m => {
+                m.collabPayer = mode;
+                if (mode === 'agent') m.collabPayerName = 'Agent'; // generic until individually assigned
+            });
+            renderRosterTable(api.teams.find(t => t.id === currentTeamId));
+        }
+
+        // Cycle collab payer through 3 states: agent → collab → teamlead → agent
+        function cycleCollabPayer(memberId) {
+            const m = teamMembers.find(x => x.id === memberId);
+            if (!m) return;
+            const cycle = { agent: 'collab', collab: 'teamlead', teamlead: 'agent' };
+            m.collabPayer = cycle[m.collabPayer] || 'teamlead';
+            renderRosterTable(api.teams.find(t => t.id === currentTeamId));
+        }
+
+        function switchMelTab(btn, tabId) {
+            // Update r-tab active state
+            btn.closest('.r-tabs').querySelectorAll('.r-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            // Show correct panel
+            ['tokenUsage', 'tokenInvoices'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = id === tabId ? 'block' : 'none';
+            });
+        }
+
+        function toggleBento(type) {
+            const sectionId = `${type}Expanded`;
+            const cardId = `bento${type.charAt(0).toUpperCase() + type.slice(1)}`;
+            const section = document.getElementById(sectionId);
+            const card = document.getElementById(cardId);
+
+            const isOpening = !section.classList.contains('open');
+
+            // Close all first
+            document.querySelectorAll('.expanded-section').forEach(s => s.classList.remove('open'));
+            document.querySelectorAll('.nav-card').forEach(c => c.classList.remove('bento-active'));
+
+            if (isOpening) {
+                section.classList.add('open');
+                card.classList.add('bento-active');
+                setTimeout(() => {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }
+        }
+
+        function autoSave() {
+            console.log("Saving changes...");
+            // Optional: Add a subtle toast or header indicator if needed
+        }
+
+        function calculateTotal(team) {
+            const sw = parseInt(team.sw.replace('$', '')) || 0;
+            const assocCount = team.A || 0;
+            const assocPrice = parseInt(team.assoc.replace('$', '')) || 0;
+
+            const extCollabSwitch = document.getElementById('extCollabSwitch');
+            const agentPaysExt = extCollabSwitch && extCollabSwitch.classList.contains('on');
+
+            const assocTotal = assocCount * assocPrice;
+            const extTotal = agentPaysExt ? 0 : (team.XC || 0) * 29;
+
+            return sw + assocTotal + extTotal + 45 + 25;
+        }
+
+        function updateGrandTotal(team) {
+            const total = calculateTotal(team);
+            const totalDisplay = document.getElementById('hubGrandTotal');
+            if (totalDisplay) totalDisplay.innerText = `$${total.toLocaleString()}.00`;
+        }
+
+        function togglePlanEdit() {
+            const team = api.teams.find(t => t.id === currentTeamId);
+            if (!team) return;
+
+            const btn = document.getElementById('editPlanBtn');
+            const containers = ['leadPriceContainer', 'associatePriceContainer', 'prefPriceContainer', 'extPriceContainer'];
+
+            if (!isEditingPlan) {
+                // Switch to Inputs
+                containers.forEach(id => {
+                    const cont = document.getElementById(id);
+                    const val = cont.innerText.split(' ')[0].replace('$', '');
+                    cont.innerHTML = `
+                        <div class="flex items-center gap-1">
+                            <span class="text-xs font-bold text-neutral-400">$</span>
+                            <input type="text" class="inline-edit-input" value="${val}" 
+                                onblur="savePlanEdit()" 
+                                onkeydown="if(event.key === 'Enter') savePlanEdit()">
+                        </div>
+                    `;
+                });
+                btn.innerText = 'Save';
+                isEditingPlan = true;
+                const firstInput = document.querySelector('.inline-edit-input');
+                if (firstInput) firstInput.focus();
+            } else {
+                savePlanEdit();
+            }
+        }
+
+        function savePlanEdit() {
+            if (!isEditingPlan) return;
+
+            const team = api.teams.find(t => t.id === currentTeamId);
+            const inputs = document.querySelectorAll('.inline-edit-input');
+            if (!inputs.length) return;
+
+            // Mock Save to Data Store
+            team.sw = `$${inputs[0].value}`;
+            team.assoc = `$${inputs[1].value}`;
+
+            // Re-render display spans
+            document.getElementById('leadPriceContainer').innerHTML = `<span class="text-sm font-bold text-neutral-900">$${inputs[0].value}.00</span>`;
+            document.getElementById('associatePriceContainer').innerHTML = `<span class="text-sm font-bold text-neutral-900">$${inputs[1].value}.00 /ea</span>`;
+            document.getElementById('prefPriceContainer').innerHTML = `<span class="text-sm font-bold text-neutral-900">$${inputs[2].value}.00 /ea</span>`;
+            document.getElementById('extPriceContainer').innerHTML = `<span class="text-sm font-bold text-neutral-900">$${inputs[3].value}.00 /ea</span>`;
+
+            updateGrandTotal(team);
+            document.getElementById('editPlanBtn').innerText = 'Edit';
+            isEditingPlan = false;
+            autoSave();
+            render(); // Update main table view
+        }
+
+        function autoSave() {
+            const toast = document.getElementById('saveToast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function openPaymentModal() {
+            document.getElementById('paymentModal').classList.add('show');
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('show');
+        }
+
+        function renderInvoiceTable(team) {
+            const tableBody = document.getElementById('invoiceTableBody');
+            if (!tableBody) return;
+
+            const invoices = [
+                {
+                    date: 'Apr 20, 2026', id: 'INV-49201', amount: '$1,870.00', status: 'Paid',
+                    splitType: 'split',
+                    splits: [
+                        { label: 'Team Lead pays', detail: 'Base plan + 3 associates', amount: '$1,570.00', badge: 'bg-indigo-50 text-indigo-600' },
+                        { label: 'Sandra pays', detail: 'James Wilson (collab seat)', amount: '$25.00', badge: 'bg-amber-50 text-amber-600' },
+                        { label: 'Collab pays', detail: 'Priya Mehta self-pays', amount: '$25.00', badge: 'bg-violet-50 text-violet-600' },
+                    ]
+                },
+                {
+                    date: 'Mar 20, 2026', id: 'INV-48122', amount: '$1,845.00', status: 'Paid',
+                    splitType: 'split',
+                    splits: [
+                        { label: 'Team Lead pays', detail: 'Base plan + 4 associates', amount: '$1,795.00', badge: 'bg-indigo-50 text-indigo-600' },
+                        { label: 'Scott pays', detail: 'Milan Torres (collab seat)', amount: '$25.00', badge: 'bg-amber-50 text-amber-600' },
+                    ]
+                },
+                {
+                    date: 'Feb 20, 2026', id: 'INV-47003', amount: '$1,785.00', status: 'Paid',
+                    splitType: 'teamlead',
+                    splits: [
+                        { label: 'Team Lead pays', detail: 'All seats — no split-pay active', amount: '$1,785.00', badge: 'bg-indigo-50 text-indigo-600' }
+                    ]
+                },
+                {
+                    date: 'Jan 20, 2026', id: 'INV-45912', amount: '$1,650.00', status: 'Failed',
+                    splitType: 'split',
+                    splits: [
+                        { label: 'Agent split-pay', detail: '2 associates billed separately', amount: '$1,650.00', badge: 'bg-rose-50 text-rose-500' }
+                    ]
+                }
             ];
 
-            container.innerHTML = tabs.map(tab => `
-                <div onclick="switchDetailTab('${tab.id}')" class="pricing-nav-item ${currentDetailTab === tab.id ? 'active' : ''}">
-                    ${tab.label}
+            tableBody.innerHTML = invoices.map((inv, idx) => {
+                const splitRows = inv.splits.map(s => `
+                    <div class="flex items-center justify-between py-1 border-b border-dashed border-neutral-100 last:border-0">
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wide ${s.badge}">${s.label}</span>
+                            <span class="text-[10px] text-neutral-400">${s.detail}</span>
+                        </div>
+                        <span class="text-[10px] font-bold text-neutral-700 font-mono">${s.amount}</span>
+                    </div>
+                `).join('');
+
+                const canSwitch = inv.splitType === 'split';
+
+                return `
+                <tr class="hover:bg-neutral-50 transition-colors group border-b border-neutral-50 last:border-0">
+                    <td class="py-2.5 px-5 text-[11px] font-semibold text-neutral-900 whitespace-nowrap">${inv.date}</td>
+                    <td class="py-2.5 px-5 text-[11px] font-mono text-neutral-400">${inv.id}</td>
+                    <td class="py-2.5 px-5 text-[11px] font-bold text-neutral-900">${inv.amount}</td>
+                    <td class="py-2.5 px-5">
+                        <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase ${inv.status === 'Paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}">${inv.status}</span>
+                    </td>
+                    <td class="py-2.5 px-5" style="max-width:320px;">
+                        <div class="flex flex-col gap-0.5">
+                            ${splitRows}
+                        </div>
+                        ${canSwitch ? `<button onclick="showSwitchBillingModal()" class="mt-1.5 text-[9px] font-bold text-indigo-500 hover:text-indigo-700 hover:underline leading-none">Switch to Team Lead pays →</button>` : ''}
+                    </td>
+                    <td class="py-2.5 px-5 text-right">
+                        <button class="size-7 rounded-lg text-neutral-400 hover:text-primary hover:bg-indigo-50 transition-all flex items-center justify-center ml-auto">
+                            <i data-lucide="download" class="size-3.5"></i>
+                        </button>
+                    </td>
+                </tr>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function showSwitchBillingModal() {
+            // Show a toast-style confirmation banner
+            const existing = document.getElementById('switchBillingBanner');
+            if (existing) { existing.remove(); }
+            const banner = document.createElement('div');
+            banner.id = 'switchBillingBanner';
+            banner.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;align-items:center;gap:16px;background:#0A0A0A;color:#fff;padding:14px 20px;border-radius:12px;font-size:13px;font-family:var(--font-ui);box-shadow:0 8px 32px rgba(0,0,0,.3);min-width:420px;';
+            banner.innerHTML = `
+                <i data-lucide="shuffle" style="width:16px;height:16px;flex-shrink:0;color:#A78BFA;"></i>
+                <div style="flex:1;">
+                    <p style="margin:0;font-weight:600;font-size:12px;">Switch billing to Team Lead pays?</p>
+                    <p style="margin:0;font-size:11px;opacity:.6;margin-top:2px;">All collab seats will consolidate under the team plan. Takes effect next cycle.</p>
                 </div>
+                <button onclick="confirmSwitchBilling()" style="background:#5A5FF2;color:#fff;border:none;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;">Confirm switch</button>
+                <button onclick="document.getElementById('switchBillingBanner').remove()" style="background:transparent;color:#fff;border:none;opacity:.5;cursor:pointer;padding:4px;">✕</button>
+            `;
+            document.body.appendChild(banner);
+            lucide.createIcons();
+            setTimeout(() => { if (banner.parentNode) banner.remove(); }, 8000);
+        }
+
+        function confirmSwitchBilling() {
+            const banner = document.getElementById('switchBillingBanner');
+            if (banner) {
+                banner.innerHTML = `<i data-lucide="check-circle" style="width:16px;height:16px;color:#34D399;"></i> <span style="font-size:13px;">Billing switched — Team Lead now covers all seats from next cycle.</span>`;
+                lucide.createIcons();
+                setTimeout(() => banner.remove(), 3000);
+            }
+            // Update all collaborator payers in the data model
+            teamMembers.forEach(m => { if (m.role === 'Collaborator') m.collabPayer = 'teamlead'; });
+            renderRosterTable(api.teams.find(t => t.id === currentTeamId));
+        }
+
+        function navigateToTokens() {
+            const pricingPage = document.getElementById('pricingPage');
+            const tokensPage = document.getElementById('tokensPage');
+            const teamName = document.getElementById('pricingTeamName').innerText;
+
+            document.getElementById('tokenTeamBreadcrumb').innerText = teamName;
+
+            pricingPage.classList.add('hidden');
+            tokensPage.classList.remove('hidden');
+
+            renderTokenLogs();
+            renderTokenFinancial();
+            lucide.createIcons();
+            window.scrollTo(0, 0);
+        }
+
+        function switchTokenTab(tab) {
+            const usageTab = document.getElementById('usageLogTab');
+            const financialTab = document.getElementById('financialTab');
+            const usageView = document.getElementById('usageLogView');
+            const financialView = document.getElementById('financialView');
+
+            if (tab === 'usage') {
+                usageTab.classList.add('border-primary', 'text-neutral-900');
+                usageTab.classList.remove('border-transparent', 'text-neutral-400');
+                financialTab.classList.remove('border-primary', 'text-neutral-900');
+                financialTab.classList.add('border-transparent', 'text-neutral-400');
+                usageView.classList.remove('hidden');
+                financialView.classList.add('hidden');
+            } else {
+                financialTab.classList.add('border-primary', 'text-neutral-900');
+                financialTab.classList.remove('border-transparent', 'text-neutral-400');
+                usageTab.classList.remove('border-primary', 'text-neutral-900');
+                usageTab.classList.add('border-transparent', 'text-neutral-400');
+                usageView.classList.add('hidden');
+                financialView.classList.remove('hidden');
+            }
+        }
+
+        function renderTokenLogs() {
+            const body = document.getElementById('tokenUsageBody');
+            const logs = [
+                { date: 'Apr 18, 2026, 2:45 PM', user: 'Sandra O.', service: 'Listing Description', tokens: '450' },
+                { date: 'Apr 18, 2026, 1:12 PM', user: 'Mark V.', service: 'Email Draft', tokens: '120' },
+                { date: 'Apr 17, 2026, 9:00 AM', user: 'Sandra O.', service: 'Smart Search', tokens: '85' }
+            ];
+
+            body.innerHTML = logs.map(log => `
+                <tr class="hover:bg-neutral-50/80 transition-colors border-b border-neutral-50 last:border-0">
+                    <td class="py-4 px-8 text-[11px] font-bold text-neutral-500 tabular-nums">${log.date}</td>
+                    <td class="py-4 px-8">
+                        <div class="flex items-center gap-3">
+                            <div class="size-7 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-[10px] font-bold text-primary shadow-sm">${log.user.charAt(0)}</div>
+                            <span class="text-[11px] font-bold text-neutral-900 tracking-tight">${log.user}</span>
+                        </div>
+                    </td>
+                    <td class="py-4 px-8">
+                        <span class="px-2.5 py-0.5 bg-neutral-100 text-neutral-600 text-[9px] font-black uppercase rounded-full tracking-wider">${log.service}</span>
+                    </td>
+                    <td class="py-4 px-8 text-right font-bold text-neutral-900 tabular-nums">${log.tokens}</td>
+                </tr>
             `).join('');
         }
 
-        function renderPricingContent() {
-            const body = document.getElementById('pricingBody');
-            const team = currentTeam;
+        function renderTokenFinancial() {
+            const body = document.getElementById('tokenFinancialBody');
+            const history = [
+                { date: 'Apr 18, 2026', type: 'Auto-Recharge', amount: '$50.00', credits: '5,000' },
+                { date: 'Mar 25, 2026', type: 'Manual Recharge', amount: '$100.00', credits: '12,000' },
+                { date: 'Mar 02, 2026', type: 'Auto-Recharge', amount: '$50.00', credits: '5,000' }
+            ];
 
-            if (currentDetailTab === 'overview') {
-                body.innerHTML = `
-                    <div class="space-y-8">
-                        <div class="pricing-content-grid">
-                            <div class="r-card">
-                                <p class="text-xs font-bold text-neutral-400 uppercase mb-4">Subscription Plan</p>
-                                <h4 class="text-4xl font-bold text-neutral-900 mb-2">${team.sw}</h4>
-                                <p class="text-sm text-neutral-500">Billed monthly on the ${team.billing}</p>
-                                <hr class="my-6 border-neutral-100">
-                                <div class="space-y-3">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-neutral-500">Associates</span>
-                                        <span class="font-bold">${team.A} seats</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-neutral-500">External Collabs</span>
-                                        <span class="font-bold">${team.XC} seats</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="r-card border-indigo-100 bg-indigo-50/30">
-                                <p class="text-xs font-bold text-indigo-400 uppercase mb-4">Associate Pricing</p>
-                                <h4 class="text-4xl font-bold text-indigo-600 mb-2">${team.assoc}</h4>
-                                <p class="text-sm text-indigo-500">Per seat / monthly</p>
-                                <hr class="my-6 border-indigo-100">
-                                <div class="switch-container border-indigo-100">
-                                    <div>
-                                        <p class="text-sm font-bold text-neutral-900">Agent Pays</p>
-                                        <p class="text-[11px] text-neutral-500">Toggle billing responsibility</p>
-                                    </div>
-                                    <div class="r-switch ${team.paying === 'Agents' ? 'on' : ''}" onclick="toggleTeamPayer(this)"></div>
-                                </div>
-                            </div>
-
-                            <div class="r-card">
-                                <p class="text-xs font-bold text-neutral-400 uppercase mb-4">Credits Balance</p>
-                                <h4 class="text-4xl font-bold text-neutral-900 mb-2">${team.credits.toLocaleString()}</h4>
-                                <p class="text-sm text-neutral-500">Points remaining this cycle</p>
-                                <hr class="my-6 border-neutral-100">
-                                <button class="r-btn r-btn-outline w-full rounded-xl h-10">Top Up Credits</button>
-                            </div>
-                        </div>
-
-                        <div class="r-card">
-                            <h5 class="text-lg font-bold text-neutral-900 mb-6">Plan Features</h5>
-                            <div class="grid grid-cols-4 gap-6">
-                                ${['MLS Integration', 'Website Builder', 'CRM Access', 'Marketing Suite', 'Lead Routing', 'E/O Insurance', '24/7 Support', 'API Access'].map(feature => `
-                                    <div class="flex items-center gap-3">
-                                        <div class="size-5 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                                            <i data-lucide="check" class="size-3"></i>
-                                        </div>
-                                        <span class="text-sm text-neutral-700">${feature}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else if (currentDetailTab === 'history') {
-                body.innerHTML = `
-                    <div class="bg-white border border-neutral-100 rounded-2xl overflow-hidden">
-                        <table class="w-full text-left">
-                            <thead class="bg-neutral-50 border-b border-neutral-100">
-                                <tr>
-                                    <th class="px-6 py-4 text-xs font-bold text-neutral-500 uppercase">Date</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-neutral-500 uppercase">Description</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-neutral-500 uppercase">Amount</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-neutral-500 uppercase">Status</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-neutral-500 uppercase">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-neutral-50">
-                                ${Array(5).fill(0).map((_, i) => `
-                                    <tr class="hover:bg-neutral-50/50">
-                                        <td class="px-6 py-4 text-sm text-neutral-600">April ${12 - i}, 2026</td>
-                                        <td class="px-6 py-4 text-sm font-semibold text-neutral-900">Software Subscription - Pro Plan</td>
-                                        <td class="px-6 py-4 text-sm font-bold">$1,492.00</td>
-                                        <td class="px-6 py-4">
-                                            <span class="r-badge r-badge-success text-[10px]">SUCCESS</span>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <button class="text-indigo-600 hover:underline text-sm font-bold">Download</button>
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-            } else if (currentDetailTab === 'tokens') {
-                body.innerHTML = `
-                    <div class="grid grid-cols-3 gap-8">
-                        <div class="col-span-2 space-y-6">
-                            <div class="r-card bg-neutral-950 text-white border-0 p-8">
-                                <div class="flex justify-between items-start mb-8">
-                                    <div>
-                                        <p class="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-2">Available AI Points</p>
-                                        <h3 class="text-5xl font-bold">${team.credits.toLocaleString()}</h3>
-                                    </div>
-                                    <div class="size-12 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                                        <i data-lucide="zap" class="size-6 text-white"></i>
-                                    </div>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                                        <div class="h-full bg-indigo-500" style="width: 72%"></div>
-                                    </div>
-                                    <div class="flex justify-between text-[11px] font-bold text-neutral-400">
-                                        <span>72% REMAINING</span>
-                                        <span>REFILL ON MAY 20</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="r-card">
-                                <h5 class="text-sm font-bold text-neutral-900 mb-6 uppercase">Point Usage History</h5>
-                                <div class="space-y-4">
-                                    ${Array(4).fill(0).map((_, i) => `
-                                        <div class="flex items-center justify-between py-3 border-b border-neutral-50 last:border-0">
-                                            <div class="flex items-center gap-3">
-                                                <div class="size-8 rounded-lg bg-neutral-50 flex items-center justify-center">
-                                                    <i data-lucide="bot" class="size-4 text-neutral-400"></i>
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold text-neutral-900">AI Listing Generation</p>
-                                                    <p class="text-xs text-neutral-500">Today, 11:20 AM</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-sm font-bold text-rose-600">-250 pts</span>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="space-y-6">
-                            <div class="r-card">
-                                <h5 class="text-sm font-bold text-neutral-900 mb-4 uppercase">Top Consumers</h5>
-                                <div class="space-y-4">
-                                    ${Array(3).fill(0).map((_, i) => `
-                                        <div class="flex items-center gap-3">
-                                            <div class="r-avatar r-avatar-sm">${['MV', 'JS', 'SJ'][i]}</div>
-                                            <div class="flex-1">
-                                                <div class="flex justify-between text-xs mb-1">
-                                                    <span class="font-bold">${['Marcus Vane', 'Jonathan Sterling', 'Sarah Jenkins'][i]}</span>
-                                                    <span>${12000 - i * 3000}</span>
-                                                </div>
-                                                <div class="r-progress"><div class="r-progress-bar" style="width: ${80 - i * 15}%"></div></div>
-                                            </div>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else if (currentDetailTab === 'activity') {
-                body.innerHTML = `
-                    <div class="max-w-2xl">
-                        <div class="space-y-10">
-                            ${[
-                                { title: 'Plan Upgraded', desc: 'Marcus Thorne upgraded to Pro Plan + 12 Associates', time: 'Today, 2:45 PM', icon: 'trending-up', color: 'indigo' },
-                                { title: 'Billing Updated', desc: 'New Payment Method added (Visa •••• 4242)', time: 'Yesterday, 10:12 AM', icon: 'credit-card', color: 'neutral' },
-                                { title: 'Credits Refilled', desc: 'Auto-refill triggered: 50,000 Credits', time: 'April 15, 2026', icon: 'zap', color: 'amber' },
-                                { title: 'Member Invited', desc: 'Sarah Jenkins was invited as an Associate', time: 'April 10, 2026', icon: 'user-plus', color: 'neutral' }
-                            ].map((item, i) => `
-                                <div class="flex gap-6">
-                                    <div class="flex flex-col items-center">
-                                        <div class="size-10 rounded-xl bg-${item.color === 'neutral' ? 'neutral-100' : item.color + '-50'} flex items-center justify-center">
-                                            <i data-lucide="${item.icon}" class="size-5 text-${item.color === 'neutral' ? 'neutral-600' : item.color + '-600'}"></i>
-                                        </div>
-                                        ${i < 3 ? `<div class="w-px flex-1 bg-neutral-100 my-2"></div>` : ''}
-                                    </div>
-                                    <div class="pt-1">
-                                        <p class="text-base font-bold text-neutral-900">${item.title}</p>
-                                        <p class="text-sm text-neutral-500 mt-1">${item.desc}</p>
-                                        <p class="text-[11px] text-neutral-400 mt-2 font-bold uppercase tracking-wider">${item.time}</p>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
+            body.innerHTML = history.map(item => `
+                <tr class="hover:bg-neutral-50/80 transition-colors border-b border-neutral-50 last:border-0">
+                    <td class="py-4 px-8 text-[11px] font-bold text-neutral-900">${item.date}</td>
+                    <td class="py-4 px-8">
+                        <span class="px-2.5 py-0.5 ${item.type === 'Auto-Recharge' ? 'bg-emerald-50 text-emerald-600' : 'bg-indigo-50 text-indigo-600'} text-[9px] font-black uppercase rounded-full tracking-wider">${item.type}</span>
+                    </td>
+                    <td class="py-4 px-8 text-center text-[11px] font-bold text-neutral-900 tabular-nums">${item.amount}</td>
+                    <td class="py-4 px-8 text-center text-[11px] font-bold text-neutral-900 tabular-nums">${item.credits}</td>
+                    <td class="py-4 px-8 text-right">
+                        <button class="size-8 rounded-lg text-neutral-400 hover:text-primary hover:bg-indigo-50 transition-all flex items-center justify-center ml-auto">
+                            <i data-lucide="download" class="size-4"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
         }
 
-        function toggleTeamPayer(el) {
-            el.classList.toggle('on');
-            if (currentTeam) {
-                currentTeam.paying = el.classList.contains('on') ? 'Agents' : 'Lead';
-            }
+        function navigateBackToOverview() {
+            document.getElementById('tokensPage').classList.add('hidden');
+            document.getElementById('pricingPage').classList.remove('hidden');
         }
 
-        let currentSheetTeam = null;
+        function showToastConfirm({ icon, title, body, confirmLabel, confirmClass, onConfirm }) {
+            const existing = document.getElementById('toastConfirmBanner');
+            if (existing) existing.remove();
+            const el = document.createElement('div');
+            el.id = 'toastConfirmBanner';
+            el.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:9999;background:#fff;border:1px solid #E5E5E5;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.14);padding:20px 24px;min-width:440px;max-width:520px;display:flex;flex-direction:column;gap:12px;font-family:var(--font-ui);';
+            el.innerHTML = `
+                <div style="display:flex;align-items:flex-start;gap:12px;">
+                    <div style="width:36px;height:36px;border-radius:10px;background:#F5F5F5;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i data-lucide="${icon}" style="width:16px;height:16px;color:#5A5FF2;"></i>
+                    </div>
+                    <div style="flex:1;">
+                        <p style="font-size:14px;font-weight:700;color:#0A0A0A;margin:0 0 4px;">${title}</p>
+                        <p style="font-size:12px;color:#737373;margin:0;line-height:1.5;">${body}</p>
+                    </div>
+                    <button onclick="document.getElementById('toastConfirmBanner').remove()" style="background:none;border:none;cursor:pointer;color:#A3A3A3;padding:2px;font-size:18px;line-height:1;">×</button>
+                </div>
+                <div style="display:flex;gap:8px;justify-content:flex-end;">
+                    <button onclick="document.getElementById('toastConfirmBanner').remove()" style="padding:8px 16px;border-radius:8px;border:1px solid #E5E5E5;background:#fff;font-size:13px;font-weight:600;cursor:pointer;color:#404040;">Cancel</button>
+                    <button id="toastConfirmBtn" style="padding:8px 16px;border-radius:8px;border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;" class="${confirmClass}">${confirmLabel}</button>
+                </div>
+            `;
+            document.body.appendChild(el);
+            document.getElementById('toastConfirmBtn').className = confirmClass.replace('hover:', '');
+            document.getElementById('toastConfirmBtn').style.cssText = `padding:8px 16px;border-radius:8px;border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;background:${confirmClass.includes('rose') ? '#DC2626' : '#5A5FF2'};`;
+            document.getElementById('toastConfirmBtn').onclick = () => { onConfirm(); el.remove(); };
+            lucide.createIcons();
+            setTimeout(() => { if (el.parentNode) el.remove(); }, 12000);
+        }
+
+        function showMelPricingInfo() {
+            showToastConfirm({
+                icon: 'info',
+                title: 'Mel Credit Pricing',
+                body: 'Prospecting run: ~30,000 cr · CMA Report: 120 cr · Listing Description: 50 cr · Doc Signing: 15 cr · Mel Q&A: 3 cr. Packs: 50k = $50 · 100k = $90 · 250k = $200.',
+                confirmLabel: 'Got it',
+                confirmClass: 'bg-[#5A5FF2]',
+                onConfirm: () => {}
+            });
+        }
+
+        const activityEvents = [
+            { color: '#10B981', icon: 'user-plus', title: 'Associate seat added', detail: 'David Park joined as Associate · Core Plan', who: 'Sandra O.', when: 'Today, 4:21 PM' },
+            { color: '#5A5FF2', icon: 'credit-card', title: 'Payment method added', detail: 'Mastercard ···· 8801 added as secondary card', who: 'Sandra O.', when: 'Today, 2:15 PM' },
+            { color: '#10B981', icon: 'user-plus', title: 'External collaborator added', detail: 'Priya Mehta onboarded — Collab pays billing', who: 'Marcus W.', when: 'Today, 10:02 AM' },
+            { color: '#5A5FF2', icon: 'sparkles', title: 'Mel Credits auto-recharged', detail: '50,000 credits added — balance dropped below 10k', who: 'System', when: 'Yesterday, 11:48 PM' },
+            { color: '#F59E0B', icon: 'shuffle', title: 'Billing logic switched', detail: 'Tom Reeves collab seat moved to Team Lead pays', who: 'Sandra O.', when: 'Yesterday, 3:30 PM' },
+            { color: '#5A5FF2', icon: 'trending-up', title: 'Plan upgraded to Team Pro', detail: 'Team Lead plan: Core → Pro ($199 → $299/mo)', who: 'Admin', when: 'Apr 18, 2026' },
+            { color: '#EC4899', icon: 'file-text', title: 'CMA Report generated', detail: 'Mark V. used 120 Mel Credits — 14 Oak St', who: 'Mark V.', when: 'Apr 18, 2026' },
+            { color: '#F59E0B', icon: 'zap', title: 'Mel Prospecting run', detail: 'Sandra O. searched 30,000 contacts — Westside Farm', who: 'Sandra O.', when: 'Apr 18, 2026' },
+            { color: '#10B981', icon: 'check-circle', title: 'Invoice paid — Apr cycle', detail: 'INV-49201 · $1,870.00 charged to Visa ···· 4242', who: 'System', when: 'Apr 20, 2026' },
+            { color: '#DC2626', icon: 'alert-circle', title: 'Payment failed — Jan cycle', detail: 'INV-45912 · $1,650.00 — card declined, retrying', who: 'System', when: 'Jan 20, 2026' },
+        ];
+
+        function renderActivityLog() {
+            const container = document.getElementById('activityTimeline');
+            if (!container) return;
+            container.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 48px;">
+                ${activityEvents.map(e => `
+                    <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #F5F5F5;align-items:flex-start;">
+                        <div style="width:30px;height:30px;border-radius:9999px;background:${e.color}18;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">
+                            <i data-lucide="${e.icon}" style="width:13px;height:13px;color:${e.color};stroke-width:2;"></i>
+                        </div>
+                        <div style="flex:1;min-width:0;">
+                            <p style="font-size:13px;font-weight:600;color:#0A0A0A;margin:0 0 2px;line-height:1.3;">${e.title}</p>
+                            <p style="font-size:11px;color:#737373;margin:0 0 4px;line-height:1.4;">${e.detail}</p>
+                            <div style="display:flex;gap:6px;align-items:center;">
+                                <span style="font-size:10px;font-weight:700;color:#A3A3A3;font-family:var(--font-ui);">${e.who}</span>
+                                <span style="width:2px;height:2px;border-radius:50%;background:#D4D4D4;display:inline-block;flex-shrink:0;"></span>
+                                <span style="font-size:10px;color:#A3A3A3;font-family:var(--font-ui);">${e.when}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>`;
+            lucide.createIcons();
+        }
+
+        function toggleAutoRenew(switchEl) {
+            const isOn = switchEl.classList.contains('on');
+            const action = isOn ? 'Disable' : 'Enable';
+            showToastConfirm({
+                icon: 'refresh-cw',
+                title: `${action} monthly auto-renew?`,
+                body: isOn ? 'The team will be moved to manual billing. Subscription will not renew automatically.' : 'Subscription will automatically renew each month using the default payment method.',
+                confirmLabel: `${action} auto-renew`,
+                confirmClass: isOn ? 'bg-rose-600 hover:bg-rose-700' : 'bg-[#5A5FF2] hover:bg-[#4A4FE0]',
+                onConfirm: () => {
+                    switchEl.classList.toggle('on');
+                    const label = document.getElementById('autoRenewLabel');
+                    if (label) label.textContent = switchEl.classList.contains('on') ? 'Monthly auto-renew' : 'Manual billing';
+                }
+            });
+        }
+
+        function showLeadPaysConfirmation(switchEl) {
+            const overlay = document.getElementById('modalOverlay');
+            const modal = document.getElementById('confirmationModal');
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.remove('scale-95', 'opacity-0');
+            }, 10);
+
+            // Store element for confirmation
+            window.pendingSwitch = switchEl;
+        }
+
+        function closeModal() {
+            const overlay = document.getElementById('modalOverlay');
+            const modal = document.getElementById('confirmationModal');
+            modal.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
+        }
+
+        function confirmLeadPays() {
+            if (window.pendingSwitch) {
+                window.pendingSwitch.classList.add('on');
+                autoSave();
+            }
+            closeModal();
+        }
+
+        function backToDashboard() {
+            document.body.classList.remove('is-scrolling');
+            document.body.style.overflow = 'auto';
+            document.documentElement.style.overflow = 'auto';
+            document.getElementById('pricingPage').classList.add('hidden');
+            document.getElementById('pricingPage').classList.remove('show');
+            document.getElementById('mainDashboard').classList.remove('hidden');
+            render();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        let currentSheetTeamId = null;
         let currentSheetTab = 'history';
 
-        function openSheet(teamName, initialTab = 'history') {
-            const team = initialData.find(t => t.name === teamName);
+        function openSheet(teamId, initialTab = 'history') {
+            const team = api.teams.find(t => t.id === teamId);
             if (!team) return;
-            
-            currentSheetTeam = team;
+
+            currentSheetTeamId = teamId;
             currentSheetTab = initialTab;
 
             document.getElementById('sheetOverlay').classList.add('show');
             document.getElementById('sheetContent').classList.add('show');
-            document.getElementById('sheetTitle').innerText = teamName;
-            
+            document.getElementById('sheetTitle').innerText = team.name;
+
             renderSheetTabs();
-            renderSheetContent();
+            renderSheetContent(team);
             lucide.createIcons();
-            
+
             document.body.style.overflow = 'hidden';
         }
 
@@ -1249,8 +3086,9 @@
 
         function switchSheetTab(tab) {
             currentSheetTab = tab;
+            const team = api.teams.find(t => t.id === currentSheetTeamId);
             renderSheetTabs();
-            renderSheetContent();
+            renderSheetContent(team);
             lucide.createIcons();
         }
 
@@ -1273,9 +3111,8 @@
             `;
         }
 
-        function renderSheetContent() {
+        function renderSheetContent(team) {
             const body = document.getElementById('sheetBody');
-            const team = currentSheetTeam;
 
             if (currentSheetTab === 'history') {
                 body.innerHTML = `
@@ -1296,10 +3133,10 @@
                 body.innerHTML = `
                     <div class="tab-content space-y-6">
                         ${[
-                            { title: 'Plan Upgraded', time: 'Today, 2:45 PM' },
-                            { title: 'Billing Updated', time: 'Yesterday, 10:12 AM' },
-                            { title: 'Credits Refilled', time: 'April 15, 2026' }
-                        ].map((item, i) => `
+                        { title: 'Plan Upgraded', time: 'Today, 2:45 PM' },
+                        { title: 'Billing Updated', time: 'Yesterday, 10:12 AM' },
+                        { title: 'Credits Refilled', time: 'April 15, 2026' }
+                    ].map((item, i) => `
                             <div class="flex gap-4">
                                 <div class="flex flex-col items-center">
                                     <div class="size-2 rounded-full bg-indigo-500"></div>
@@ -1328,16 +3165,19 @@
     <!-- Side Panel / Sheet (Moved to document root for stacking context purity) -->
     <div id="sheetOverlay" class="sheet-overlay" onclick="closeSheet()"></div>
     <div id="sheetContent" class="sheet-content">
-        <div class="sheet-header border-b border-neutral-100 p-6 flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 z-20">
+        <div
+            class="sheet-header border-b border-neutral-100 p-6 flex justify-between items-center bg-white/80 backdrop-blur-md sticky top-0 z-20">
             <div>
-                <p id="sheetSubtitle" class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-0.5">Team Details</p>
-                <h3 id="sheetTitle" class="text-xl font-bold text-neutral-900 tracking-tight leading-tight">Team Alpha Group</h3>
+                <p id="sheetSubtitle" class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-0.5">
+                    Team Details</p>
+                <h3 id="sheetTitle" class="text-xl font-bold text-neutral-900 tracking-tight leading-tight">Team Alpha
+                    Group</h3>
             </div>
             <button onclick="closeSheet()" class="p-2.5 hover:bg-neutral-100 rounded-xl transition-all active:scale-95">
                 <i data-lucide="x" class="size-5 text-neutral-600"></i>
             </button>
         </div>
-        
+
         <div id="sheetTabs" class="sheet-tabs-container py-2 flex items-center justify-center">
             <!-- Tabs injected here -->
         </div>
@@ -1347,4 +3187,5 @@
         </div>
     </div>
 </body>
+
 </html>
