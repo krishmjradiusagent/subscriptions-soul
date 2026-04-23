@@ -1599,42 +1599,54 @@
                 <!-- Right Column (Sticky Summary) -->
                 <div class="w-[350px] flex-shrink-0 flex flex-col gap-6 sticky top-0 self-start">
                     <!-- Subscription Summary (Sticky) -->
-                    <div class="hub-card p-8 bg-white border border-neutral-100 no-phantom-padding relative overflow-hidden shadow-sm"
-                        style="margin-top: 0;">
-                        <div
-                            class="absolute top-0 right-0 w-32 h-32 bg-indigo-50/50 rounded-full blur-3xl -mr-16 -mt-16">
-                        </div>
-                        <h3 class="text-[10px] font-bold text-neutral-400 uppercase tracking-[0.15em] mb-8">
-                            Subscription Summary</h3>
-                        <div class="space-y-5 mb-10 relative z-10">
-                            <div class="flex justify-between text-sm">
-                                <span class="font-medium text-neutral-500">Team Lead Plan</span>
-                                <span class="font-semibold text-neutral-900">$299.00</span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="font-medium text-neutral-500">Associate Seats (<span
-                                        id="hubSumSeats">24</span>)</span>
-                                <span class="font-semibold text-neutral-900">$1,416.00</span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="font-medium text-neutral-500">Global Add-ons</span>
-                                <span class="font-semibold text-neutral-900">$45.00</span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="font-medium text-neutral-500">Risk Management</span>
-                                <span class="font-semibold text-neutral-900">$25.00</span>
-                            </div>
-                        </div>
-                        <div class="pt-8 border-t border-neutral-50 mt-10 relative z-10">
-                            <div class="flex justify-between items-baseline">
-                                <div>
-                                    <p class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">Monthly
-                                        Total</p>
-                                    <p class="text-[9px] font-medium text-neutral-300 uppercase tracking-tight">EXCL.
-                                        TAXES</p>
+                    <div class="relative overflow-hidden rounded-2xl shadow-sm" style="margin-top:0;background:linear-gradient(135deg,#5A5FF2 0%,#7C3AED 100%);">
+                        <!-- decorative circles -->
+                        <div class="absolute top-0 right-0 w-40 h-40 rounded-full opacity-20" style="background:rgba(255,255,255,.25);transform:translate(30%,-30%);"></div>
+                        <div class="absolute bottom-0 left-0 w-28 h-28 rounded-full opacity-10" style="background:rgba(255,255,255,.3);transform:translate(-30%,30%);"></div>
+
+                        <div class="relative z-10 p-6">
+                            <p class="text-[10px] font-black uppercase tracking-[0.18em] mb-5" style="color:rgba(255,255,255,.5);">Subscription Summary</p>
+
+                            <div class="space-y-2 mb-5">
+                                <!-- Team Lead Plan -->
+                                <div class="flex justify-between items-center py-2.5 px-3 rounded-xl" style="background:rgba(255,255,255,.12);">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="size-6 rounded-lg flex items-center justify-center" style="background:rgba(255,255,255,.2);">
+                                            <i data-lucide="crown" style="width:12px;height:12px;color:#fff;stroke-width:2;"></i>
+                                        </div>
+                                        <span class="text-sm font-medium" style="color:rgba(255,255,255,.85);">Team Lead Plan</span>
+                                    </div>
+                                    <span class="text-sm font-bold text-white">$299.00</span>
                                 </div>
-                                <span class="text-3xl font-bold text-neutral-900 tracking-tight"
-                                    id="hubGrandTotal">$1,785.00</span>
+                                <!-- Associate Seats -->
+                                <div class="flex justify-between items-center py-2.5 px-3 rounded-xl" style="background:rgba(255,255,255,.08);">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="size-6 rounded-lg flex items-center justify-center" style="background:rgba(255,255,255,.15);">
+                                            <i data-lucide="users" style="width:12px;height:12px;color:#fff;stroke-width:2;"></i>
+                                        </div>
+                                        <span class="text-sm font-medium" style="color:rgba(255,255,255,.85);">Associate Seats (<span id="hubSumSeats">24</span>)</span>
+                                    </div>
+                                    <span class="text-sm font-bold text-white">$1,416.00</span>
+                                </div>
+                                <!-- E&O -->
+                                <div class="flex justify-between items-center py-2.5 px-3 rounded-xl" style="background:rgba(255,255,255,.08);">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="size-6 rounded-lg flex items-center justify-center" style="background:rgba(255,255,255,.15);">
+                                            <i data-lucide="shield-check" style="width:12px;height:12px;color:#fff;stroke-width:2;"></i>
+                                        </div>
+                                        <span class="text-sm font-medium" style="color:rgba(255,255,255,.85);">E&amp;O</span>
+                                    </div>
+                                    <span class="text-sm font-bold text-white">$25.00</span>
+                                </div>
+                            </div>
+
+                            <!-- Total -->
+                            <div class="mt-4 pt-4 flex items-center justify-between" style="border-top:1px solid rgba(255,255,255,.18);">
+                                <div class="flex flex-col gap-0.5">
+                                    <p class="text-[10px] font-black uppercase tracking-widest" style="color:rgba(255,255,255,.5);">Monthly Total</p>
+                                    <p class="text-[9px] uppercase tracking-wide" style="color:rgba(255,255,255,.3);">Excl. taxes</p>
+                                </div>
+                                <span class="text-[32px] font-black text-white leading-none tracking-tight" id="hubGrandTotal">$2,017.00</span>
                             </div>
                         </div>
                     </div>
