@@ -1206,6 +1206,10 @@
                     <i data-lucide="rotate-ccw" class="size-3.5"></i>
                     <span class="text-[12px] font-bold">Reset</span>
                 </button>
+                <button onclick="exportCSV()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-700 transition-colors">
+                    <i data-lucide="download" class="size-3.5"></i>
+                    <span class="text-[12px] font-bold">CSV</span>
+                </button>
             </div>
         </div>
 
@@ -1265,25 +1269,42 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse compact-table">
                     <thead class="header-solid sticky top-0 z-30">
-                        <tr class="bg-neutral-50">
-                            <th class="sticky-col bg-neutral-50 text-[12px] font-semibold text-neutral-500 font-ui">Team
-                                Name</th>
-                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Primary Team Lead</th>
-                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Who is Paying</th>
-                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Lead Software Plan</th>
-                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Associate Pricing</th>
-                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Preferred Collaborator
-                                Pricing</th>
-                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">MLS Fee</th>
-                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Website Fee</th>
-                            <th class="text-[12px] font-semibold text-neutral-500 font-ui text-center">Leads</th>
-                            <th class="text-[12px] font-semibold text-neutral-500 font-ui text-center">Associates</th>
-                            <th class="text-[12px] font-semibold text-neutral-500 font-ui text-center">External
-                                Collaborators</th>
-                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">E/O Pricing Plan</th>
-                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Credits Remaining</th>
-                            <th class="text-[12px] font-semibold text-neutral-500 font-ui">Billing Cycle Date</th>
-                            <th class="text-center text-[12px] font-semibold text-neutral-500 font-ui">Actions</th>
+                        <!-- Group header row -->
+                        <tr class="bg-neutral-100 border-b border-neutral-200">
+                            <th class="sticky-col bg-neutral-100 border-r border-neutral-200" rowspan="2" style="vertical-align:middle;padding:8px 16px;font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:.05em;min-width:160px;">Team Name</th>
+                            <th rowspan="2" style="vertical-align:middle;padding:8px 12px;font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;">Team Lead</th>
+                            <!-- Headcount group -->
+                            <th colspan="3" style="padding:6px 12px 4px;font-size:10px;font-weight:800;color:#8B5CF6;text-transform:uppercase;letter-spacing:.08em;text-align:center;background:#F5F3FF;border-left:1px solid #DDD6FE;border-right:1px solid #DDD6FE;">Headcount</th>
+                            <!-- Software group -->
+                            <th colspan="9" style="padding:6px 12px 4px;font-size:10px;font-weight:800;color:#2563EB;text-transform:uppercase;letter-spacing:.08em;text-align:center;background:#EFF6FF;border-left:1px solid #BFDBFE;border-right:1px solid #BFDBFE;">Software Pricing</th>
+                            <!-- E&O group -->
+                            <th colspan="5" style="padding:6px 12px 4px;font-size:10px;font-weight:800;color:#D97706;text-transform:uppercase;letter-spacing:.08em;text-align:center;background:#FFFBEB;border-left:1px solid #FDE68A;border-right:1px solid #FDE68A;">E&amp;O</th>
+                            <!-- Credits + Actions -->
+                            <th rowspan="2" style="vertical-align:middle;padding:8px 12px;font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;">Credits</th>
+                            <th rowspan="2" style="vertical-align:middle;padding:8px 12px;font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:.05em;text-align:center;">Actions</th>
+                        </tr>
+                        <!-- Sub-header row -->
+                        <tr class="bg-neutral-50 border-b border-neutral-200" style="font-size:11px;">
+                            <!-- Headcount -->
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#7C3AED;background:#F5F3FF;border-left:1px solid #DDD6FE;text-align:center;">Leads</th>
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#7C3AED;background:#F5F3FF;text-align:center;">Associates</th>
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#7C3AED;background:#F5F3FF;border-right:1px solid #DDD6FE;text-align:center;white-space:nowrap;">Ext. Collabs</th>
+                            <!-- Software -->
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#1D4ED8;background:#EFF6FF;border-left:1px solid #BFDBFE;white-space:nowrap;">Who Pays</th>
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#1D4ED8;background:#EFF6FF;white-space:nowrap;">Frequency</th>
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#1D4ED8;background:#EFF6FF;white-space:nowrap;">Lead Plan</th>
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#1D4ED8;background:#EFF6FF;white-space:nowrap;">Assoc. Fee</th>
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#1D4ED8;background:#EFF6FF;white-space:nowrap;">Collab Fee</th>
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#1D4ED8;background:#EFF6FF;white-space:nowrap;">MLS Fee</th>
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#1D4ED8;background:#EFF6FF;white-space:nowrap;">Web Fee</th>
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#1D4ED8;background:#EFF6FF;white-space:nowrap;">Billing Date</th>
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#1D4ED8;background:#EFF6FF;border-right:1px solid #BFDBFE;white-space:nowrap;">Status</th>
+                            <!-- E&O -->
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#B45309;background:#FFFBEB;border-left:1px solid #FDE68A;white-space:nowrap;">Who Pays</th>
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#B45309;background:#FFFBEB;white-space:nowrap;">Type</th>
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#B45309;background:#FFFBEB;white-space:nowrap;">Fee</th>
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#B45309;background:#FFFBEB;white-space:nowrap;">Billing Date</th>
+                            <th style="padding:6px 12px;font-size:11px;font-weight:600;color:#B45309;background:#FFFBEB;border-right:1px solid #FDE68A;white-space:nowrap;">Status</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody" class="divide-y divide-neutral-100"></tbody>
@@ -1469,15 +1490,6 @@
                         <span class="text-xs font-bold text-neutral-400 tracking-widest uppercase">Team Subscription ID:
                             <span id="hubTeamId">Team-CR-9201</span></span>
                     </div>
-                    <div class="flex gap-3">
-                        <button class="action-btn action-btn-secondary h-10 px-4 rounded-xl text-xs font-bold">
-                            <i data-lucide="share-2" class="size-4"></i> Export Data
-                        </button>
-                        <button
-                            class="action-btn action-btn-primary h-10 px-5 rounded-xl text-xs font-bold bg-[#5A5FF2] text-white border-0">
-                            <i data-lucide="settings" class="size-4"></i> Manage Plan
-                        </button>
-                    </div>
                 </div>
             </header>
 
@@ -1516,79 +1528,120 @@
                                 class="text-xs font-semibold text-primary hover:underline">Edit</button>
                         </div>
 
-                        <div class="space-y-2">
-                            <div class="plan-row px-4 py-4 rounded-2xl bg-neutral-50/50">
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="size-10 rounded-xl bg-white border border-neutral-100 flex items-center justify-center text-neutral-600 shadow-sm">
-                                        <i data-lucide="crown" class="size-5"></i>
-                                    </div>
-                                    <span class="text-sm font-semibold text-neutral-900">Team Lead Plan</span>
-                                </div>
-                                <div id="leadPriceContainer">
-                                    <span class="text-sm font-bold text-neutral-900 tracking-tight">$299.00</span>
-                                </div>
-                            </div>
+                        <style>
+                            .plan-row-item {
+                                display:flex;align-items:center;justify-content:space-between;
+                                padding:12px 14px;border-radius:14px;
+                                transition:background 180ms ease,transform 160ms ease;cursor:default;
+                            }
+                            .plan-row-item:hover { transform:translateX(2px); }
+                            .plan-icon {
+                                width:38px;height:38px;border-radius:10px;flex-shrink:0;
+                                display:flex;align-items:center;justify-content:center;
+                                transition:transform 180ms ease;
+                            }
+                            .plan-row-item:hover .plan-icon { transform:scale(1.1) rotate(-3deg); }
+                            .plan-price {
+                                font-size:14px;font-weight:700;color:#111827;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;
+                            }
+                            .plan-section-divider {
+                                display:flex;align-items:center;justify-content:space-between;
+                                padding:0 2px;margin-bottom:6px;
+                            }
+                        </style>
 
-                            <div class="plan-row px-4 py-4 rounded-2xl bg-neutral-50/50">
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="size-10 rounded-xl bg-white border border-neutral-100 flex items-center justify-center text-neutral-600 shadow-sm">
-                                        <i data-lucide="users" class="size-5"></i>
+                        <!-- Software section -->
+                        <div class="plan-section-divider">
+                            <span style="font-size:10px;font-weight:800;color:#6366F1;text-transform:uppercase;letter-spacing:.1em;">Software</span>
+                            <span style="font-size:10px;font-weight:600;color:#9CA3AF;">Pays: <span style="color:#4F46E5;font-weight:700;" id="swWhoPaysLabel">Team Lead</span></span>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:4px;background:#F8F8FF;border-radius:16px;padding:6px;">
+                            <!-- Team Lead Plan -->
+                            <div class="plan-row-item" style="background:#fff;">
+                                <div style="display:flex;align-items:center;gap:12px;">
+                                    <div class="plan-icon" style="background:oklch(95% 0.05 280);">
+                                        <i data-lucide="crown" style="width:16px;height:16px;color:#6366F1;stroke-width:2;"></i>
                                     </div>
-                                    <div class="flex flex-col">
-                                        <span class="text-sm font-semibold text-neutral-900">Associate Seats</span>
-                                        <span
-                                            class="text-[10px] font-medium text-neutral-400 uppercase tracking-wide">Currently
-                                            <span id="hubAssociateCount">24</span> seats active</span>
-                                    </div>
+                                    <span style="font-size:13px;font-weight:600;color:#111827;">Team Lead Plan</span>
                                 </div>
-                                <div id="associatePriceContainer">
-                                    <span class="text-sm font-bold text-neutral-900 tracking-tight">$59.00 /ea</span>
-                                </div>
+                                <div id="leadPriceContainer"><span class="plan-price">$299.00</span></div>
                             </div>
-
-                            <div class="plan-row px-4 py-4 rounded-2xl bg-neutral-50/50">
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="size-10 rounded-xl bg-white border border-neutral-100 flex items-center justify-center text-neutral-600 shadow-sm">
-                                        <i data-lucide="globe" class="size-5"></i>
+                            <!-- Associate Seats -->
+                            <div class="plan-row-item" style="background:transparent;">
+                                <div style="display:flex;align-items:center;gap:12px;">
+                                    <div class="plan-icon" style="background:oklch(95% 0.04 160);">
+                                        <i data-lucide="users" style="width:16px;height:16px;color:#10B981;stroke-width:2;"></i>
                                     </div>
-                                    <div class="flex flex-col">
-                                        <span class="text-sm font-bold text-neutral-900">External Collaborators</span>
-                                        <span class="text-[10px] font-bold text-neutral-400 uppercase">Currently <span
-                                                id="hubPrefCount">4</span> active</span>
+                                    <div>
+                                        <p style="font-size:13px;font-weight:600;color:#111827;margin:0;">Associate Seats</p>
+                                        <p style="font-size:10px;color:#9CA3AF;margin:0;text-transform:uppercase;letter-spacing:.05em;">Currently <span id="hubAssociateCount">24</span> active</p>
                                     </div>
                                 </div>
-                                <div class="flex items-center gap-6">
-                                    <div class="flex items-center gap-1 p-0.5 bg-neutral-100 rounded-full">
-                                        <button onclick="setCollabBilling('teamlead',this)" id="collabBtn_teamlead" class="px-3 py-1 rounded-full text-[10px] font-bold transition-all whitespace-nowrap bg-[#5A5FF2] text-white">Team lead</button>
-                                        <button onclick="setCollabBilling('agent',this)" id="collabBtn_agent" class="px-3 py-1 rounded-full text-[10px] font-bold transition-all whitespace-nowrap text-neutral-500 hover:text-neutral-700">Agent</button>
-                                        <button onclick="setCollabBilling('collab',this)" id="collabBtn_collab" class="px-3 py-1 rounded-full text-[10px] font-bold transition-all whitespace-nowrap text-neutral-500 hover:text-neutral-700">Collab</button>
+                                <div id="associatePriceContainer"><span class="plan-price">$59.00 <span style="font-size:11px;font-weight:500;color:#6B7280;">/ea</span></span></div>
+                            </div>
+                            <!-- External Collabs -->
+                            <div class="plan-row-item" style="background:transparent;">
+                                <div style="display:flex;align-items:center;gap:12px;">
+                                    <div class="plan-icon" style="background:oklch(95% 0.04 220);">
+                                        <i data-lucide="globe" style="width:16px;height:16px;color:#3B82F6;stroke-width:2;"></i>
                                     </div>
-                                    <div id="prefPriceContainer" class="hidden"></div>
-                                    <div id="extPriceContainer">
-                                        <span class="text-sm font-black text-neutral-900 tracking-tight">$25.00 /ea</span>
+                                    <div>
+                                        <p style="font-size:13px;font-weight:600;color:#111827;margin:0;">External Collaborators</p>
+                                        <p style="font-size:10px;color:#9CA3AF;margin:0;text-transform:uppercase;letter-spacing:.05em;">Currently <span id="hubPrefCount">8</span> active</p>
                                     </div>
                                 </div>
+                                <div id="extPriceContainer"><span class="plan-price">$25.00 <span style="font-size:11px;font-weight:500;color:#6B7280;">/ea</span></span></div>
+                                <div id="prefPriceContainer" class="hidden"></div>
                             </div>
                         </div>
 
-                        <div
-                            class="mt-4 pt-8 border-t border-neutral-100 flex justify-between items-center bg-indigo-50/20 -mx-8 px-8 py-6 rounded-b-xl border-b border-indigo-100/50">
-                            <div class="flex items-center gap-4">
-                                <div
-                                    class="size-12 rounded-2xl bg-white border border-indigo-100 flex items-center justify-center text-indigo-500 shadow-sm">
-                                    <i data-lucide="eye" class="size-6"></i>
+                        <!-- E&O section -->
+                        <div class="plan-section-divider" style="margin-top:16px;">
+                            <span style="font-size:10px;font-weight:800;color:#D97706;text-transform:uppercase;letter-spacing:.1em;">E&amp;O Insurance</span>
+                            <span style="font-size:10px;font-weight:600;color:#9CA3AF;">Pays: <span style="color:#B45309;font-weight:700;" id="eoWhoPaysLabel">Team Lead</span></span>
+                        </div>
+                        <div style="background:#FEFCE8;border-radius:16px;padding:6px;">
+                            <div class="plan-row-item" style="background:transparent;">
+                                <div style="display:flex;align-items:center;gap:12px;">
+                                    <div class="plan-icon" style="background:oklch(95% 0.06 80);">
+                                        <i data-lucide="shield-check" style="width:16px;height:16px;color:#D97706;stroke-width:2;"></i>
+                                    </div>
+                                    <div>
+                                        <p style="font-size:13px;font-weight:600;color:#111827;margin:0;">E&amp;O Coverage</p>
+                                        <p id="eoTypeDisplay" style="font-size:10px;color:#9CA3AF;margin:0;text-transform:uppercase;letter-spacing:.05em;">Per Transaction</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 class="text-sm font-semibold text-neutral-900">Access to my clients and my
-                                        transactions</h4>
-                                    <p class="text-xs text-neutral-400">Opens dedicated visibility tabs for front-end
-                                        agents</p>
-                                </div>
+                                <div id="eoPriceContainer"><span class="plan-price" style="color:#92400E;">$15.00</span></div>
                             </div>
-                            <div class="r-switch on shadow-sm" onclick="toggleSwitch(this)"></div>
+                        </div>
+
+                        <div class="mt-4 pt-4 border-t border-neutral-100 flex flex-col gap-0 -mx-8 rounded-b-xl overflow-hidden">
+                            <!-- My Clients toggle -->
+                            <div class="flex justify-between items-center px-8 py-4 bg-indigo-50/30 border-b border-neutral-100" id="myClientsRow">
+                                <div class="flex items-center gap-3">
+                                    <div class="size-9 rounded-xl bg-white border border-indigo-100 flex items-center justify-center text-indigo-500 shadow-sm">
+                                        <i data-lucide="users" class="size-4"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-neutral-900">My Clients</h4>
+                                        <p class="text-[11px] text-neutral-400" id="myClientsStatus">Agents can view client data</p>
+                                    </div>
+                                </div>
+                                <div class="r-switch on shadow-sm" id="myClientsSwitch" onclick="toggleMyClients(this)"></div>
+                            </div>
+                            <!-- My Transactions toggle -->
+                            <div class="flex justify-between items-center px-8 py-4 bg-indigo-50/10">
+                                <div class="flex items-center gap-3">
+                                    <div class="size-9 rounded-xl bg-white border border-indigo-100 flex items-center justify-center text-indigo-500 shadow-sm">
+                                        <i data-lucide="file-text" class="size-4"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-neutral-900">My Transactions</h4>
+                                        <p class="text-[11px] text-neutral-400">Agents can view transaction records</p>
+                                    </div>
+                                </div>
+                                <div class="r-switch on shadow-sm" onclick="toggleSwitch(this)"></div>
+                            </div>
                         </div>
                     </section>
 
@@ -1604,47 +1657,105 @@
                         <div class="absolute top-0 right-0 w-40 h-40 rounded-full opacity-20" style="background:rgba(255,255,255,.25);transform:translate(30%,-30%);"></div>
                         <div class="absolute bottom-0 left-0 w-28 h-28 rounded-full opacity-10" style="background:rgba(255,255,255,.3);transform:translate(-30%,30%);"></div>
 
+                        <style>
+                            .sum-row {
+                                display:flex;justify-content:space-between;align-items:center;
+                                padding:10px 12px;border-radius:12px;
+                                transition:background 220ms ease,transform 180ms ease;
+                                cursor:default;
+                            }
+                            .sum-row:hover { transform:translateX(2px); }
+                            .sum-row-crown:hover  { background:rgba(250,204,21,.18) !important; }
+                            .sum-row-users:hover  { background:rgba(52,211,153,.15) !important; }
+                            .sum-row-shield:hover { background:rgba(249,115,22,.15) !important; }
+                            .sum-icon {
+                                width:26px;height:26px;border-radius:8px;
+                                display:flex;align-items:center;justify-content:center;flex-shrink:0;
+                                transition:transform 200ms ease,background 220ms ease;
+                            }
+                            .sum-row:hover .sum-icon { transform:scale(1.15) rotate(-4deg); }
+                            .sum-row-crown:hover  .sum-icon { background:#CA8A04 !important; }
+                            .sum-row-users:hover  .sum-icon { background:#059669 !important; }
+                            .sum-row-shield:hover .sum-icon { background:#EA6C00 !important; }
+                            .sum-amount {
+                                font-size:13px;font-weight:700;color:#fff;
+                                transition:letter-spacing 180ms ease;
+                            }
+                            .sum-row:hover .sum-amount { letter-spacing:0.01em; }
+                            @keyframes totalIn {
+                                from { opacity:0; transform:translateY(6px) scale(0.95); }
+                                to   { opacity:1; transform:translateY(0) scale(1); }
+                            }
+                            #hubGrandTotal { animation: totalIn 500ms cubic-bezier(.22,1,.36,1) both; }
+                            @keyframes rowSlideIn {
+                                from { opacity:0; transform:translateX(-8px); }
+                                to   { opacity:1; transform:translateX(0); }
+                            }
+                            .sum-row-crown  { animation: rowSlideIn 340ms 80ms  cubic-bezier(.22,1,.36,1) both; }
+                            .sum-row-users  { animation: rowSlideIn 340ms 160ms cubic-bezier(.22,1,.36,1) both; }
+                            .sum-row-shield { animation: rowSlideIn 340ms 240ms cubic-bezier(.22,1,.36,1) both; }
+                        </style>
                         <div class="relative z-10 p-6">
-                            <p class="text-[10px] font-black uppercase tracking-[0.18em] mb-5" style="color:rgba(255,255,255,.5);">Subscription Summary</p>
+                            <p class="text-[10px] font-black uppercase tracking-[0.18em] mb-5" style="color:rgba(255,255,255,.45);">Subscription Summary</p>
 
-                            <div class="space-y-2 mb-5">
+                            <div class="flex flex-col gap-1.5 mb-5">
                                 <!-- Team Lead Plan -->
-                                <div class="flex justify-between items-center py-2.5 px-3 rounded-xl" style="background:rgba(255,255,255,.12);">
+                                <div class="sum-row sum-row-crown" style="background:rgba(0,0,0,.18);">
                                     <div class="flex items-center gap-2.5">
-                                        <div class="size-6 rounded-lg flex items-center justify-center" style="background:rgba(255,255,255,.2);">
-                                            <i data-lucide="crown" style="width:12px;height:12px;color:#fff;stroke-width:2;"></i>
+                                        <div class="sum-icon" style="background:rgba(234,179,8,.28);">
+                                            <i data-lucide="crown" style="width:12px;height:12px;color:#FCD34D;stroke-width:2;"></i>
                                         </div>
-                                        <span class="text-sm font-medium" style="color:rgba(255,255,255,.85);">Team Lead Plan</span>
+                                        <span class="text-sm font-medium" style="color:rgba(255,255,255,.88);">Team Lead Plan</span>
                                     </div>
-                                    <span class="text-sm font-bold text-white">$299.00</span>
+                                    <span class="sum-amount">$299.00</span>
                                 </div>
                                 <!-- Associate Seats -->
-                                <div class="flex justify-between items-center py-2.5 px-3 rounded-xl" style="background:rgba(255,255,255,.08);">
+                                <div class="sum-row sum-row-users" style="background:rgba(0,0,0,.18);">
                                     <div class="flex items-center gap-2.5">
-                                        <div class="size-6 rounded-lg flex items-center justify-center" style="background:rgba(255,255,255,.15);">
-                                            <i data-lucide="users" style="width:12px;height:12px;color:#fff;stroke-width:2;"></i>
+                                        <div class="sum-icon" style="background:rgba(16,185,129,.28);">
+                                            <i data-lucide="users" style="width:12px;height:12px;color:#6EE7B7;stroke-width:2;"></i>
                                         </div>
-                                        <span class="text-sm font-medium" style="color:rgba(255,255,255,.85);">Associate Seats (<span id="hubSumSeats">24</span>)</span>
+                                        <span class="text-sm font-medium" style="color:rgba(255,255,255,.88);">Associate Seats (<span id="hubSumSeats">24</span>)</span>
                                     </div>
-                                    <span class="text-sm font-bold text-white">$1,416.00</span>
+                                    <span class="sum-amount">$1,416.00</span>
+                                </div>
+                                <!-- Website Fee -->
+                                <div class="sum-row" style="background:rgba(0,0,0,.12);">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="sum-icon" style="background:rgba(99,102,241,.28);">
+                                            <i data-lucide="globe" style="width:12px;height:12px;color:#A5B4FC;stroke-width:2;"></i>
+                                        </div>
+                                        <span style="font-size:13px;font-weight:500;color:rgba(255,255,255,.88);">Website Fee</span>
+                                    </div>
+                                    <span class="sum-amount" id="hubSumWebFee">$149.00</span>
+                                </div>
+                                <!-- Collab Fee -->
+                                <div class="sum-row" style="background:rgba(0,0,0,.12);">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="sum-icon" style="background:rgba(14,165,233,.25);">
+                                            <i data-lucide="handshake" style="width:12px;height:12px;color:#7DD3FC;stroke-width:2;"></i>
+                                        </div>
+                                        <span style="font-size:13px;font-weight:500;color:rgba(255,255,255,.88);">Ext. Collabs (<span id="hubSumCollabs">8</span>)</span>
+                                    </div>
+                                    <span class="sum-amount" id="hubSumCollabFee">$200.00</span>
                                 </div>
                                 <!-- E&O -->
-                                <div class="flex justify-between items-center py-2.5 px-3 rounded-xl" style="background:rgba(255,255,255,.08);">
+                                <div class="sum-row sum-row-shield" style="background:rgba(0,0,0,.18);">
                                     <div class="flex items-center gap-2.5">
-                                        <div class="size-6 rounded-lg flex items-center justify-center" style="background:rgba(255,255,255,.15);">
-                                            <i data-lucide="shield-check" style="width:12px;height:12px;color:#fff;stroke-width:2;"></i>
+                                        <div class="sum-icon" style="background:rgba(249,115,22,.28);">
+                                            <i data-lucide="shield-check" style="width:12px;height:12px;color:#FCA679;stroke-width:2;"></i>
                                         </div>
-                                        <span class="text-sm font-medium" style="color:rgba(255,255,255,.85);">E&amp;O</span>
+                                        <span class="text-sm font-medium" style="color:rgba(255,255,255,.88);">E&amp;O (<span id="hubSumEoType">Per Transaction</span>)</span>
                                     </div>
-                                    <span class="text-sm font-bold text-white">$25.00</span>
+                                    <span class="sum-amount" id="hubSumEoAmount">$25.00</span>
                                 </div>
                             </div>
 
                             <!-- Total -->
-                            <div class="mt-4 pt-4 flex items-center justify-between" style="border-top:1px solid rgba(255,255,255,.18);">
+                            <div class="mt-4 pt-4 flex items-center justify-between" style="border-top:1px solid rgba(255,255,255,.15);">
                                 <div class="flex flex-col gap-0.5">
-                                    <p class="text-[10px] font-black uppercase tracking-widest" style="color:rgba(255,255,255,.5);">Monthly Total</p>
-                                    <p class="text-[9px] uppercase tracking-wide" style="color:rgba(255,255,255,.3);">Excl. taxes</p>
+                                    <p class="text-[10px] font-black uppercase tracking-widest" style="color:rgba(255,255,255,.45);">Monthly Total</p>
+                                    <p class="text-[9px] uppercase tracking-wide" style="color:rgba(255,255,255,.28);">Excl. taxes</p>
                                 </div>
                                 <span class="text-[32px] font-black text-white leading-none tracking-tight" id="hubGrandTotal">$2,017.00</span>
                             </div>
@@ -1729,84 +1840,97 @@
 
                         <!-- Billing History -->
                         <div id="billingExpanded" class="hub-card overflow-hidden">
-                            <div class="p-6 bg-neutral-50/50 border-b border-neutral-100">
-                                <div class="flex justify-between items-center mb-6">
+                            <div style="padding:20px 24px 20px;background:linear-gradient(135deg,oklch(97% 0.01 280) 0%,oklch(98% 0.008 240) 100%);border-bottom:1px solid oklch(92% 0.012 270);">
+                                <div class="flex justify-between items-center" style="margin-bottom:18px;">
                                     <div class="flex items-center gap-3">
-                                        <div class="size-9 rounded-xl bg-indigo-50 flex items-center justify-center text-primary">
-                                            <i data-lucide="credit-card" class="size-4"></i>
+                                        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#6366F1,#8B5CF6);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(99,102,241,.3);">
+                                            <i data-lucide="credit-card" style="width:16px;height:16px;color:#fff;stroke-width:2;"></i>
                                         </div>
                                         <div>
-                                            <h3 class="text-sm font-semibold text-neutral-900">Billing History</h3>
-                                            <p class="text-[10px] font-medium text-neutral-400 uppercase tracking-wide">Financial Audit & Invoices</p>
+                                            <h3 style="font-size:14px;font-weight:700;color:#111827;margin:0;">Billing History</h3>
+                                            <p style="font-size:10px;font-weight:600;color:#9CA3AF;text-transform:uppercase;letter-spacing:.08em;margin:0;">Financial Audit & Invoices</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-center gap-4">
-                                        <div
-                                            class="flex items-center gap-3 px-4 py-2.5 bg-white border border-neutral-100 rounded-xl shadow-sm">
-                                            <div class="text-right">
-                                                <p
-                                                    class="text-[9px] font-black text-neutral-400 uppercase tracking-widest">
-                                                    Billing cycle</p>
-                                                <p class="text-xs font-bold text-neutral-900" id="autoRenewLabel">Monthly auto-renew</p>
-                                            </div>
-                                            <div class="r-switch on" onclick="toggleAutoRenew(this)"></div>
-                                        </div>
+                                    <div style="display:flex;gap:6px;align-items:center;">
+                                        <span style="font-size:9px;font-weight:800;color:#6366F1;background:#EEF2FF;padding:3px 9px;border-radius:8px;text-transform:uppercase;letter-spacing:.07em;">Preferred: Team Lead pays</span>
+                                        <span style="font-size:9px;font-weight:800;color:#D97706;background:#FFF7ED;padding:3px 9px;border-radius:8px;text-transform:uppercase;letter-spacing:.07em;">External: Agent / Collab pays</span>
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-4 gap-4">
-                                    <div class="p-5 rounded-2xl bg-white border border-neutral-100 shadow-sm">
-                                        <p class="text-[10px] font-bold text-neutral-400 uppercase mb-1">Next Reset</p>
-                                        <p class="text-lg font-black text-neutral-900" id="bhResetDate">May 20, 2026</p>
-                                    </div>
-                                    <div class="p-5 rounded-2xl bg-white border border-neutral-100 shadow-sm">
-                                        <p class="text-[10px] font-bold text-neutral-400 uppercase mb-1">Invoices this cycle</p>
-                                        <div class="flex items-baseline gap-2">
-                                            <p class="text-lg font-black text-neutral-900">3</p>
-                                            <span class="text-[9px] font-bold text-indigo-500 uppercase tracking-wide">Split-pay active</span>
-                                        </div>
-                                    </div>
-                                    <div class="p-5 rounded-2xl bg-white border border-neutral-100 shadow-sm">
-                                        <p class="text-[10px] font-bold text-neutral-400 uppercase mb-1">Who covers collab seats</p>
-                                        <div class="flex flex-col gap-1 mt-1">
-                                            <div class="flex items-center gap-1.5">
-                                                <span class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
-                                                <span class="text-[10px] font-semibold text-neutral-700">Sandra → James Wilson</span>
-                                            </div>
-                                            <div class="flex items-center gap-1.5">
-                                                <span class="w-2 h-2 rounded-full bg-violet-400 inline-block"></span>
-                                                <span class="text-[10px] font-semibold text-neutral-700">Priya Mehta self-pays</span>
-                                            </div>
-                                            <div class="flex items-center gap-1.5">
-                                                <span class="w-2 h-2 rounded-full bg-indigo-400 inline-block"></span>
-                                                <span class="text-[10px] font-semibold text-neutral-700">Team Lead → Tom Reeves</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="p-5 rounded-2xl bg-white border border-neutral-100 shadow-sm flex flex-col justify-between">
+                                <div class="grid grid-cols-3 gap-3">
+                                    <!-- Next Reset -->
+                                    <div style="padding:16px;border-radius:14px;background:#fff;border:1px solid oklch(92% 0.012 270);box-shadow:0 1px 4px rgba(99,102,241,.06);display:flex;flex-direction:column;justify-content:space-between;">
                                         <div>
-                                            <p class="text-[10px] font-bold text-neutral-400 uppercase mb-1">Billing logic</p>
-                                            <p class="text-xs font-bold text-neutral-700">Agent & Collab Split-Pay</p>
-                                            <p class="text-[10px] text-neutral-400 mt-1">Per-seat responsibility assigned</p>
+                                            <p style="font-size:9px;font-weight:800;color:#A5B4FC;text-transform:uppercase;letter-spacing:.1em;margin:0 0 6px;">Next Reset</p>
+                                            <p style="font-size:17px;font-weight:900;color:#111827;letter-spacing:-.02em;margin:0;font-variant-numeric:tabular-nums;" id="bhResetDate">May 20, 2026</p>
                                         </div>
-                                        <button onclick="showSwitchBillingModal()" class="mt-3 text-[10px] font-bold text-indigo-500 hover:text-indigo-700 text-left leading-none hover:underline">Switch all → Team Lead pays</button>
+                                        <button onclick="document.getElementById('activityTimeline').scrollIntoView({behavior:'smooth',block:'start'})" style="margin-top:12px;font-size:10px;font-weight:700;color:#6366F1;background:none;border:none;cursor:pointer;text-align:left;padding:0;transition:color 140ms;" onmouseover="this.style.color='#4F46E5'" onmouseout="this.style.color='#6366F1'">View history →</button>
+                                    </div>
+                                    <!-- Invoices this cycle -->
+                                    <div style="padding:16px;border-radius:14px;background:linear-gradient(135deg,#EEF2FF,#F5F3FF);border:1px solid #C7D2FE;box-shadow:0 1px 4px rgba(99,102,241,.08);display:flex;flex-direction:column;justify-content:space-between;">
+                                        <div>
+                                            <p style="font-size:9px;font-weight:800;color:#818CF8;text-transform:uppercase;letter-spacing:.1em;margin:0 0 6px;">Invoices This Cycle</p>
+                                            <div style="display:flex;align-items:baseline;gap:8px;">
+                                                <p style="font-size:22px;font-weight:900;color:#4F46E5;letter-spacing:-.03em;margin:0;">3</p>
+                                                <span style="font-size:9px;font-weight:800;color:#6366F1;background:rgba(99,102,241,.12);padding:2px 7px;border-radius:10px;text-transform:uppercase;letter-spacing:.06em;">Split-pay active</span>
+                                            </div>
+                                        </div>
+                                        <button onclick="document.getElementById('invoiceTableBody').closest('table').scrollIntoView({behavior:'smooth',block:'start'})" style="margin-top:12px;font-size:10px;font-weight:700;color:#6366F1;background:none;border:none;cursor:pointer;text-align:left;padding:0;" onmouseover="this.style.color='#4F46E5'" onmouseout="this.style.color='#6366F1'">View invoices →</button>
+                                    </div>
+                                    <!-- Who Pays -->
+                                    <div style="padding:16px;border-radius:14px;background:linear-gradient(135deg,#FFF7ED,#FFFBEB);border:1px solid #FDE68A;box-shadow:0 1px 4px rgba(217,119,6,.08);display:flex;flex-direction:column;justify-content:space-between;">
+                                        <div>
+                                            <p style="font-size:9px;font-weight:800;color:#F59E0B;text-transform:uppercase;letter-spacing:.1em;margin:0 0 6px;">Who Pays</p>
+                                            <p style="font-size:12px;font-weight:800;color:#92400E;margin:0;line-height:1.3;">Agent & Collab<br>Split-Pay</p>
+                                        </div>
+                                        <button onclick="showSwitchBillingModal()" style="margin-top:12px;font-size:10px;font-weight:700;color:#D97706;background:none;border:none;cursor:pointer;text-align:left;padding:0;" onmouseover="this.style.color='#B45309'" onmouseout="this.style.color='#D97706'">Switch to Team Lead pays →</button>
                                     </div>
                                 </div>
+
                             </div>
-                            <div class="p-0">
+                            <!-- Tab bar -->
+                            <div style="display:flex;align-items:center;border-bottom:1px solid #EEEEFF;padding:0 20px;background:linear-gradient(90deg,#FAFBFF,#F9F8FF);">
+                                <button id="bhTabInternal" onclick="switchBillingTab('internal')" style="padding:11px 14px;font-size:11px;font-weight:700;color:#4F46E5;border:none;border-bottom:2px solid #6366F1;background:none;cursor:pointer;white-space:nowrap;transition:all 160ms;">Team Billing</button>
+                                <button id="bhTabExternal" onclick="switchBillingTab('external')" style="padding:11px 14px;font-size:11px;font-weight:700;color:#9CA3AF;border:none;border-bottom:2px solid transparent;background:none;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px;transition:all 160ms;">
+                                    External Collab Billing
+                                    <span style="padding:1px 7px;border-radius:10px;background:#F5F3FF;font-size:9px;font-weight:800;color:#7C3AED;">4</span>
+                                </button>
+                            </div>
+                            <!-- Team billing table -->
+                            <div id="bhInternalView" class="p-0">
                                 <table class="w-full text-left">
-                                    <thead class="bg-neutral-50 border-b border-neutral-100">
+                                    <thead style="background:linear-gradient(90deg,#F8F8FF,#FAFAFF);border-bottom:1px solid #EEEEFF;">
                                         <tr>
                                             <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest whitespace-nowrap">Date</th>
                                             <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Invoice ID</th>
                                             <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Amount</th>
                                             <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Status</th>
-                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Responsibility</th>
+                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Paid By</th>
+                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Associates Covered</th>
                                             <th class="py-2.5 px-5"></th>
                                         </tr>
                                     </thead>
-                                    <tbody id="invoiceTableBody">
-                                        <!-- Dynamic invoices -->
-                                    </tbody>
+                                    <tbody id="invoiceTableBody"></tbody>
+                                </table>
+                            </div>
+                            <!-- External collab billing table -->
+                            <div id="bhExternalView" class="p-0 hidden">
+                                <div style="padding:10px 20px 8px;display:flex;align-items:center;gap:6px;">
+                                    <span style="font-size:10px;font-weight:700;color:#7C3AED;background:#F5F3FF;padding:2px 8px;border-radius:10px;">External</span>
+                                    <span style="font-size:10px;color:#9CA3AF;">Bills paid directly by collaborators invited by agents</span>
+                                </div>
+                                <table class="w-full text-left">
+                                    <thead style="background:#F9FAFB;border-bottom:1px solid #F3F4F6;border-top:1px solid #F3F4F6;">
+                                        <tr>
+                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest whitespace-nowrap">Date</th>
+                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Invoice ID</th>
+                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Amount</th>
+                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Status</th>
+                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Collab</th>
+                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Invited By</th>
+                                            <th class="py-2.5 px-5 text-[9px] font-bold text-neutral-400 uppercase tracking-widest">Note</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="extCollabBillingBody"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -2133,12 +2257,12 @@
 
         const generateRows = () => {
             const baseData = [
-                { id: 0, name: "Circle RE", lead: "Marcus Vane", paying: "Lead", sw: "$299", assoc: "$59", collab: "$39", mls: "$25", web: "$149", L: 2, A: 24, XC: 8, eo: "$15", credits: 45000, billing: "May 20", status: "active" },
-                { id: 1, name: "The Alpha Group Real Estate", lead: "Jonathan Sterling", paying: "Lead", sw: "$199", assoc: "$49", collab: "$29", mls: "$15", web: "$99", L: 1, A: 12, XC: 4, eo: "$10", credits: 12500, billing: "May 12", status: "active" },
-                { id: 2, name: "Sunset Valley Associates", lead: "Sarah Jenkins", paying: "Agents", sw: "$149", assoc: "$39", collab: "$19", mls: "$15", web: "$99", L: 1, A: 8, XC: 2, eo: "$10", credits: 850, billing: "May 28", status: "warning" },
-                { id: 3, name: "Horizon Luxury Properties", lead: "Michael Chen", paying: "Lead", sw: "$299", assoc: "$69", collab: "$39", mls: "$25", web: "$149", L: 3, A: 34, XC: 12, eo: "$15", credits: 45200, billing: "May 15", status: "active" },
-                { id: 4, name: "Evergreen Realty Network", lead: "Elena Rodriguez", paying: "Lead", sw: "$199", assoc: "$49", collab: "$29", mls: "$15", web: "$99", L: 1, A: 5, XC: 2, eo: "$10", credits: 120, billing: "May 05", status: "failed" },
-                { id: 5, name: "Pacific Heights Brokerage", lead: "David Kim", paying: "Agents", sw: "$299", assoc: "$59", collab: "$39", mls: "$25", web: "$179", L: 2, A: 15, XC: 6, eo: "$12", credits: 8200, billing: "May 10", status: "active" },
+                { id: 0, name: "Circle RE", lead: "Marcus Vane", paying: "Lead", sw: "$299", assoc: "$59", collab: "$39", mls: "$25", web: "$149", L: 2, A: 24, XC: 8, eo: "$15", eoType: "Per Transaction", eoFee: "$15", eoPaying: "Lead", eoStatus: "active", eoBilling: "May 20", credits: 45000, billing: "May 20", status: "active", swFreq: "Monthly", swStatus: "active", swBilling: "May 20" },
+                { id: 1, name: "The Alpha Group Real Estate", lead: "Jonathan Sterling", paying: "Lead", sw: "$199", assoc: "$49", collab: "$29", mls: "$15", web: "$99", L: 1, A: 12, XC: 4, eo: "$10", eoType: "Flat Rate", eoFee: "$10", eoPaying: "Lead", eoStatus: "active", eoBilling: "May 12", credits: 12500, billing: "May 12", status: "active", swFreq: "Monthly", swStatus: "active", swBilling: "May 12" },
+                { id: 2, name: "Sunset Valley Associates", lead: "Sarah Jenkins", paying: "Agents", sw: "$149", assoc: "$39", collab: "$19", mls: "$15", web: "$99", L: 1, A: 8, XC: 2, eo: "$1200", eoType: "Annual Blanket", eoFee: "$1,200", eoPaying: "Agents", eoStatus: "failed-2", eoBilling: "Jun 01", credits: 850, billing: "May 28", status: "warning", swFreq: "Annual", swStatus: "failed-1", swBilling: "May 28" },
+                { id: 3, name: "Horizon Luxury Properties", lead: "Michael Chen", paying: "Lead", sw: "$299", assoc: "$69", collab: "$39", mls: "$25", web: "$149", L: 3, A: 34, XC: 12, eo: "$15", eoType: "Per Transaction", eoFee: "$15", eoPaying: "Lead", eoStatus: "active", eoBilling: "May 15", credits: 45200, billing: "May 15", status: "active", swFreq: "Monthly", swStatus: "active", swBilling: "May 15" },
+                { id: 4, name: "Evergreen Realty Network", lead: "Elena Rodriguez", paying: "Lead", sw: "$199", assoc: "$49", collab: "$29", mls: "$15", web: "$99", L: 1, A: 5, XC: 2, eo: "$10", eoType: "Flat Rate", eoFee: "$10", eoPaying: "Split", eoStatus: "failed-3", eoBilling: "May 05", credits: 120, billing: "May 05", status: "failed", swFreq: "Monthly", swStatus: "failed-3", swBilling: "May 05" },
+                { id: 5, name: "Pacific Heights Brokerage", lead: "David Kim", paying: "Agents", sw: "$299", assoc: "$59", collab: "$39", mls: "$25", web: "$179", L: 2, A: 15, XC: 6, eo: "$600", eoType: "Annual Blanket", eoFee: "$600", eoPaying: "Agents", eoStatus: "active", eoBilling: "May 10", credits: 8200, billing: "May 10", status: "active", swFreq: "Quarterly", swStatus: "active", swBilling: "May 10" },
             ];
 
             const extraNames = ["Beacon Hill", "Golden Gate", "Emerald City", "Silver Lake", "Grand Central", "Blue Harbor", "Summit Ridge", "Metro City", "Oasis Property", "Urban Square", "Skyline Realty", "Heritage Homes", "Coastal Living", "Park Avenue", "Lakeside Estates"];
@@ -2162,10 +2286,18 @@
                     L: Math.floor(Math.random() * 3) + 1,
                     A: Math.floor(Math.random() * 20) + 5,
                     XC: Math.floor(Math.random() * 10),
-                    eo: "$10",
+                    eo: Math.random() > 0.5 ? "$10" : "$600",
+                    eoType: Math.random() > 0.5 ? "Per Transaction" : "Annual Blanket",
+                    eoFee: Math.random() > 0.5 ? "$10" : "$600",
+                    eoPaying: Math.random() > 0.6 ? "Lead" : (Math.random() > 0.5 ? "Agents" : "Split"),
+                    eoStatus: status === 'failed' ? 'failed-1' : (status === 'warning' ? 'failed-2' : 'active'),
+                    eoBilling: "Jun " + (Math.floor(Math.random() * 28) + 1).toString().padStart(2, '0'),
                     credits: Math.floor(Math.random() * 20000),
                     billing: "Jun " + (Math.floor(Math.random() * 28) + 1).toString().padStart(2, '0'),
-                    status: status
+                    status: status,
+                    swFreq: Math.random() > 0.6 ? "Monthly" : (Math.random() > 0.5 ? "Quarterly" : "Annual"),
+                    swStatus: status === 'failed' ? 'failed-3' : (status === 'warning' ? 'failed-1' : 'active'),
+                    swBilling: "Jun " + (Math.floor(Math.random() * 28) + 1).toString().padStart(2, '0')
                 });
             }
             return rows;
@@ -2204,35 +2336,76 @@
 
         const api = new DataManager();
 
+        function exportCSV() {
+            const teams = api.getFilteredTeams();
+            const headers = ['Team Name','Team Lead','Leads','Associates','Ext Collabs','SW Who Pays','SW Frequency','Lead Plan','Assoc Fee','Collab Fee','MLS Fee','Web Fee','SW Billing Date','SW Status','EO Who Pays','EO Type','EO Fee','EO Billing Date','EO Status','Credits'];
+            const rows = teams.map(t => [
+                `"${t.name}"`, `"${t.lead}"`, t.L, t.A, t.XC,
+                t.paying, t.swFreq||'Monthly', t.sw, t.assoc, t.collab, t.mls, t.web,
+                t.swBilling||t.billing, t.swStatus||'active',
+                t.eoPaying||'Lead', t.eoType, t.eoFee||t.eo, t.eoBilling||t.billing, t.eoStatus||'active',
+                t.credits
+            ]);
+            const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+            const a = document.createElement('a');
+            a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+            a.download = 'subscriptions-' + new Date().toISOString().slice(0,10) + '.csv';
+            a.click();
+        }
+
         function render() {
             const body = document.getElementById('tableBody');
             const filtered = api.getFilteredTeams();
 
+            const swStatusBadge = (s) => {
+                if (s === 'active') return `<span style="display:inline-flex;align-items:center;gap:3px;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:800;text-transform:uppercase;background:#ECFDF5;color:#065F46;"><span style="width:5px;height:5px;border-radius:50%;background:#10B981;display:inline-block;"></span>Active</span>`;
+                if (s === 'failed-1') return `<span style="padding:2px 6px;border-radius:4px;font-size:9px;font-weight:800;text-transform:uppercase;background:#FEF3C7;color:#92400E;">1 mo failed</span>`;
+                if (s === 'failed-2') return `<span style="padding:2px 6px;border-radius:4px;font-size:9px;font-weight:800;text-transform:uppercase;background:#FEE2E2;color:#991B1B;">2 mo failed</span>`;
+                if (s === 'failed-3') return `<span style="padding:2px 6px;border-radius:4px;font-size:9px;font-weight:800;text-transform:uppercase;background:#FCA5A5;color:#7F1D1D;">3 mo failed</span>`;
+                return '';
+            };
+            const payerBadge = (p, scheme) => {
+                const colors = scheme === 'sw'
+                    ? { Lead: 'bg-indigo-50 text-indigo-600', Agents: 'bg-neutral-100 text-neutral-500', Split: 'bg-blue-50 text-blue-600' }
+                    : { Lead: 'bg-amber-50 text-amber-700', Agents: 'bg-orange-50 text-orange-600', Split: 'bg-yellow-50 text-yellow-700' };
+                const cls = colors[p] || 'bg-neutral-100 text-neutral-500';
+                return `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${cls}">${p}</span>`;
+            };
+            const freqBadge = (f) => {
+                const map = { Monthly: 'bg-blue-50 text-blue-600', Quarterly: 'bg-violet-50 text-violet-600', Annual: 'bg-teal-50 text-teal-600' };
+                const cls = map[f] || 'bg-neutral-100 text-neutral-500';
+                return `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${cls}">${f || 'Monthly'}</span>`;
+            };
+
             body.innerHTML = filtered.map(team => `
                 <tr class="row-hover group cursor-pointer" onclick="showPricingPage(${team.id})">
-                    <td class="sticky-col font-semibold text-neutral-900 bg-white group-hover:bg-neutral-50 transition-colors">
+                    <td class="sticky-col font-semibold text-neutral-900 bg-white group-hover:bg-neutral-50 transition-colors" style="border-right:1px solid #E5E7EB;">
                         <div class="truncate-team" title="${team.name}">${team.name}</div>
                     </td>
-                    <td class="text-neutral-700 font-medium">${team.lead}</td>
-                    <td>
-                        <span class="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${team.paying === 'Lead' ? 'bg-indigo-50 text-indigo-600' : 'bg-neutral-100 text-neutral-500'}">
-                            ${team.paying}
-                        </span>
-                    </td>
-                    <td class="font-mono text-[13px] text-neutral-600">${team.sw}</td>
-                    <td class="font-mono text-[13px] text-neutral-600">${team.assoc}</td>
-                    <td class="font-mono text-[13px] text-neutral-600">${team.collab}</td>
-                    <td class="font-mono text-[13px] text-neutral-600">${team.mls}</td>
-                    <td class="font-mono text-[13px] text-neutral-600">${team.web}</td>
-                    <td class="text-center font-mono text-[13px] text-neutral-500">${team.L}</td>
-                    <td class="text-center font-mono text-[13px] text-neutral-500">${team.A}</td>
-                    <td class="text-center font-mono text-[13px] text-neutral-500">${team.XC}</td>
-                    <td class="font-mono text-[13px] text-neutral-600">${team.eo}</td>
-                    <td class="font-mono text-[13px] ${team.credits < 1000 ? (team.credits < 200 ? 'text-red-600' : 'text-amber-600') : 'text-neutral-900'}">
+                    <td class="text-neutral-700 font-medium text-[13px]" style="white-space:nowrap;">${team.lead}</td>
+                    <!-- Headcount -->
+                    <td class="text-center font-mono text-[13px] font-semibold text-violet-600" style="background:#FDFCFF;border-left:1px solid #EDE9FE;">${team.L}</td>
+                    <td class="text-center font-mono text-[13px] font-semibold text-violet-600" style="background:#FDFCFF;">${team.A}</td>
+                    <td class="text-center font-mono text-[13px] font-semibold text-violet-600" style="background:#FDFCFF;border-right:1px solid #EDE9FE;">${team.XC}</td>
+                    <!-- Software -->
+                    <td style="background:#F8FBFF;border-left:1px solid #DBEAFE;">${payerBadge(team.paying, 'sw')}</td>
+                    <td style="background:#F8FBFF;">${freqBadge(team.swFreq)}</td>
+                    <td class="font-mono text-[13px] text-neutral-700 font-semibold" style="background:#F8FBFF;">${team.sw}</td>
+                    <td class="font-mono text-[13px] text-neutral-600" style="background:#F8FBFF;">${team.assoc}</td>
+                    <td class="font-mono text-[13px] text-neutral-600" style="background:#F8FBFF;">${team.collab}</td>
+                    <td class="font-mono text-[13px] text-neutral-600" style="background:#F8FBFF;">${team.mls}</td>
+                    <td class="font-mono text-[13px] text-neutral-600" style="background:#F8FBFF;">${team.web}</td>
+                    <td class="text-[11px] text-neutral-500 font-mono" style="background:#F8FBFF;white-space:nowrap;">${team.swBilling || team.billing}</td>
+                    <td style="background:#F8FBFF;border-right:1px solid #DBEAFE;">${swStatusBadge(team.swStatus || 'active')}</td>
+                    <!-- E&O -->
+                    <td style="background:#FFFDF5;border-left:1px solid #FDE68A;">${payerBadge(team.eoPaying || 'Lead', 'eo')}</td>
+                    <td class="text-[12px] text-neutral-500 font-medium" style="background:#FFFDF5;white-space:nowrap;">${team.eoType}</td>
+                    <td class="font-mono text-[13px] text-neutral-700 font-semibold" style="background:#FFFDF5;">${team.eoFee || team.eo}</td>
+                    <td class="text-[11px] text-neutral-500 font-mono" style="background:#FFFDF5;white-space:nowrap;">${team.eoBilling || team.billing}</td>
+                    <td style="background:#FFFDF5;border-right:1px solid #FDE68A;">${swStatusBadge(team.eoStatus || 'active')}</td>
+                    <!-- Credits -->
+                    <td class="font-mono text-[13px] ${team.credits < 1000 ? (team.credits < 200 ? 'text-red-600 font-bold' : 'text-amber-600 font-semibold') : 'text-neutral-900'}">
                         ${team.credits.toLocaleString()}
-                    </td>
-                    <td class="text-[12px] font-medium ${team.status === 'failed' ? 'text-red-600' : (team.status === 'warning' ? 'text-amber-600' : 'text-neutral-500')}">
-                        ${team.billing}
                     </td>
                     <td class="text-center">
                         <div class="flex items-center justify-center gap-1.5">
@@ -2243,6 +2416,10 @@
                             <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); openSheet(${team.id}, 'activity')">
                                 <i data-lucide="history" class="size-3.5"></i>
                                 Activity
+                            </button>
+                            <button class="action-btn" style="background:#F0FDF4;color:#16A34A;border:1px solid #BBF7D0;border-radius:8px;padding:4px 10px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;gap:4px;cursor:pointer;" onclick="event.stopPropagation(); showPricingPage(${team.id})">
+                                <i data-lucide="pencil" class="size-3.5"></i>
+                                Edit
                             </button>
                         </div>
                     </td>
@@ -2355,19 +2532,64 @@
             if (prefContainer) prefContainer.innerHTML = `<span class="text-sm font-bold text-neutral-900">$29.00 /ea</span>`;
 
             const extContainer = document.getElementById('extPriceContainer');
-            if (extContainer) extContainer.innerHTML = `<span class="text-sm font-bold text-neutral-900">$0.00 /ea</span>`;
+            if (extContainer) extContainer.innerHTML = `<span class="text-sm font-bold text-neutral-900">$25.00 /ea</span>`;
 
-            // Error state simulation
+            const eoContainer = document.getElementById('eoPriceContainer');
+            if (eoContainer) eoContainer.innerHTML = `<span class="text-sm font-bold text-neutral-900">${team.eo}.00</span>`;
+            
+            const eoTypeDisplay = document.getElementById('eoTypeDisplay');
+            if (eoTypeDisplay) eoTypeDisplay.innerText = team.eoType;
+
+            const hubSumEoType = document.getElementById('hubSumEoType');
+            if (hubSumEoType) hubSumEoType.innerText = team.eoType;
+
+            const hubSumEoAmount = document.getElementById('hubSumEoAmount');
+            if (hubSumEoAmount) hubSumEoAmount.innerText = `${team.eo}.00`;
+
+            // Error state + auto-block My Clients on failure
             const errorBanner = document.getElementById('hubErrorBanner');
+            const myClientsSwitch = document.getElementById('myClientsSwitch');
+            const myClientsStatus = document.getElementById('myClientsStatus');
+            const myClientsRow = document.getElementById('myClientsRow');
             if (errorBanner) {
                 if (team.status === 'failed') {
                     errorBanner.classList.remove('hidden');
                     const errorAmt = document.getElementById('errorAmount');
-                    if (errorAmt) errorAmt.innerText = `$${calculateTotal(team).toLocaleString()}.00`;
+                    if (errorAmt) errorAmt.innerText = `$${calculateTotal(team).toLocaleString()}.00 owed`;
+                    // Auto-block My Clients
+                    if (myClientsSwitch) myClientsSwitch.classList.remove('on');
+                    if (myClientsStatus) myClientsStatus.textContent = 'Blocked — payment failed';
+                    if (myClientsRow) myClientsRow.style.background = 'rgba(239,68,68,.05)';
                 } else {
                     errorBanner.classList.add('hidden');
+                    if (myClientsSwitch) myClientsSwitch.classList.add('on');
+                    if (myClientsStatus) myClientsStatus.textContent = 'Agents can view client data';
+                    if (myClientsRow) myClientsRow.style.background = '';
                 }
             }
+            // Update who-pays labels
+            const swLabel = document.getElementById('swWhoPaysLabel');
+            const eoLabel = document.getElementById('eoWhoPaysLabel');
+            if (swLabel) swLabel.textContent = team.paying || 'Team Lead';
+            if (eoLabel) eoLabel.textContent = team.eoPaying || 'Team Lead';
+            // E&O status badge + billing
+            const eoStatusBadge = document.getElementById('eoPaymentStatusBadge');
+            const eoBillingLabel = document.getElementById('eoBillingCycleLabel');
+            if (eoStatusBadge) {
+                const s = team.eoStatus || 'active';
+                const map = { 'active': ['bg-emerald-50 text-emerald-700','Active'], 'failed-1': ['bg-amber-100 text-amber-800','1 mo failed'], 'failed-2': ['bg-rose-100 text-rose-700','2 mo failed'], 'failed-3': ['bg-rose-200 text-rose-900','3 mo failed'] };
+                const [cls, txt] = map[s] || map['active'];
+                eoStatusBadge.className = `px-2 py-0.5 rounded-full text-[9px] font-black uppercase ${cls}`;
+                eoStatusBadge.textContent = txt;
+            }
+            if (eoBillingLabel) eoBillingLabel.textContent = `Next: ${team.eoBilling || team.billing}`;
+            // Summary web + collab fees
+            const sumWeb = document.getElementById('hubSumWebFee');
+            const sumCollab = document.getElementById('hubSumCollabFee');
+            const sumCollabCount = document.getElementById('hubSumCollabs');
+            if (sumWeb) sumWeb.textContent = team.web + '.00';
+            if (sumCollabCount) sumCollabCount.textContent = team.XC;
+            if (sumCollab) { const collabTotal = parseInt((team.collab||'$25').replace(/\D/g,'')) * (team.XC||0); sumCollab.textContent = `$${collabTotal.toLocaleString()}.00`; }
 
             // Calculations
             updateGrandTotal(team);
@@ -2397,33 +2619,56 @@
         }
 
         const teamMembers = [
-            { id: 1, name: "Sarah Chen", role: "Team Lead", email: "sarah.chen@soul.ai", status: "Active", entry: "Start of Cycle", type: "Pro", baseFee: 49 },
-            { id: 2, name: "Marcus Wright", role: "Co-Team Lead", email: "m.wright@soul.ai", status: "Active", entry: "Start of Cycle", type: "Pro", baseFee: 49 },
-            { id: 3, name: "Elena Rossi", role: "Associate", email: "elena@soul.ai", status: "Active", entry: "Start of Cycle", type: "Core", baseFee: 29 },
-            { id: 4, name: "James Wilson", role: "Collaborator", email: "j.wilson@partner.ai", status: "Active", entry: "Added 12 days ago", type: "Core", baseFee: 25, prorated: true, collabPayer: "agent", collabPayerName: "Sandra O." },
-            { id: 5, name: "Amara Okafor", role: "Associate", email: "amara@soul.ai", status: "Active", entry: "Start of Cycle", type: "Core", baseFee: 29 },
-            { id: 6, name: "David Park", role: "Associate", email: "d.park@soul.ai", status: "Pending", entry: "Added 3 days ago", type: "Core", baseFee: 29, prorated: true },
-            { id: 7, name: "Priya Mehta", role: "Collaborator", email: "priya@extpartner.co", status: "Active", entry: "Start of Cycle", type: "Core", baseFee: 25, collabPayer: "collab" },
-            { id: 8, name: "Tom Reeves", role: "Collaborator", email: "t.reeves@re.com", status: "Active", entry: "Added 5 days ago", type: "Core", baseFee: 25, prorated: true, collabPayer: "teamlead" }
+            { id: 1, name: "Sarah Chen", role: "Team Lead", email: "sarah.chen@soul.ai", status: "Active", entry: "Start of Cycle", type: "Pro", baseFee: 49, missedPayments: 0, owed: 0 },
+            { id: 2, name: "Marcus Wright", role: "Co-Team Lead", email: "m.wright@soul.ai", status: "Active", entry: "Start of Cycle", type: "Pro", baseFee: 49, missedPayments: 0, owed: 0 },
+            { id: 3, name: "Elena Rossi", role: "Associate", email: "elena@soul.ai", status: "Active", entry: "Start of Cycle", type: "Core", baseFee: 29, missedPayments: 0, owed: 0 },
+            { id: 4, name: "James Wilson", role: "Collaborator", email: "j.wilson@partner.ai", status: "Active", entry: "Added 12 days ago", type: "Core", baseFee: 25, prorated: true, collabPayer: "agent", collabPayerName: "Sandra O.", missedPayments: 0, owed: 0 },
+            { id: 5, name: "Amara Okafor", role: "Associate", email: "amara@soul.ai", status: "Overdue", entry: "Start of Cycle", type: "Core", baseFee: 29, missedPayments: 2, owed: 58 },
+            { id: 6, name: "David Park", role: "Associate", email: "d.park@soul.ai", status: "Pending", entry: "Added 3 days ago", type: "Core", baseFee: 29, prorated: true, missedPayments: 1, owed: 29 },
+            { id: 7, name: "Priya Mehta", role: "Collaborator", email: "priya@extpartner.co", status: "Active", entry: "Start of Cycle", type: "Core", baseFee: 25, collabPayer: "collab", missedPayments: 0, owed: 0 },
+            { id: 8, name: "Tom Reeves", role: "Collaborator", email: "t.reeves@re.com", status: "Active", entry: "Added 5 days ago", type: "Core", baseFee: 25, prorated: true, collabPayer: "teamlead", missedPayments: 3, owed: 75 }
         ];
 
         function renderRosterTable(team) {
             const container = document.getElementById('rosterTableContainer');
             if (!container) return;
 
-            const extSwitch = document.getElementById('extCollabSwitch');
-            const agentPaysExt = extSwitch ? extSwitch.classList.contains('on') : false;
+            // Determine if agents self-pay (software or E&O)
+            const agentsSelfPay = (team.paying === 'Agents' || team.eoPaying === 'Agents' || team.eoPaying === 'Split');
+            const leadPaysAll = team.paying === 'Lead' && team.eoPaying === 'Lead';
+
+            // Who-pays summary bar
+            const swPayerColor = team.paying === 'Agents' ? '#10B981' : '#6366F1';
+            const eoPayerColor = team.eoPaying === 'Lead' ? '#6366F1' : team.eoPaying === 'Split' ? '#D97706' : '#10B981';
+
+            // Total owed across all agents
+            const totalOwed = teamMembers.reduce((sum, m) => sum + (m.owed || 0), 0);
 
             let html = `
-                <table class="w-full text-left border-collapse">
+                <div style="padding:12px 24px 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                    <span style="font-size:10px;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:.08em;">Billing Responsibility:</span>
+                    <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:${team.paying==='Agents'?'#ECFDF5':'#EEF2FF'};font-size:10px;font-weight:800;color:${swPayerColor};text-transform:uppercase;letter-spacing:.06em;">
+                        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                        Software: ${team.paying}
+                    </span>
+                    <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:${team.eoPaying==='Lead'?'#EEF2FF':team.eoPaying==='Split'?'#FFFBEB':'#ECFDF5'};font-size:10px;font-weight:800;color:${eoPayerColor};text-transform:uppercase;letter-spacing:.06em;">
+                        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        E&amp;O: ${team.eoPaying}
+                    </span>
+                    ${totalOwed > 0 ? `<span style="margin-left:auto;display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:#FEF2F2;font-size:10px;font-weight:800;color:#DC2626;letter-spacing:.04em;">
+                        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        $${totalOwed} outstanding
+                    </span>` : ''}
+                </div>
+                <table class="w-full text-left border-collapse" style="margin-top:10px;">
                     <thead>
-                        <tr class="border-b border-neutral-100">
-                            <th class="px-6 py-4 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Member</th>
-                            <th class="px-6 py-4 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Role / Plan</th>
-                            <th class="px-6 py-4 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Status</th>
-                            <th class="px-6 py-4 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Cycle Usage</th>
-                            <th class="px-6 py-4 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Payer</th>
-                            <th class="px-6 py-4 text-[10px] font-bold text-neutral-400 uppercase tracking-wider text-right whitespace-nowrap">Fee</th>
+                        <tr style="border-bottom:1px solid #F3F4F6;">
+                            <th class="px-6 py-3 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Member</th>
+                            <th class="px-6 py-3 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Role / Plan</th>
+                            <th class="px-6 py-3 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Status</th>
+                            <th class="px-6 py-3 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Missed Payments</th>
+                            <th class="px-6 py-3 text-[10px] font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">Payer</th>
+                            <th class="px-6 py-3 text-[10px] font-bold text-neutral-400 uppercase tracking-wider text-right whitespace-nowrap">${agentsSelfPay ? 'Fee / Owed' : 'Fee'}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-neutral-50">
@@ -2433,87 +2678,151 @@
                 const isLead = m.role.includes("Lead");
                 const isExt = m.role === "Collaborator";
 
+                // Missed payment badge
+                let missedBadge = '';
+                if (m.missedPayments === 0) {
+                    missedBadge = `<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:#D1D5DB;">—</span>`;
+                } else if (m.missedPayments === 1) {
+                    missedBadge = `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;background:#FFFBEB;font-size:10px;font-weight:800;color:#D97706;text-transform:uppercase;letter-spacing:.04em;">${m.missedPayments} missed</span>`;
+                } else {
+                    missedBadge = `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;background:#FEF2F2;font-size:10px;font-weight:800;color:#DC2626;text-transform:uppercase;letter-spacing:.04em;">${m.missedPayments} missed</span>`;
+                }
+
                 // Payer badge logic
                 let payerBadge = '';
                 if (isLead) {
-                    payerBadge = `<span class="inline-flex px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wide bg-indigo-50 text-indigo-600">Team Lead</span>`;
+                    payerBadge = `<span style="display:inline-flex;padding:2px 8px;border-radius:6px;background:#EEF2FF;font-size:9px;font-weight:800;color:#6366F1;text-transform:uppercase;letter-spacing:.06em;">Team Lead</span>`;
                 } else if (isExt) {
-                    if (m.collabPayer === 'agent') {
-                        payerBadge = `
-                            <div class="flex flex-col gap-1">
-                                <span class="inline-flex px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wide bg-amber-50 text-amber-600">${m.collabPayerName} pays</span>
-                                <button onclick="cycleCollabPayer(${m.id})" class="text-[9px] font-bold text-indigo-500 hover:text-indigo-700 text-left leading-none">Switch billing →</button>
-                            </div>`;
-                    } else if (m.collabPayer === 'collab') {
-                        payerBadge = `
-                            <div class="flex flex-col gap-1">
-                                <span class="inline-flex px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wide bg-violet-50 text-violet-600">Collab pays</span>
-                                <button onclick="cycleCollabPayer(${m.id})" class="text-[9px] font-bold text-indigo-500 hover:text-indigo-700 text-left leading-none">Switch billing →</button>
-                            </div>`;
-                    } else {
-                        payerBadge = `
-                            <div class="flex flex-col gap-1">
-                                <span class="inline-flex px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wide bg-indigo-50 text-indigo-600">Team Lead pays</span>
-                                <button onclick="cycleCollabPayer(${m.id})" class="text-[9px] font-bold text-indigo-500 hover:text-indigo-700 text-left leading-none">Switch billing →</button>
-                            </div>`;
-                    }
+                    const payerMap = {
+                        agent: [`#FFFBEB`, `#D97706`, m.collabPayerName ? `${m.collabPayerName} pays` : 'Agent pays'],
+                        collab: [`#F5F3FF`, `#7C3AED`, 'Collab pays'],
+                        teamlead: [`#EEF2FF`, `#6366F1`, 'Team Lead pays']
+                    };
+                    const [bg, color, label] = payerMap[m.collabPayer] || payerMap.teamlead;
+                    payerBadge = `
+                        <div style="display:flex;flex-direction:column;gap:4px;">
+                            <span style="display:inline-flex;padding:2px 8px;border-radius:6px;background:${bg};font-size:9px;font-weight:800;color:${color};text-transform:uppercase;letter-spacing:.06em;">${label}</span>
+                            <button onclick="cycleCollabPayer(${m.id})" style="font-size:9px;font-weight:700;color:#6366F1;background:none;border:none;cursor:pointer;text-align:left;padding:0;">Switch →</button>
+                        </div>`;
                 } else {
-                    payerBadge = `<span class="inline-flex px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wide bg-neutral-100 text-neutral-500">Agent</span>`;
+                    // Regular agent
+                    const payer = leadPaysAll ? 'Team Lead' : 'Agent';
+                    const bg = leadPaysAll ? '#EEF2FF' : '#F0FDF4';
+                    const color = leadPaysAll ? '#6366F1' : '#16A34A';
+                    payerBadge = `<span style="display:inline-flex;padding:2px 8px;border-radius:6px;background:${bg};font-size:9px;font-weight:800;color:${color};text-transform:uppercase;letter-spacing:.06em;">${payer}</span>`;
                 }
 
+                // Fee display
                 let displayFee = m.baseFee;
                 if (m.prorated) {
                     const daysLeft = m.entry.includes("12") ? 18 : m.entry.includes("5") ? 25 : 27;
                     displayFee = (m.baseFee * (daysLeft / 30)).toFixed(2);
                 }
 
+                // Show fee + owed only if agents self-pay; leads always see full fee
+                let feeCell = '';
+                if (isLead) {
+                    feeCell = `<span style="font-size:13px;font-weight:700;color:#111827;">$${displayFee}</span>`;
+                } else if (leadPaysAll) {
+                    // Lead covers all — show em dash for individual agent fee
+                    feeCell = `<span style="font-size:12px;font-weight:600;color:#D1D5DB;">—</span>`;
+                } else {
+                    // Agent pays themselves
+                    const owedAmt = m.owed || 0;
+                    feeCell = `
+                        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
+                            <span style="font-size:13px;font-weight:700;color:#111827;">$${displayFee}</span>
+                            ${owedAmt > 0 ? `<span style="font-size:10px;font-weight:800;color:#DC2626;background:#FEF2F2;padding:1px 6px;border-radius:5px;">$${owedAmt} owed</span>` : `<span style="font-size:10px;font-weight:600;color:#D1D5DB;">Current</span>`}
+                        </div>`;
+                }
+
+                // Row highlight if overdue
+                const rowBg = m.missedPayments > 0 ? 'background:rgba(239,68,68,.03);' : '';
+                const statusDot = m.status === 'Active' ? '#10B981' : m.status === 'Overdue' ? '#EF4444' : '#F59E0B';
+                const statusColor = m.status === 'Active' ? '#065F46' : m.status === 'Overdue' ? '#991B1B' : '#92400E';
+                const statusBg = m.status === 'Active' ? '#ECFDF5' : m.status === 'Overdue' ? '#FEF2F2' : '#FFFBEB';
+
                 html += `
-                    <tr class="hover:bg-neutral-50/50 transition-colors group cursor-pointer" data-member-id="${m.id}">
+                    <tr style="transition:background 160ms ease;${rowBg}" onmouseover="this.style.background='#FAFAFA'" onmouseout="this.style.background='${m.missedPayments>0?'rgba(239,68,68,.03)':''}'" data-member-id="${m.id}">
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center gap-3">
-                                <div class="size-8 rounded-full ${isExt ? 'bg-violet-50 text-violet-500' : 'bg-neutral-100 text-neutral-500'} flex items-center justify-center text-[10px] font-bold group-hover:bg-primary group-hover:text-white transition-all shrink-0">
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <div style="width:32px;height:32px;border-radius:50%;background:${isExt?'#F5F3FF':'#F1F5F9'};color:${isExt?'#7C3AED':'#64748B'};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;">
                                     ${m.name.split(' ').map(n => n[0]).join('')}
                                 </div>
-                                <div class="flex flex-col">
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-sm font-semibold text-neutral-900">${m.name}</span>
-                                        ${isExt ? '<span class="text-[8px] font-black uppercase tracking-wider text-violet-400 bg-violet-50 px-1.5 py-0.5 rounded">External</span>' : ''}
+                                <div style="display:flex;flex-direction:column;gap:1px;">
+                                    <div style="display:flex;align-items:center;gap:6px;">
+                                        <span style="font-size:13px;font-weight:600;color:#111827;">${m.name}</span>
+                                        ${isExt ? '<span style="font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#7C3AED;background:#F5F3FF;padding:1px 5px;border-radius:4px;">External</span>' : ''}
                                     </div>
-                                    <span class="text-[10px] font-medium text-neutral-400">${m.email}</span>
+                                    <span style="font-size:10px;font-weight:500;color:#9CA3AF;">${m.email}</span>
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex flex-col">
-                                <span class="text-xs font-semibold text-neutral-700">${m.role}</span>
-                                <span class="text-[10px] font-bold text-neutral-400 uppercase tracking-tight">${m.type} Plan · $${m.baseFee}/mo</span>
+                            <div style="display:flex;flex-direction:column;gap:1px;">
+                                <span style="font-size:12px;font-weight:600;color:#374151;">${m.role}</span>
+                                <span style="font-size:10px;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:.04em;">${m.type} · $${m.baseFee}/mo</span>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center gap-1.5">
-                                <div class="size-1.5 rounded-full ${m.status === 'Active' ? 'bg-emerald-500' : 'bg-amber-500'}"></div>
-                                <span class="text-xs font-medium text-neutral-600">${m.status}</span>
-                            </div>
+                            <span style="display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:6px;background:${statusBg};font-size:10px;font-weight:800;color:${statusColor};text-transform:uppercase;letter-spacing:.04em;">
+                                <span style="width:5px;height:5px;border-radius:50%;background:${statusDot};flex-shrink:0;"></span>
+                                ${m.status}
+                            </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex flex-col">
-                                <span class="text-xs font-medium text-neutral-700">${m.entry}</span>
-                                ${m.prorated ? '<span class="text-[9px] font-bold text-indigo-500 uppercase tracking-wider">Prorated Charge</span>' : '<span class="text-[9px] font-bold text-neutral-300 uppercase tracking-wider">Full Cycle</span>'}
-                            </div>
+                            ${missedBadge}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             ${payerBadge}
                         </td>
                         <td class="px-6 py-4 text-right whitespace-nowrap">
-                            <span class="text-sm font-bold text-neutral-900">$${displayFee}</span>
+                            ${feeCell}
                         </td>
                     </tr>
                 `;
             });
 
+            // Footer: total owed row if agents self-pay
+            if (agentsSelfPay && totalOwed > 0) {
+                html += `
+                    <tr style="background:#FEF2F2;border-top:2px solid #FECACA;">
+                        <td colspan="5" class="px-6 py-3">
+                            <span style="font-size:11px;font-weight:800;color:#DC2626;text-transform:uppercase;letter-spacing:.06em;">Total Outstanding Balance</span>
+                        </td>
+                        <td class="px-6 py-3 text-right">
+                            <span style="font-size:15px;font-weight:900;color:#DC2626;font-variant-numeric:tabular-nums;">$${totalOwed}.00</span>
+                        </td>
+                    </tr>
+                `;
+            }
+
             html += `</tbody></table>`;
             container.innerHTML = html;
             lucide.createIcons();
+        }
+
+        function toggleMyClients(el) {
+            const isOn = el.classList.contains('on');
+            showToastConfirm({
+                icon: isOn ? 'lock' : 'unlock',
+                title: isOn ? 'Block My Clients access?' : 'Enable My Clients access?',
+                body: isOn ? 'Agents will no longer see client data. This is auto-triggered on payment failure.' : 'Agents will regain access to client data.',
+                confirmLabel: isOn ? 'Block access' : 'Enable access',
+                confirmClass: isOn ? 'bg-rose-600 hover:bg-rose-700' : 'bg-[#5A5FF2] hover:bg-[#4A4FE0]',
+                onConfirm: () => {
+                    el.classList.toggle('on');
+                    const label = document.getElementById('myClientsStatus');
+                    const row = document.getElementById('myClientsRow');
+                    if (el.classList.contains('on')) {
+                        if (label) label.textContent = 'Agents can view client data';
+                        if (row) row.style.background = '';
+                    } else {
+                        if (label) label.textContent = 'Blocked — payment issue';
+                        if (row) row.style.background = 'rgba(239,68,68,.05)';
+                    }
+                }
+            });
         }
 
         function toggleSwitch(el) {
@@ -2648,14 +2957,20 @@
             const sw = parseInt(team.sw.replace('$', '')) || 0;
             const assocCount = team.A || 0;
             const assocPrice = parseInt(team.assoc.replace('$', '')) || 0;
+            const mlsPrice = parseInt((team.mls || "$0").replace('$', '')) || 0;
+            const webPrice = parseInt((team.web || "$0").replace('$', '')) || 0;
+            const eoPrice = parseInt((team.eo || "$0").replace('$', '')) || 0;
 
             const extCollabSwitch = document.getElementById('extCollabSwitch');
             const agentPaysExt = extCollabSwitch && extCollabSwitch.classList.contains('on');
 
             const assocTotal = assocCount * assocPrice;
-            const extTotal = agentPaysExt ? 0 : (team.XC || 0) * 29;
+            const extTotal = agentPaysExt ? 0 : (team.XC || 0) * 25; // Using 25 as default collab price
+            
+            // If E/O is yearly, we show the monthly contribution in the "Monthly Total"
+            const eoMonthly = team.eoType === 'Yearly' ? eoPrice / 12 : eoPrice;
 
-            return sw + assocTotal + extTotal + 45 + 25;
+            return sw + assocTotal + extTotal + mlsPrice + webPrice + eoMonthly;
         }
 
         function updateGrandTotal(team) {
@@ -2669,21 +2984,39 @@
             if (!team) return;
 
             const btn = document.getElementById('editPlanBtn');
-            const containers = ['leadPriceContainer', 'associatePriceContainer', 'prefPriceContainer', 'extPriceContainer'];
+            const containers = ['leadPriceContainer', 'associatePriceContainer', 'prefPriceContainer', 'extPriceContainer', 'eoPriceContainer'];
 
             if (!isEditingPlan) {
                 // Switch to Inputs
                 containers.forEach(id => {
                     const cont = document.getElementById(id);
-                    const val = cont.innerText.split(' ')[0].replace('$', '');
-                    cont.innerHTML = `
-                        <div class="flex items-center gap-1">
-                            <span class="text-xs font-bold text-neutral-400">$</span>
-                            <input type="text" class="inline-edit-input" value="${val}" 
-                                onblur="savePlanEdit()" 
-                                onkeydown="if(event.key === 'Enter') savePlanEdit()">
-                        </div>
-                    `;
+                    const val = cont.innerText.split(' ')[0].replace('$', '').replace(',', '');
+                    
+                    if (id === 'eoPriceContainer') {
+                        // Dropdown for E/O as requested
+                        cont.innerHTML = `
+                            <select class="inline-edit-select" onchange="savePlanEdit()">
+                                <optgroup label="Monthly">
+                                    <option value="10" ${val === '10' ? 'selected' : ''}>$10 /mo</option>
+                                    <option value="12" ${val === '12' ? 'selected' : ''}>$12 /mo</option>
+                                    <option value="15" ${val === '15' ? 'selected' : ''}>$15 /mo</option>
+                                </optgroup>
+                                <optgroup label="Annual">
+                                    <option value="600" ${val === '600' ? 'selected' : ''}>$600 /yr</option>
+                                    <option value="1200" ${val === '1200' ? 'selected' : ''}>$1200 /yr</option>
+                                </optgroup>
+                            </select>
+                        `;
+                    } else {
+                        cont.innerHTML = `
+                            <div class="flex items-center gap-1">
+                                <span class="text-xs font-bold text-neutral-400">$</span>
+                                <input type="text" class="inline-edit-input" value="${val}" 
+                                    onblur="savePlanEdit()" 
+                                    onkeydown="if(event.key === 'Enter') savePlanEdit()">
+                            </div>
+                        `;
+                    }
                 });
                 btn.innerText = 'Save';
                 isEditingPlan = true;
@@ -2699,17 +3032,27 @@
 
             const team = api.teams.find(t => t.id === currentTeamId);
             const inputs = document.querySelectorAll('.inline-edit-input');
-            if (!inputs.length) return;
+            const eoSelect = document.querySelector('.inline-edit-select');
+            if (!inputs.length && !eoSelect) return;
 
             // Mock Save to Data Store
-            team.sw = `$${inputs[0].value}`;
-            team.assoc = `$${inputs[1].value}`;
+            if (inputs[0]) team.sw = `$${inputs[0].value}`;
+            if (inputs[1]) team.assoc = `$${inputs[1].value}`;
+            if (eoSelect) {
+                const val = parseInt(eoSelect.value);
+                team.eo = `$${val}`;
+                team.eoType = val > 100 ? 'Yearly' : 'Monthly';
+            }
 
             // Re-render display spans
-            document.getElementById('leadPriceContainer').innerHTML = `<span class="text-sm font-bold text-neutral-900">$${inputs[0].value}.00</span>`;
-            document.getElementById('associatePriceContainer').innerHTML = `<span class="text-sm font-bold text-neutral-900">$${inputs[1].value}.00 /ea</span>`;
-            document.getElementById('prefPriceContainer').innerHTML = `<span class="text-sm font-bold text-neutral-900">$${inputs[2].value}.00 /ea</span>`;
-            document.getElementById('extPriceContainer').innerHTML = `<span class="text-sm font-bold text-neutral-900">$${inputs[3].value}.00 /ea</span>`;
+            document.getElementById('leadPriceContainer').innerHTML = `<span class="text-sm font-bold text-neutral-900">${team.sw}.00</span>`;
+            document.getElementById('associatePriceContainer').innerHTML = `<span class="text-sm font-bold text-neutral-900">${team.assoc}.00 /ea</span>`;
+            document.getElementById('prefPriceContainer').innerHTML = `<span class="text-sm font-bold text-neutral-900">$29.00 /ea</span>`;
+            document.getElementById('extPriceContainer').innerHTML = `<span class="text-sm font-bold text-neutral-900">$25.00 /ea</span>`;
+            document.getElementById('eoPriceContainer').innerHTML = `<span class="text-sm font-bold text-neutral-900">${team.eo}.00</span>`;
+            document.getElementById('eoTypeDisplay').innerText = team.eoType;
+            document.getElementById('hubSumEoType').innerText = team.eoType;
+            document.getElementById('hubSumEoAmount').innerText = `${team.eo}.00`;
 
             updateGrandTotal(team);
             document.getElementById('editPlanBtn').innerText = 'Edit';
@@ -2736,75 +3079,157 @@
             const tableBody = document.getElementById('invoiceTableBody');
             if (!tableBody) return;
 
+            // invoices: splits have payer, amount, associates[] (names covered), collab (collab name if applicable)
             const invoices = [
                 {
-                    date: 'Apr 20, 2026', id: 'INV-49201', amount: '$1,870.00', status: 'Paid',
-                    splitType: 'split',
+                    date: 'Apr 20, 2026', id: 'INV-49201', status: 'Paid',
                     splits: [
-                        { label: 'Team Lead pays', detail: 'Base plan + 3 associates', amount: '$1,570.00', badge: 'bg-indigo-50 text-indigo-600' },
-                        { label: 'Sandra pays', detail: 'James Wilson (collab seat)', amount: '$25.00', badge: 'bg-amber-50 text-amber-600' },
-                        { label: 'Collab pays', detail: 'Priya Mehta self-pays', amount: '$25.00', badge: 'bg-violet-50 text-violet-600' },
+                        { payer: 'Team Lead', payerName: 'Marcus Vane', amount: '$1,570.00', badge: 'bg-indigo-50 text-indigo-600',
+                          associates: ['Elena Rossi','Amara Okafor','David Park'], collab: null,
+                          note: 'Roster: +David Park added Apr 17' },
+                        { payer: 'Agent', payerName: 'Sandra O.', amount: '$25.00', badge: 'bg-amber-50 text-amber-600',
+                          associates: [], collab: 'James Wilson', note: null },
+                        { payer: 'Collab', payerName: 'Priya Mehta', amount: '$25.00', badge: 'bg-violet-50 text-violet-600',
+                          associates: [], collab: 'Priya Mehta', note: 'Self-pays' },
                     ]
                 },
                 {
-                    date: 'Mar 20, 2026', id: 'INV-48122', amount: '$1,845.00', status: 'Paid',
-                    splitType: 'split',
+                    date: 'Mar 20, 2026', id: 'INV-48122', status: 'Paid',
                     splits: [
-                        { label: 'Team Lead pays', detail: 'Base plan + 4 associates', amount: '$1,795.00', badge: 'bg-indigo-50 text-indigo-600' },
-                        { label: 'Scott pays', detail: 'Milan Torres (collab seat)', amount: '$25.00', badge: 'bg-amber-50 text-amber-600' },
+                        { payer: 'Team Lead', payerName: 'Marcus Vane', amount: '$1,795.00', badge: 'bg-indigo-50 text-indigo-600',
+                          associates: ['Elena Rossi','Amara Okafor','David Park','James R.'], collab: null,
+                          note: null },
+                        { payer: 'Agent', payerName: 'Scott M.', amount: '$25.00', badge: 'bg-amber-50 text-amber-600',
+                          associates: [], collab: 'Milan Torres', note: null },
                     ]
                 },
                 {
-                    date: 'Feb 20, 2026', id: 'INV-47003', amount: '$1,785.00', status: 'Paid',
-                    splitType: 'teamlead',
+                    date: 'Feb 20, 2026', id: 'INV-47003', status: 'Paid',
                     splits: [
-                        { label: 'Team Lead pays', detail: 'All seats — no split-pay active', amount: '$1,785.00', badge: 'bg-indigo-50 text-indigo-600' }
+                        { payer: 'Team Lead', payerName: 'Marcus Vane', amount: '$1,785.00', badge: 'bg-indigo-50 text-indigo-600',
+                          associates: ['Elena Rossi','Amara Okafor','David Park','James R.','Tom K.'], collab: null,
+                          note: 'All seats — no split-pay this cycle' },
                     ]
                 },
                 {
-                    date: 'Jan 20, 2026', id: 'INV-45912', amount: '$1,650.00', status: 'Failed',
-                    splitType: 'split',
+                    date: 'Jan 20, 2026', id: 'INV-45912', status: 'Failed',
                     splits: [
-                        { label: 'Agent split-pay', detail: '2 associates billed separately', amount: '$1,650.00', badge: 'bg-rose-50 text-rose-500' }
+                        { payer: 'Agent', payerName: 'Elena Rossi', amount: '$825.00', badge: 'bg-rose-50 text-rose-500',
+                          associates: ['Elena Rossi'], collab: null, note: null },
+                        { payer: 'Agent', payerName: 'Amara Okafor', amount: '$825.00', badge: 'bg-rose-50 text-rose-500',
+                          associates: ['Amara Okafor'], collab: null, note: null },
                     ]
                 }
             ];
 
-            tableBody.innerHTML = invoices.map((inv, idx) => {
-                const splitRows = inv.splits.map(s => `
-                    <div class="flex items-center justify-between py-1 border-b border-dashed border-neutral-100 last:border-0">
-                        <div class="flex items-center gap-2">
-                            <span class="inline-flex px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wide ${s.badge}">${s.label}</span>
-                            <span class="text-[10px] text-neutral-400">${s.detail}</span>
-                        </div>
-                        <span class="text-[10px] font-bold text-neutral-700 font-mono">${s.amount}</span>
-                    </div>
-                `).join('');
+            // External collab billing (bills paid by collabs invited by agents)
+            const extCollabInvoices = [
+                { date: 'Apr 20, 2026', id: 'EXT-49201-A', payer: 'Priya Mehta', invitedBy: 'Sandra O.', amount: '$25.00', status: 'Paid', note: 'Monthly seat — self-pays' },
+                { date: 'Mar 20, 2026', id: 'EXT-48122-A', payer: 'Milan Torres', invitedBy: 'Scott M.', amount: '$25.00', status: 'Paid', note: 'Monthly seat' },
+                { date: 'Feb 20, 2026', id: 'EXT-47003-A', payer: 'Priya Mehta', invitedBy: 'Sandra O.', amount: '$25.00', status: 'Paid', note: 'Monthly seat' },
+                { date: 'Jan 20, 2026', id: 'EXT-45912-A', payer: 'Tom Reeves', invitedBy: 'Mark V.', amount: '$25.00', status: 'Failed', note: '3 missed payments' },
+            ];
 
-                const canSwitch = inv.splitType === 'split';
+            const rows = [];
+            invoices.forEach((inv) => {
+                const suffixes = ['A','B','C','D','E'];
+                const multiSplit = inv.splits.length > 1;
+                inv.splits.forEach((s, i) => {
+                    const rowId = multiSplit ? `${inv.id}-${suffixes[i]}` : inv.id;
+                    const statusText = s.status || inv.status;
+                    const isPaid = statusText === 'Paid';
+                    const statusBadge = `<span style="display:inline-flex;padding:2px 7px;border-radius:20px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;background:${isPaid?'#ECFDF5':'#FEF2F2'};color:${isPaid?'#065F46':'#991B1B'};">${statusText}</span>`;
+                    const downloadBtn = `<button style="width:28px;height:28px;border-radius:8px;border:none;background:transparent;cursor:pointer;color:#9CA3AF;display:flex;align-items:center;justify-content:center;transition:all 160ms ease;" onmouseover="this.style.background='#EEF2FF';this.style.color='#6366F1'" onmouseout="this.style.background='transparent';this.style.color='#9CA3AF'"><i data-lucide="download" style="width:13px;height:13px;"></i></button>`;
 
-                return `
-                <tr class="hover:bg-neutral-50 transition-colors group border-b border-neutral-50 last:border-0">
-                    <td class="py-2.5 px-5 text-[11px] font-semibold text-neutral-900 whitespace-nowrap">${inv.date}</td>
-                    <td class="py-2.5 px-5 text-[11px] font-mono text-neutral-400">${inv.id}</td>
-                    <td class="py-2.5 px-5 text-[11px] font-bold text-neutral-900">${inv.amount}</td>
-                    <td class="py-2.5 px-5">
-                        <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase ${inv.status === 'Paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}">${inv.status}</span>
-                    </td>
-                    <td class="py-2.5 px-5" style="max-width:320px;">
-                        <div class="flex flex-col gap-0.5">
-                            ${splitRows}
-                        </div>
-                        ${canSwitch ? `<button onclick="showSwitchBillingModal()" class="mt-1.5 text-[9px] font-bold text-indigo-500 hover:text-indigo-700 hover:underline leading-none">Switch to Team Lead pays →</button>` : ''}
-                    </td>
-                    <td class="py-2.5 px-5 text-right">
-                        <button class="size-7 rounded-lg text-neutral-400 hover:text-primary hover:bg-indigo-50 transition-all flex items-center justify-center ml-auto">
-                            <i data-lucide="download" class="size-3.5"></i>
-                        </button>
-                    </td>
-                </tr>`;
-            }).join('');
+                    // Associates column — names as chips, or collab name, or dash
+                    let assocCell = '';
+                    if (s.associates && s.associates.length > 0) {
+                        const visible = s.associates.slice(0,2);
+                        const hidden = s.associates.slice(2);
+                        const uid = `am-${inv.id}-${i}`;
+                        const chips = visible.map(a=>`<span style="display:inline-flex;padding:2px 7px;border-radius:4px;background:#F1F5F9;font-size:10px;font-weight:600;color:#374151;white-space:nowrap;">${a}</span>`).join('');
+                        const more = hidden.length ? `<div style="position:relative;display:inline-flex;">
+                            <button onclick="toggleAssocMore('${uid}')" style="display:inline-flex;padding:2px 7px;border-radius:4px;background:#EEF2FF;font-size:10px;font-weight:700;color:#6366F1;border:none;cursor:pointer;white-space:nowrap;">+${hidden.length} more</button>
+                            <div id="${uid}" style="display:none;position:absolute;top:100%;left:0;margin-top:4px;background:#fff;border:1px solid #E5E7EB;border-radius:8px;padding:6px;box-shadow:0 4px 16px rgba(0,0,0,.1);z-index:50;min-width:140px;display:none;flex-direction:column;gap:3px;">
+                                ${hidden.map(a=>`<span style="padding:3px 8px;font-size:11px;font-weight:600;color:#374151;white-space:nowrap;">${a}</span>`).join('')}
+                            </div>
+                        </div>` : '';
+                        assocCell = `<div style="display:flex;flex-wrap:wrap;gap:3px;align-items:center;">${chips}${more}</div>`;
+                    } else if (s.collab) {
+                        assocCell = `<span style="display:inline-flex;padding:1px 6px;border-radius:4px;background:#F5F3FF;font-size:9px;font-weight:700;color:#7C3AED;white-space:nowrap;">${s.collab}</span>`;
+                    } else {
+                        assocCell = `<span style="font-size:10px;color:#D1D5DB;">—</span>`;
+                    }
+
+                    // Note badge
+                    const noteBadge = s.note ? `<span style="display:block;font-size:9px;color:#9CA3AF;margin-top:3px;font-style:italic;">${s.note}</span>` : '';
+
+                    rows.push(`
+                    <tr style="border-bottom:1px solid #F9FAFB;transition:background 140ms ease;" onmouseover="this.style.background='#FAFAFA'" onmouseout="this.style.background=''">
+                        <td class="py-2.5 px-5" style="font-size:11px;font-weight:600;color:#111827;white-space:nowrap;">${inv.date}</td>
+                        <td class="py-2.5 px-5" style="font-size:11px;font-family:monospace;color:#9CA3AF;">${rowId}</td>
+                        <td class="py-2.5 px-5" style="font-size:12px;font-weight:800;color:#111827;font-variant-numeric:tabular-nums;">${s.amount}</td>
+                        <td class="py-2.5 px-5">${statusBadge}</td>
+                        <td class="py-2.5 px-5">
+                            <span style="display:inline-flex;padding:2px 7px;border-radius:5px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;" class="${s.badge}">${s.payerName}</span>
+                            ${noteBadge}
+                        </td>
+                        <td class="py-2.5 px-5" style="max-width:200px;">${assocCell}</td>
+                        <td class="py-2.5 px-5 text-right">${downloadBtn}</td>
+                    </tr>`);
+                });
+            });
+            tableBody.innerHTML = rows.join('');
+
+            // External billing section
+            const extBody = document.getElementById('extCollabBillingBody');
+            if (extBody) {
+                extBody.innerHTML = extCollabInvoices.map(r => {
+                    const isPaid = r.status === 'Paid';
+                    const statusBadge = `<span style="display:inline-flex;padding:2px 7px;border-radius:20px;font-size:9px;font-weight:800;text-transform:uppercase;background:${isPaid?'#ECFDF5':'#FEF2F2'};color:${isPaid?'#065F46':'#991B1B'};">${r.status}</span>`;
+                    return `<tr style="border-bottom:1px solid #F9FAFB;transition:background 140ms ease;" onmouseover="this.style.background='#FAFAFA'" onmouseout="this.style.background=''">
+                        <td class="py-2.5 px-5" style="font-size:11px;font-weight:600;color:#111827;white-space:nowrap;">${r.date}</td>
+                        <td class="py-2.5 px-5" style="font-size:11px;font-family:monospace;color:#9CA3AF;">${r.id}</td>
+                        <td class="py-2.5 px-5" style="font-size:12px;font-weight:800;color:#111827;font-variant-numeric:tabular-nums;">${r.amount}</td>
+                        <td class="py-2.5 px-5">${statusBadge}</td>
+                        <td class="py-2.5 px-5">
+                            <span style="display:inline-flex;padding:2px 7px;border-radius:5px;font-size:9px;font-weight:800;text-transform:uppercase;background:#F5F3FF;color:#7C3AED;">${r.payer}</span>
+                        </td>
+                        <td class="py-2.5 px-5" style="font-size:11px;color:#6B7280;">Invited by <span style="font-weight:700;color:#374151;">${r.invitedBy}</span></td>
+                        <td class="py-2.5 px-5" style="font-size:10px;color:#9CA3AF;font-style:italic;">${r.note}</td>
+                    </tr>`;
+                }).join('');
+            }
+
             lucide.createIcons();
+        }
+
+        function toggleAssocMore(uid) {
+            const el = document.getElementById(uid);
+            if (!el) return;
+            const open = el.style.display === 'flex';
+            document.querySelectorAll('[id^="am-"]').forEach(e => e.style.display='none');
+            el.style.display = open ? 'none' : 'flex';
+        }
+        document.addEventListener('click', e => {
+            if (!e.target.closest('[id^="am-"]') && !e.target.closest('button[onclick^="toggleAssocMore"]'))
+                document.querySelectorAll('[id^="am-"]').forEach(el => el.style.display='none');
+        });
+
+        function switchBillingTab(tab) {
+            const internal = document.getElementById('bhInternalView');
+            const external = document.getElementById('bhExternalView');
+            const tInt = document.getElementById('bhTabInternal');
+            const tExt = document.getElementById('bhTabExternal');
+            if (tab === 'internal') {
+                internal.classList.remove('hidden'); external.classList.add('hidden');
+                tInt.style.color='#111827'; tInt.style.borderBottom='2px solid #6366F1';
+                tExt.style.color='#9CA3AF'; tExt.style.borderBottom='2px solid transparent';
+            } else {
+                external.classList.remove('hidden'); internal.classList.add('hidden');
+                tExt.style.color='#111827'; tExt.style.borderBottom='2px solid #7C3AED';
+                tInt.style.color='#9CA3AF'; tInt.style.borderBottom='2px solid transparent';
+            }
         }
 
         function showSwitchBillingModal() {
@@ -2991,25 +3416,59 @@
         function renderActivityLog() {
             const container = document.getElementById('activityTimeline');
             if (!container) return;
-            container.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 48px;">
-                ${activityEvents.map(e => `
-                    <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #F5F5F5;align-items:flex-start;">
-                        <div style="width:30px;height:30px;border-radius:9999px;background:${e.color}18;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">
-                            <i data-lucide="${e.icon}" style="width:13px;height:13px;color:${e.color};stroke-width:2;"></i>
+            container.innerHTML = `<div style="position:relative;padding-left:40px;">
+                <div style="position:absolute;left:11px;top:8px;bottom:8px;width:2px;background:linear-gradient(to bottom,#E5E7EB 60%,#F3F4F6 100%);border-radius:2px;"></div>
+                ${activityEvents.map((e, i) => `
+                    <div class="activity-row" data-index="${i}" style="position:relative;display:flex;gap:14px;padding:12px 8px 12px 0;align-items:flex-start;cursor:default;transition:background 200ms;border-radius:10px;"
+                         onmouseenter="this.style.background='#F9FAFB';this.querySelector('.activity-detail').style.maxHeight='60px';this.querySelector('.activity-detail').style.opacity='1';"
+                         onmouseleave="this.style.background='transparent';this.querySelector('.activity-detail').style.maxHeight='0';this.querySelector('.activity-detail').style.opacity='0';">
+                        <div style="position:absolute;left:-33px;top:50%;transform:translateY(-50%);width:10px;height:10px;border-radius:50%;background:${e.color};box-shadow:0 0 0 3px white,0 0 0 5px ${e.color}33;z-index:2;"></div>
+                        <div style="width:32px;height:32px;border-radius:10px;background:${e.color}14;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 200ms,transform 200ms;"
+                             onmouseenter="this.style.background='${e.color}28';this.style.transform='scale(1.08)';"
+                             onmouseleave="this.style.background='${e.color}14';this.style.transform='scale(1)';">
+                            <i data-lucide="${e.icon}" style="width:13px;height:13px;color:${e.color};stroke-width:2.2;"></i>
                         </div>
-                        <div style="flex:1;min-width:0;">
-                            <p style="font-size:13px;font-weight:600;color:#0A0A0A;margin:0 0 2px;line-height:1.3;">${e.title}</p>
-                            <p style="font-size:11px;color:#737373;margin:0 0 4px;line-height:1.4;">${e.detail}</p>
-                            <div style="display:flex;gap:6px;align-items:center;">
-                                <span style="font-size:10px;font-weight:700;color:#A3A3A3;font-family:var(--font-ui);">${e.who}</span>
-                                <span style="width:2px;height:2px;border-radius:50%;background:#D4D4D4;display:inline-block;flex-shrink:0;"></span>
-                                <span style="font-size:10px;color:#A3A3A3;font-family:var(--font-ui);">${e.when}</span>
+                        <div style="flex:1;min-width:0;padding-top:2px;">
+                            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;">
+                                <p style="font-size:13px;font-weight:600;color:#111827;margin:0;line-height:1.35;letter-spacing:-0.01em;">${e.title}</p>
+                                <span style="font-size:10px;color:#9CA3AF;white-space:nowrap;flex-shrink:0;">${e.when}</span>
+                            </div>
+                            <p style="font-size:11.5px;color:#6B7280;margin:2px 0 0;line-height:1.5;">${e.detail}</p>
+                            <div class="activity-detail" style="max-height:0;overflow:hidden;opacity:0;transition:max-height 220ms ease,opacity 180ms ease;">
+                                <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+                                    <div style="width:18px;height:18px;border-radius:50%;background:#E5E7EB;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#6B7280;">${e.who.charAt(0)}</div>
+                                    <span style="font-size:10.5px;font-weight:600;color:#9CA3AF;">${e.who}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    ${i < activityEvents.length - 1 ? '' : ''}
                 `).join('')}
             </div>`;
             lucide.createIcons();
+            // staggered entrance animation
+            container.querySelectorAll('.activity-row').forEach((row, i) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(10px)';
+                row.style.transition = 'opacity 300ms ease, transform 300ms ease, background 200ms';
+                setTimeout(() => { row.style.opacity = '1'; row.style.transform = 'translateY(0)'; }, 40 + i * 55);
+            });
+        }
+
+        function toggleCollabSeatsPopup(e) {
+            e.stopPropagation();
+            const popup = document.getElementById('collabSeatsPopup');
+            if (!popup) return;
+            if (popup.style.display === 'none' || !popup.style.display) {
+                const rect = e.currentTarget.getBoundingClientRect();
+                popup.style.top = (rect.bottom + 8 + window.scrollY) + 'px';
+                popup.style.left = rect.left + 'px';
+                popup.style.display = 'block';
+                const close = (ev) => { if (!popup.contains(ev.target)) { popup.style.display = 'none'; document.removeEventListener('click', close); } };
+                setTimeout(() => document.addEventListener('click', close), 0);
+            } else {
+                popup.style.display = 'none';
+            }
         }
 
         function toggleAutoRenew(switchEl) {
